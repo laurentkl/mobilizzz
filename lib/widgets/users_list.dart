@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mobilizzz/providers/user_provider.dart';
-import 'package:mobilizzz/utlis/utils.dart';
 import 'package:provider/provider.dart';
 
 class UsersList extends StatelessWidget {
@@ -15,9 +14,9 @@ class UsersList extends StatelessWidget {
             final users = userProvider.users;
             return ListView.builder(
               // Show only the first 5 elements
-              itemCount: users?.length,
+              itemCount: users.length,
               itemBuilder: (context, index) {
-                final user = users?[index];
+                final user = users[index];
                 return Container(
                   margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
@@ -31,12 +30,12 @@ class UsersList extends StatelessWidget {
                       children: [
                         Flexible(
                           child: Text(
-                            user?.firstName ?? "",
+                            user.firstName ?? "",
                             style: const TextStyle(color: Colors.black, fontSize: 16),
                           ),
                         ),
                         Text(
-                          '${user?.getTotalDistanceByTeam(1).toStringAsFixed(1)} km',
+                          '${user.getTotalDistanceByTeam(1).toStringAsFixed(1)} km',
                           style: const TextStyle(color: Colors.black, fontSize: 14),
                         ),
                       ],

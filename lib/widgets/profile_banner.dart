@@ -5,9 +5,7 @@ import 'package:mobilizzz/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 
 class ProfileBanner extends StatelessWidget {
-  const ProfileBanner({Key? key, this.user});
-
-  final User? user;
+  const ProfileBanner({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +21,7 @@ class ProfileBanner extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const EditProfilePage()));
                   },
                   child: ClipOval(
                     child: Image.network(
@@ -41,11 +39,11 @@ class ProfileBanner extends StatelessWidget {
                   children: [
                     Text(
                       user?.firstName ?? 'No Name',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     Text(
                       user?.lastName ?? 'No Last Name',
-                      style: TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 16),
                     ),
                   ],
                 ),

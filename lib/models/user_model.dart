@@ -1,5 +1,4 @@
 import 'package:mobilizzz/models/team_model.dart';
-import 'package:mobilizzz/utlis/utils.dart';
 import 'package:mobilizzz/models/record_model.dart';
 
 class User {

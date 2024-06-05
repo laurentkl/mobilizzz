@@ -7,17 +7,18 @@ class AuthService {
   // Simulate user authentication
   Future<User?> signIn(String email, String password) async {
     // Simulate network delay
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
 
     // Simulate successful authentication
     if (email == 'user@example.com' && password == 'password') {
     } else {
       return null;
     }
+    return null;
   }
 
   Future<User?> getCurrentUser() async {
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
 
     const url = 'http://10.0.10.55:5169/User/Get/1';
     final uri = Uri.parse(url);

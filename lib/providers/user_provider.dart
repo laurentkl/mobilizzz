@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mobilizzz/models/user_model.dart';
-import 'package:mobilizzz/services/record_service.dart';
-import 'package:mobilizzz/models/record_model.dart';
 import 'package:mobilizzz/services/user_service.dart';
 
 class UserProvider extends ChangeNotifier {

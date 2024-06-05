@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobilizzz/models/record_model.dart';
 import 'package:mobilizzz/providers/record_provider.dart';
-import 'package:mobilizzz/services/record_service.dart';
 import 'package:provider/provider.dart';
 
 class AddRecordPage extends StatefulWidget {

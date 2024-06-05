@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:mobilizzz/models/record_model.dart';
 import 'package:mobilizzz/models/team_model.dart';
 
 class TeamService {

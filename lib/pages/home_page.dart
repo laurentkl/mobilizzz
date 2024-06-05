@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobilizzz/pages/add_record_page.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
-import 'package:mobilizzz/providers/user_provider.dart';
 import 'package:mobilizzz/widgets/profile_banner.dart'; // Assuming profile_banner.dart has ProfileBanner
 import 'package:mobilizzz/widgets/records_list.dart';
 import 'package:provider/provider.dart'; // Assuming records_list.dart has RecordsList
@@ -15,10 +14,10 @@ class HomePage extends StatelessWidget {
       builder:(context, value, child) => Scaffold(
       body: Stack( // Use Stack for positioning
         children: [
-          Column(
+          const Column(
             children: [
-              ProfileBanner(user: value.user),
-              const Expanded(child: RecordsList()),
+              ProfileBanner(),
+              Expanded(child: RecordsList()),
             ],
           ),
           Positioned( // Position button at bottom right

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobilizzz/models/team_model.dart';
-import 'package:mobilizzz/models/user_model.dart';
 import 'package:mobilizzz/services/team_service.dart';
-import 'package:mobilizzz/services/user_service.dart';
 
 class TeamProvider extends ChangeNotifier {
   bool isLoading = false;

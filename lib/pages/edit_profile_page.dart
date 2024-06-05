@@ -5,7 +5,7 @@ import 'package:mobilizzz/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class EditProfilePage extends StatefulWidget {
-  const EditProfilePage({Key? key}) : super(key: key);
+  const EditProfilePage({super.key});
 
   @override
   State<EditProfilePage> createState() => _EditProfilePageState();
@@ -31,7 +31,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         title: const Text('Edit Profile'),
         actions: [
           IconButton(
-            icon: Icon(Icons.logout),
+            icon: const Icon(Icons.logout),
             onPressed: () {
               // Call the signOut method from the userProvider to logout
               Provider.of<AuthProvider>(context, listen: false).signOut();
