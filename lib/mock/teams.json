@@ -1,0 +1,21 @@
+[
+    {
+      "id": 1,
+      "name": "Mobility Masters",
+      "leaderId": 2,
+      "companyId": 123
+    },
+    {
+      "id": 2,
+      "name": "Green Commuters",
+      "leaderId": 5,
+      "companyId": 456
+    },
+    {
+      "id": 3,
+      "name": "Eco Champs",
+      "leaderId": 1,
+      "companyId": 789
+    }
+  ]
+  

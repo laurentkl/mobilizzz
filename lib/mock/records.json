@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "transportMethod": "car",
+    "distance": 5.2,
+    "userId": 1,
+    "teamId": 1
+  },
+  {
+    "id": 2,
+    "transportMethod": "bicycle",
+    "distance": 3.8,
+    "userId": 2,
+    "teamId": 2
+  },
+  {
+    "id": 3,
+    "transportMethod": "public transport",
+    "distance": 8.1,
+    "userId": 3,
+    "teamId": 1
+  },
+  {
+    "id": 4,
+    "transportMethod": "car",
+    "distance": 12.4,
+    "userId": 4,
+    "teamId": 1
+  },
+  {
+    "id": 5,
+    "transportMethod": "walking",
+    "distance": 1.5,
+    "userId": 5,
+    "teamId": 1
+  },
+  {
+    "id": 6,
+    "transportMethod": "bicycle",
+    "distance": 7.2,
+    "userId": 1,
+    "teamId": 2
+  },
+  {
+    "id": 7,
+    "transportMethod": "carpool",
+    "distance": 10.8,
+    "userId": 2,
+    "teamId": 1
+  },
+  {
+    "id": 8,
+    "transportMethod": "public transport",
+    "distance": 4.1,
+    "userId": 2,
+    "teamId": 0
+  },
+  {
+    "id": 9,
+    "transportMethod": "walking",
+    "distance": 2.3,
+    "userId": 2,
+    "teamId": 2
+  },
+  {
+    "id": 10,
+    "transportMethod": "car",
+    "distance": 15.6,
+    "userId": 1,
+    "teamId": 1
+  }
+]
