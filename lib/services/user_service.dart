@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:mobilizzz/models/team_model.dart';
 import 'package:mobilizzz/models/user_model.dart';
 
 class UserService {
@@ -15,7 +16,7 @@ class UserService {
   }
 
   Future<List<User>> getUsersByTeam(teamId) async {
-    dynamic url = 'http://10.0.10.55:5169/User/GetByTeam/$teamId';
+    dynamic url = 'http://10.0.10.55:5169/User/GetUsersByTeam/$teamId';
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     if (response.statusCode == 200) {
@@ -24,6 +25,4 @@ class UserService {
     }
     return [];
   }
-
-  
 }

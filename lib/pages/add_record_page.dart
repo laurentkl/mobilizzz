@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobilizzz/models/record_model.dart';
+import 'package:mobilizzz/models/team_model.dart';
+import 'package:mobilizzz/models/user_model.dart';
+import 'package:mobilizzz/providers/auth_provider.dart';
 import 'package:mobilizzz/providers/record_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -11,15 +14,21 @@ class AddRecordPage extends StatefulWidget {
 }
 
 class AddRecordPageState extends State<AddRecordPage> {
+  late User _user;
+
+  // Form 
   final _formKey = GlobalKey<FormState>();
-  double _distance = 0;
-  String _selectedTransportMethod = "";
+  Team? _selectedTeam;
   final List<String> transportMethods = ["Walking", "Cycling", "Bus"]; // Sample data
+  late String _selectedTransportMethod;
+  double _distance = 0;
 
   @override
   void initState() {
     super.initState();
     _selectedTransportMethod = transportMethods[0]; // Initialize with the first element
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    _user = authProvider.user!;
   }
 
     // Function to be called every time the state changes
@@ -34,7 +43,7 @@ class AddRecordPageState extends State<AddRecordPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Processing Data')),
       );
-      Record newRecord = Record(distance: _distance, transportMethod: _selectedTransportMethod, teamId: 1, userId: 1);
+      Record newRecord = Record(distance: _distance, transportMethod: _selectedTransportMethod, teamId: _selectedTeam?.id ?? 0, userId: _user.id);
 
         Provider.of<RecordProvider>(context, listen: false).addRecord(newRecord).then((success) {
         if (success) {
@@ -67,6 +76,28 @@ class AddRecordPageState extends State<AddRecordPage> {
           key: _formKey,
           child: Column(
             children: [
+              DropdownButtonFormField<Team>(
+                value: _selectedTeam,
+                decoration: const InputDecoration(labelText: "Team"),
+                items: _user.teams.map((team) {
+                  return DropdownMenuItem<Team>(
+                    value: team,
+                    child: Text(team.name),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _selectedTeam = value;
+                    _onStateChanged();
+                  });
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return "Please select a team.";
+                  }
+                  return null;
+                },
+              ),
               DropdownButtonFormField<String>(
                 value: transportMethods[0],
                 decoration: const InputDecoration(labelText: "Transport Method"),
