@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mobilizzz/pages/login_page.dart';
+import 'package:mobilizzz/providers/auth_provider.dart';
 import 'package:mobilizzz/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class EditProfilePage extends StatefulWidget {
-  const EditProfilePage({super.key});
+  const EditProfilePage({Key? key}) : super(key: key);
 
   @override
   State<EditProfilePage> createState() => _EditProfilePageState();
@@ -17,9 +19,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   void initState() {
     super.initState();
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    _firstName = userProvider.users?.first.firstName ?? "";
-    _lastName = userProvider.users?.first.lastName ?? ""; 
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    _firstName = authProvider.user?.firstName ?? "";
+    _lastName = authProvider.user?.lastName ?? "";
   }
 
   @override
@@ -27,6 +29,21 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Profile'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () {
+              // Call the signOut method from the userProvider to logout
+              Provider.of<AuthProvider>(context, listen: false).signOut();
+              // Navigate to the login page or any other page after logout
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+                (route) => false, // Remove all existing routes from the stack
+              );
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

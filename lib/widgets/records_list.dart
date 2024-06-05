@@ -1,23 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:mobilizzz/providers/record_provider.dart';
 import 'package:mobilizzz/utlis/utils.dart';
+import 'package:provider/provider.dart';
 
-class RecordsList extends StatelessWidget {
+class RecordsList extends StatefulWidget {
   const RecordsList({super.key});
+
+  @override
+  State<RecordsList> createState() => _RecordsListState();
+}
+
+class _RecordsListState extends State<RecordsList> {
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<RecordProvider>(context, listen: false).getAllRecords();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder(
-        future: loadMockRecords(), // Assuming this function returns a Future
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No records found'));
-          } else {
-            final records = snapshot.data!;
+      body: Consumer<RecordProvider>(
+        builder: (context, value, _) {
+
+          if (value.isLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+            final records = value.records;
             return ListView.builder(
               // Show only the first 5 elements
               itemCount: records.length,
@@ -50,7 +64,6 @@ class RecordsList extends StatelessWidget {
                 );
               },
             );
-          }
         },
       ),
     );

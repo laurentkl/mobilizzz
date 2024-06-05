@@ -1,49 +1,36 @@
-import 'dart:async';
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:mobilizzz/models/record_model.dart';
 import 'package:mobilizzz/models/user_model.dart';
-import 'package:mobilizzz/utlis/utils.dart';
+import 'package:mobilizzz/services/record_service.dart';
+import 'package:mobilizzz/models/record_model.dart';
+import 'package:mobilizzz/services/user_service.dart';
 
 class UserProvider extends ChangeNotifier {
-  List<User>? _users;
+  bool isLoading = false;
+  List<User> _users = [];
+  List<User> get users => _users;
 
-  List<User>? get users => _users;
-
-  set users(List<User>? users) {
-    _users = users;
-    notifyListeners(); // Notify listeners about user update
+    set users(List<User> users) {
+      _users = users;
+      notifyListeners();
   }
 
-  Future<List<User>> loadMockUsers() async {
-    final String response = await rootBundle.loadString('lib/mock/users.json');
-    final List<dynamic> data = json.decode(response);
-    return data.map((json) => User.fromJson(json)).toList();
+  Future<void> getAllUsers() async {
+    final service = UserService();
+    isLoading = true;
+
+    final response = await service.getAll();
+
+    users = response;
+    isLoading = false;
   }
 
-  getDataFromAPI() async {
-    try {
-      final response = await loadMockUsers();
+    Future<void> getTeamUsers(teamId) async {
+    final service = UserService();
+    isLoading = true;
 
-      if (response.isNotEmpty) { // Corrected line with removed extra brace
-        for (var user in response) {
-          user.records = await fetchRecordsForUser(user.id);
-          print(user);
-        }
-        users = response;
+    final response = await service.getUsersByTeam(teamId);
 
-      }
-
-      print(users);
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  Future<List<Record>> fetchRecordsForUser(userId) async {
-    final allRecords = await loadMockRecords();
-    return allRecords.where((record) => record.userId == userId).toList();
+    users = response;
+    isLoading = false;
   }
 }

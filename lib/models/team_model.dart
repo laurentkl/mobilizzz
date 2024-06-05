@@ -16,7 +16,8 @@ class Team {
       id: json['id'] as int,
       name: json['name'] as String,
       leaderId: json['leaderId'] as int,
-      companyId: json['companyId'] as int,
+      // companyId: json['companyId'] as int,
+      companyId: 0,
     );
   }
 
