@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mobilizzz/pages/login_page.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
 import 'package:mobilizzz/providers/user_provider.dart';
@@ -36,11 +37,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               // Call the signOut method from the userProvider to logout
               Provider.of<AuthProvider>(context, listen: false).signOut();
               // Navigate to the login page or any other page after logout
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => LoginPage()),
-                (route) => false, // Remove all existing routes from the stack
-              );
+              if (context.mounted) context.go('/login');
             },
           ),
         ],

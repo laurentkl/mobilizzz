@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mobilizzz/models/team_model.dart';
 import 'package:mobilizzz/models/user_model.dart';
+import 'package:mobilizzz/pages/add_record_page.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
 import 'package:mobilizzz/services/user_service.dart';
+import 'package:mobilizzz/widgets/team_stats.dart';
 import 'package:mobilizzz/widgets/users_list.dart';
 import 'package:provider/provider.dart';
 
@@ -14,19 +16,16 @@ class TeamPage extends StatefulWidget {
 }
 
 class _TeamPageState extends State<TeamPage> {
-  late Future<List<User>> _futureUsers;
-  late List<Team>? _teams;
-  int _currentTeamId = 1;
+  late User _user;
+  int _currentTeamId = 0;
+  late Team? _currentTeam;
+  late double teamTotalKm = 0.0;
 
-  Future<List<User>> _fetchUsers(int teamId) async {
-    final userService = UserService();
-    return await userService.getUsersByTeam(teamId);
-  }
-
-  void _toggleTeamId(int teamId) {
+  void _toggleTeam(int teamId) {
     setState(() {
       _currentTeamId = teamId;
-      _futureUsers = _fetchUsers(teamId);
+      _currentTeam =
+          _user.teams.firstWhere((team) => team.id == _currentTeamId);
     });
   }
 
@@ -34,11 +33,10 @@ class _TeamPageState extends State<TeamPage> {
   void initState() {
     super.initState();
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final User? user = authProvider.user;
+    _user = authProvider.user!;
 
-    _teams = user?.teams;
-
-    _futureUsers = _fetchUsers(_currentTeamId);
+    _currentTeamId = _user.teams.first.id;
+    _currentTeam = _user.teams.first;
   }
 
   @override
@@ -49,27 +47,45 @@ class _TeamPageState extends State<TeamPage> {
           title: const Text('Team'), // Default title if teams are not loaded
           actions: [
             IconButton(
-              icon: const Icon(Icons.filter_1),
-              onPressed: () => _toggleTeamId(1),
-            ),
-            IconButton(
-              icon: const Icon(Icons.filter_2),
-              onPressed: () => _toggleTeamId(2),
-            ),
-            IconButton(
-              icon: const Icon(Icons.filter_3),
-              onPressed: () => _toggleTeamId(3),
+              icon: Icon(Icons.settings),
+              onPressed: () => {},
             ),
           ],
+        ),
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              const DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                ),
+                child: Text(
+                  'Team Selection',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                  ),
+                ),
+              ),
+              ..._user.teams.map((team) => ListTile(
+                    title: Text(team.name),
+                    onTap: () {
+                      _toggleTeam(team.id);
+                      Navigator.pop(context); // Close the drawer
+                    },
+                  )),
+            ],
+          ),
         ),
         body: Stack(
           children: [
             Column(
               children: [
                 Center(
-                  child: _teams != null && _teams!.isNotEmpty
+                  child: _user.teams != null && _user.teams.isNotEmpty
                       ? Text(
-                          _teams![_currentTeamId - 1].name,
+                          _user.teams[_currentTeamId - 1].name,
                           style: const TextStyle(
                             fontSize: 34.0,
                             fontWeight: FontWeight.bold,
@@ -85,9 +101,24 @@ class _TeamPageState extends State<TeamPage> {
                           ),
                         ),
                 ),
+                FutureBuilder<double>(
+                  future: _currentTeam?.getTotalKm(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else {
+                      return TeamStats(
+                        totalKm: snapshot.data ?? 0,
+                        bikeKm: 22,
+                      );
+                    }
+                  },
+                ),
                 Expanded(
                   child: FutureBuilder<List<User>>(
-                    future: _futureUsers,
+                    future: _currentTeam!.fetchUsers(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(child: CircularProgressIndicator());
@@ -96,7 +127,10 @@ class _TeamPageState extends State<TeamPage> {
                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                         return const Center(child: Text('No users found'));
                       } else {
-                        return UsersList(users: snapshot.data!, teamId: _currentTeamId,);
+                        return UsersList(
+                          users: snapshot.data!,
+                          teamId: _currentTeamId,
+                        );
                       }
                     },
                   ),
@@ -109,7 +143,12 @@ class _TeamPageState extends State<TeamPage> {
               child: FloatingActionButton(
                 heroTag: "team-btn-insert",
                 onPressed: () {
-                  // Handle button press
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AddRecordPage(
+                                preselectedTeamId: _currentTeamId,
+                              )));
                 },
                 backgroundColor: Colors.blue,
                 child: const Icon(Icons.add),

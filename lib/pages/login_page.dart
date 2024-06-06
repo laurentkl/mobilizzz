@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
-  final TextEditingController _emailController = TextEditingController(text: "user@example.com");
+  final TextEditingController _emailController = TextEditingController(text: "klein@test.com");
   final TextEditingController _passwordController = TextEditingController(text: "password");
 
   LoginPage({super.key});
@@ -31,12 +32,16 @@ class LoginPage extends StatelessWidget {
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(
-              onPressed: () {
-                // Call the signIn method from the AuthProvider
-                Provider.of<AuthProvider>(context, listen: false).signIn(
+              onPressed: () async {
+                final authProvider = Provider.of<AuthProvider>(context, listen: false);
+                final signInSuccess = await authProvider.signIn(
                   _emailController.text.trim(),
                   _passwordController.text.trim(),
                 );
+                if (signInSuccess) {
+                  // If sign-in is successful, navigate to another route
+                  if(context.mounted) context.go('/bottomnav');
+                }
               },
               child: const Text('Login'),
             ),

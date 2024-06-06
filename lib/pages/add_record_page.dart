@@ -7,7 +7,9 @@ import 'package:mobilizzz/providers/record_provider.dart';
 import 'package:provider/provider.dart';
 
 class AddRecordPage extends StatefulWidget {
-  const AddRecordPage({super.key});
+  const AddRecordPage({super.key, this.preselectedTeamId});
+
+  final int? preselectedTeamId;
 
   @override
   AddRecordPageState createState() => AddRecordPageState();
@@ -29,6 +31,9 @@ class AddRecordPageState extends State<AddRecordPage> {
     _selectedTransportMethod = transportMethods[0]; // Initialize with the first element
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     _user = authProvider.user!;
+    if(widget.preselectedTeamId != null){
+      _selectedTeam = _user.teams[widget.preselectedTeamId! - 1];
+    }
   }
 
     // Function to be called every time the state changes
@@ -79,7 +84,7 @@ class AddRecordPageState extends State<AddRecordPage> {
               DropdownButtonFormField<Team>(
                 value: _selectedTeam,
                 decoration: const InputDecoration(labelText: "Team"),
-                items: _user.teams.map((team) {
+                items: _user.teams?.map((team) {
                   return DropdownMenuItem<Team>(
                     value: team,
                     child: Text(team.name),

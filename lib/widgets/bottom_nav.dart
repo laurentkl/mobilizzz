@@ -1,7 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:mobilizzz/pages/search_team_page.dart';
 import 'package:mobilizzz/pages/team_page.dart';
+import 'package:mobilizzz/providers/auth_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../pages/home_page.dart';
+
+class TeamPageWrapper extends StatelessWidget {
+  const TeamPageWrapper({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+    final user = authProvider.user;
+
+    if (user != null && user.teams != null && user.teams.isNotEmpty) {
+      // Si l'utilisateur a des équipes, affichez la page de l'équipe
+      return TeamPage();
+    } else {
+      // Si l'utilisateur n'a pas d'équipe, redirigez-le vers la page de recherche d'équipe
+      return SearchTeamPage();
+    }
+  }
+}
 
 class BottomNav extends StatefulWidget {
   const BottomNav({super.key});
@@ -15,7 +36,7 @@ class BottomNavState extends State<BottomNav> {
 
   static const List<Widget> _views = [
     HomePage(),
-    TeamPage(),
+    TeamPageWrapper(),
   ];
 
   void _onItemTapped(int index) {

@@ -14,7 +14,7 @@ class ProfileBanner extends StatelessWidget {
         final user = authProvider.user;
         return Container(
           height: 150,
-          color: Colors.blueGrey[100],
+          color: Colors.blue,
           padding: const EdgeInsets.all(16.0),
           child: SafeArea(
             child: Row(
@@ -38,12 +38,8 @@ class ProfileBanner extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      user?.firstName ?? 'No Name',
+                      '${user?.firstName ?? 'No Name'} ${user?.lastName ?? 'No Last Name'}',
                       style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      user?.lastName ?? 'No Last Name',
-                      style: const TextStyle(fontSize: 16),
                     ),
                   ],
                 ),
