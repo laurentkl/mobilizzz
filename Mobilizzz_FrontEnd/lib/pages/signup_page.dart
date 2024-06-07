@@ -5,10 +5,10 @@ import 'package:provider/provider.dart';
 import 'login_page.dart'; // Importez la page LoginPage ici
 
 class SignUpPage extends StatelessWidget {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController(text: "test@mail.com");
+  final TextEditingController _passwordController = TextEditingController(text: "password");
+  final TextEditingController _firstNameController = TextEditingController(text: "Laurent");
+  final TextEditingController _lastNameController = TextEditingController(text: "Klein");
 
   SignUpPage({Key? key}) : super(key: key);
 
@@ -45,14 +45,23 @@ class SignUpPage extends StatelessWidget {
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 // Call the signUp method from the AuthProvider
-                Provider.of<AuthProvider>(context, listen: false).signUp(
-                  _firstNameController.text.trim(),
-                  _lastNameController.text.trim(),
-                  _emailController.text.trim(),
-                  _passwordController.text.trim(),
-                );
+                final authProvider = Provider.of<AuthProvider>(context, listen: false);
+                
+                try {
+                  await authProvider.signUp(
+                    _firstNameController.text.trim(),
+                    _lastNameController.text.trim(),
+                    _emailController.text.trim(),
+                    _passwordController.text.trim(),
+                  );
+                  if (context.mounted) context.go('/bottomnav');
+                } catch (error) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(error.toString())),
+                  );
+                }
               },
               child: const Text('Sign Up'),
             ),
@@ -60,7 +69,7 @@ class SignUpPage extends StatelessWidget {
             TextButton(
               onPressed: () {
                 // Navigate to LoginPage
-                  if(context.mounted) context.go('/bottomnav');
+                  if(context.mounted) context.go('/login');
               },
               child: const Text(
                 'Already have an account? Login',

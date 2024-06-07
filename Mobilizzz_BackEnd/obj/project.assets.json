@@ -3027,41 +3027,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\klein\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\DevExpress 21.2\\Components\\Offline Packages": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
-    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {}
+    "/Users/shady/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\klein\\Desktop\\Mobilizzz_BackEnd\\Mobilizzz_BackEnd.csproj",
+      "projectUniqueName": "/Users/shady/Desktop/mobilizzz/Mobilizzz_BackEnd/Mobilizzz_BackEnd.csproj",
       "projectName": "Mobilizzz_BackEnd",
-      "projectPath": "C:\\Users\\klein\\Desktop\\Mobilizzz_BackEnd\\Mobilizzz_BackEnd.csproj",
-      "packagesPath": "C:\\Users\\klein\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\klein\\Desktop\\Mobilizzz_BackEnd\\obj\\",
+      "projectPath": "/Users/shady/Desktop/mobilizzz/Mobilizzz_BackEnd/Mobilizzz_BackEnd.csproj",
+      "packagesPath": "/Users/shady/.nuget/packages/",
+      "outputPath": "/Users/shady/Desktop/mobilizzz/Mobilizzz_BackEnd/obj/",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\DevExpress 21.2\\Components\\Offline Packages",
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
-      ],
       "configFilePaths": [
-        "C:\\Users\\klein\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 18.2.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 21.2.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        "/Users/shady/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\DevExpress 21.2\\Components\\System\\Components\\Packages": {},
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "https://api.nuget.org/v3/index.json": {},
-        "https://nuget.devexpress.com/QEOrojjsteGUhmNCtk1KJdWmeSdGXjhe7wKF52bEJ14RandXuS/api": {}
+        "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
@@ -3127,7 +3111,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.106/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.100/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

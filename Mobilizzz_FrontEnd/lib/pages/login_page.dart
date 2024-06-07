@@ -4,17 +4,19 @@ import 'package:mobilizzz/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
-  final TextEditingController _emailController = TextEditingController(text: "klein@test.com");
-  final TextEditingController _passwordController = TextEditingController(text: "password");
+  final TextEditingController _emailController =
+      TextEditingController(text: "klein@test.com");
+  final TextEditingController _passwordController =
+      TextEditingController(text: "password");
 
   LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-      ),
+      // appBar: AppBar(
+      //   title: const Text('LogDin'),
+      // ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -33,17 +35,32 @@ class LoginPage extends StatelessWidget {
             const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () async {
-                final authProvider = Provider.of<AuthProvider>(context, listen: false);
-                final signInSuccess = await authProvider.signIn(
-                  _emailController.text.trim(),
-                  _passwordController.text.trim(),
-                );
-                if (signInSuccess) {
-                  // If sign-in is successful, navigate to another route
-                  if(context.mounted) context.go('/bottomnav');
+                final authProvider =
+                    Provider.of<AuthProvider>(context, listen: false);
+                try {
+                  await authProvider.signIn(
+                    _emailController.text.trim(),
+                    _passwordController.text.trim(),
+                  );
+                  if (context.mounted) context.go('/bottomnav');
+                } catch (error) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(error.toString())),
+                  );
                 }
               },
               child: const Text('Login'),
+            ),
+            const SizedBox(height: 8.0),
+            TextButton(
+              onPressed: () {
+                // Navigate to LoginPage
+                if (context.mounted) context.go('/signup');
+              },
+              child: const Text(
+                "Don't have an account yet ? Sign up here",
+                style: TextStyle(color: Colors.blue),
+              ),
             ),
           ],
         ),

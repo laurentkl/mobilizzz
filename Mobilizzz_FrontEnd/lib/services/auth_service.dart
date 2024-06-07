@@ -2,12 +2,14 @@ import 'dart:convert';
 
 import 'package:mobilizzz/models/login_model.dart';
 import 'package:mobilizzz/models/user_model.dart';
+import 'package:mobilizzz/constants/constants.dart';
 import 'package:http/http.dart' as http;
+
 
 class AuthService {
 Future<User?> signIn(String email, String password) async {
   try {
-    const url = 'http://10.0.10.55:5169/Auth/login';
+    const url = '${AppConstants.apiUrl}/Auth/login';
     final uri = Uri.parse(url);
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode(Login(email: email, password: password).toJson());
@@ -44,7 +46,7 @@ Future<User?> signIn(String email, String password) async {
 
 Future<User?> signUp(String firstName, String lastName, String email, String password) async {
   try {
-    const url = 'http://10.0.10.55:5169/Auth/signup';
+    const url = '${AppConstants.apiUrl}/Auth/signup';
     final uri = Uri.parse(url);
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({
@@ -86,7 +88,7 @@ Future<User?> signUp(String firstName, String lastName, String email, String pas
 
 
   Future<User?> getCurrentUser() async {
-    const url = 'http://10.0.10.55:5169/User/Get/1';
+    const url = '${AppConstants.apiUrl}/User/Get/1';
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     if (response.statusCode == 200) {

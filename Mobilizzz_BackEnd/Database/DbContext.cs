@@ -13,4 +13,5 @@ public class Context: DbContext
     public DbSet<Record> Records { get; set; }
     public DbSet<Team> Teams { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<Company> Companies { get; set; }
 }

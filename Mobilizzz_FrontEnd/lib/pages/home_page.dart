@@ -11,31 +11,36 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<AuthProvider>(
-      builder:(context, value, child) => Scaffold(
-      body: Stack( // Use Stack for positioning
-        children: [
-          const Column(
+      builder: (context, authProvider, child) {
+        final user = authProvider.user;
+        final records = user?.records ?? [];
+
+        return Scaffold(
+          body: Stack( // Use Stack for positioning
             children: [
-              ProfileBanner(),
-              Expanded(child: RecordsList()),
+              Column(
+                children: [
+                  const ProfileBanner(),
+                  Expanded(child: RecordsList(records: records)),
+                ],
+              ),
+              Positioned( // Position button at bottom right
+                bottom: 20.0, // Adjust for spacing from bottom
+                right: 20.0,  // Adjust for spacing from right
+                child: FloatingActionButton(
+                  heroTag: "home-btn-insert",
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => const AddRecordPage()));
+                  }, 
+                  backgroundColor: Colors.blue,
+                  child: const Icon(Icons.add), 
+                ),
+              ),
             ],
           ),
-          Positioned( // Position button at bottom right
-            bottom: 20.0, // Adjust for spacing from bottom
-            right: 20.0,  // Adjust for spacing from right
-            child: FloatingActionButton(
-              heroTag: "home-btn-insert",
-              onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const AddRecordPage()));
-              }, 
-              backgroundColor: Colors.blue,
-              child: const Icon(Icons.add), 
-            ),
-          ),
-        ],
-      ),
-    ),
+        );
+      },
     );
   }
 }

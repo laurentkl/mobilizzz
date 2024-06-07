@@ -21,6 +21,26 @@ namespace Mobilizzz_BackEnd.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Mobilizzz_BackEnd.Models.Company", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Companies");
+                });
+
             modelBuilder.Entity("Mobilizzz_BackEnd.Models.Record", b =>
                 {
                     b.Property<int>("Id")
@@ -62,6 +82,9 @@ namespace Mobilizzz_BackEnd.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -73,6 +96,8 @@ namespace Mobilizzz_BackEnd.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
 
                     b.ToTable("Teams");
                 });
@@ -143,6 +168,13 @@ namespace Mobilizzz_BackEnd.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Mobilizzz_BackEnd.Models.Team", b =>
+                {
+                    b.HasOne("Mobilizzz_BackEnd.Models.Company", null)
+                        .WithMany("Teams")
+                        .HasForeignKey("CompanyId");
+                });
+
             modelBuilder.Entity("TeamUser", b =>
                 {
                     b.HasOne("Mobilizzz_BackEnd.Models.Team", null)
@@ -156,6 +188,11 @@ namespace Mobilizzz_BackEnd.Migrations
                         .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Mobilizzz_BackEnd.Models.Company", b =>
+                {
+                    b.Navigation("Teams");
                 });
 
             modelBuilder.Entity("Mobilizzz_BackEnd.Models.User", b =>

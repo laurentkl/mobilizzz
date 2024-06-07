@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:mobilizzz/constants/constants.dart';
 import 'package:mobilizzz/models/team_model.dart';
 
 class TeamService {
   Future<List<Team>> getAll() async {
-    const url = 'http://10.0.10.55:5169/User/GetAll';
+    const url = '${AppConstants.apiUrl}/User/GetAll';
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     if (response.statusCode == 200) {
@@ -15,7 +16,7 @@ class TeamService {
   }
 
   Future<List<Team>> getTeamsByUser(userId) async {
-    dynamic url = 'http://10.0.10.55:5169/Team/GetTeamsByUser/$userId';
+    dynamic url = '${AppConstants.apiUrl}/Team/GetTeamsByUser/$userId';
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     if (response.statusCode == 200) {
