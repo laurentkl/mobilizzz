@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobilizzz/models/user_model.dart';
 import 'package:mobilizzz/pages/edit_profile_page.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
 import 'package:provider/provider.dart';

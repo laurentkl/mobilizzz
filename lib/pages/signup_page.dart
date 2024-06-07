@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 import 'login_page.dart'; // Importez la page LoginPage ici
@@ -15,7 +16,7 @@ class SignUpPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sign Up'),
+        title: const Text('Sign Up'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -24,25 +25,25 @@ class SignUpPage extends StatelessWidget {
           children: [
             TextField(
               controller: _firstNameController,
-              decoration: InputDecoration(labelText: 'First Name'),
+              decoration: const InputDecoration(labelText: 'First Name'),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextField(
               controller: _lastNameController,
-              decoration: InputDecoration(labelText: 'Last Name'),
+              decoration: const InputDecoration(labelText: 'Last Name'),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextField(
               controller: _emailController,
-              decoration: InputDecoration(labelText: 'Email'),
+              decoration: const InputDecoration(labelText: 'Email'),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextField(
               controller: _passwordController,
-              decoration: InputDecoration(labelText: 'Password'),
+              decoration: const InputDecoration(labelText: 'Password'),
               obscureText: true,
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () {
                 // Call the signUp method from the AuthProvider
@@ -53,17 +54,15 @@ class SignUpPage extends StatelessWidget {
                   _passwordController.text.trim(),
                 );
               },
-              child: Text('Sign Up'),
+              child: const Text('Sign Up'),
             ),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             TextButton(
               onPressed: () {
                 // Navigate to LoginPage
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => LoginPage()),
-                );
+                  if(context.mounted) context.go('/bottomnav');
               },
-              child: Text(
+              child: const Text(
                 'Already have an account? Login',
                 style: TextStyle(color: Colors.blue),
               ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobilizzz/pages/home_page.dart';
 import 'package:mobilizzz/pages/signup_page.dart';
 import 'package:provider/provider.dart';
 import 'package:mobilizzz/pages/login_page.dart';
@@ -23,13 +22,25 @@ final _router = GoRouter(
     ),
     GoRoute(
       path: '/bottomnav',
-      builder: (context, state) => BottomNav(),
+      builder: (context, state) => const BottomNav(),
     ),
     GoRoute(
       path: '/login',
       builder: (context, state) => LoginPage(),
     ),
   ],
+  redirect: (context, state) {
+    // final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+    // // Check if the user is authenticated
+    // if (authProvider.user != null) {
+    //   // User is authenticated, redirect to '/bottomnav'
+    //   return "/bottomnav";
+    // } else {
+    //   // User is not authenticated, redirect to '/'
+    //   return "/";
+    // }
+  },
 );
 
 void main() async {
@@ -78,3 +89,23 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
+// class AuthWrapper extends StatelessWidget {
+//   const AuthWrapper({Key? key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Consumer<AuthProvider>(
+//       builder: (context, authProvider, _) {
+//         final user = authProvider.user;
+
+//         // Check if user is null and show LoginPage if true, otherwise show the main app content
+//         if (user == null) {
+//           return LoginPage();
+//         } else {
+//           return const BottomNav();
+//         }
+//       },
+//     );
+//   }
+// }
