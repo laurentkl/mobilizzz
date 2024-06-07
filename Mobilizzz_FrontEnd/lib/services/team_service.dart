@@ -5,7 +5,7 @@ import 'package:mobilizzz/models/team_model.dart';
 
 class TeamService {
   Future<List<Team>> getAll() async {
-    const url = '${AppConstants.apiUrl}/User/GetAll';
+    const url = '${AppConstants.apiUrl}/Team/GetAll';
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     if (response.statusCode == 200) {

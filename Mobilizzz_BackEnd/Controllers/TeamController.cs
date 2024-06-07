@@ -18,7 +18,9 @@ public class TeamController : ControllerBase
     [HttpGet("GetAll")]
     public async Task<IActionResult> GetAll()
     {
-        var teams = await _dbContext.Teams.ToListAsync();
+        var teams = await _dbContext.Teams
+            .Include(t => t.Company)
+            .ToListAsync();
         return Ok(teams);
     }
 

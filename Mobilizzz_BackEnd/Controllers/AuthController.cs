@@ -31,7 +31,7 @@ namespace Mobilizzz_BackEnd.Controllers
         {
             // Vérifier les informations d'identification de l'utilisateur
             var user = await _dbContext.Users
-                .Include(u => u.Teams)
+                .Include(u => u.Teams).ThenInclude(t => t.Company)
                 .Include(u => u.Records)
                 .FirstOrDefaultAsync(u => u.Email == model.Email && u.Password == model.Password);
 
@@ -75,7 +75,9 @@ namespace Mobilizzz_BackEnd.Controllers
             try
             {
                 // Vérifier si l'utilisateur existe déjà dans la base de données
-                var existingUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
+                var existingUser = await _dbContext.Users
+                    .Include(u => u.Teams).ThenInclude(t => t.Company)
+                    .FirstOrDefaultAsync(u => u.Email == model.Email);
 
                 if (existingUser != null)
                 {

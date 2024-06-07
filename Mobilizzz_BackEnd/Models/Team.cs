@@ -6,8 +6,8 @@ namespace Mobilizzz_BackEnd.Models
     {
         public string Name { get; set; }
         public int LeaderId { get; set; }
-        // public int? CompanyId { get; set; }
-        // public Company? Company { get; set; }
+        public int? CompanyId { get; set; }
+        public Company? Company { get; set; }
 
         [JsonIgnore]
         public List<User> Users { get; set; } // Read-only collection for teams

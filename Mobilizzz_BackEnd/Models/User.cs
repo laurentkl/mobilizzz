@@ -6,8 +6,8 @@
         public string FirstName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        // public int? CompanyId { get; set; }
-        // public Company? Company { get; set; }
+        public int? CompanyId { get; set; }
+        public Company? Company { get; set; }
         public List<Record>? Records { get; set; } 
         public List<Team>? Teams { get; set; } 
     }
