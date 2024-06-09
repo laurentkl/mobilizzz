@@ -46,6 +46,19 @@ class TeamProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> createTeam(Team team, int userId) async {
+    try {
+      await _teamService.createTeam(team);
+      // Optionally, you can refetch teams or update the state
+      await fetchTeamsForUser(userId);
+    } catch (error) {
+      print('Error joining team: $error');
+      // Handle error accordingly
+    }
+  }
+
+
+
   // Add other methods as needed based on your app requirements
 
   // For example, method to leave a team

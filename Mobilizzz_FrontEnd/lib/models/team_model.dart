@@ -3,14 +3,14 @@ import 'package:mobilizzz/services/user_service.dart';
 import 'package:mobilizzz/models/company_model.dart'; // Import your Company model
 
 class Team {
-  final int id;
+  final int? id;
   final String name;
   final List<int> adminIds;
   final int companyId;
   final Company? company; // Add nullable company object field
 
   const Team({
-    required this.id,
+    this.id,
     required this.name,
     required this.adminIds,
     required this.companyId,
@@ -50,11 +50,14 @@ class Team {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {
-      'id': id,
       'name': name,
-      'leaderIds': adminIds,
+      'adminIds': adminIds,
       'companyId': companyId,
     };
+
+    if (id != null) {
+      data['id'] = id;
+    }
 
     if (company != null) {
       data['company'] = company!.toJson(); // Include company object in JSON if not null

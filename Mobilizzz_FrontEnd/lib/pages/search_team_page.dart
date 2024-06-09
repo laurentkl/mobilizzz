@@ -32,7 +32,7 @@ class _SearchTeamPageState extends State<SearchTeamPage> {
     final teamProvider = Provider.of<TeamProvider>(context, listen: false);
     final userId = authProvider.user!.id; // Get the user ID from the auth provider
     try {
-        await teamProvider.joinTeam(team.id, userId);
+        await teamProvider.joinTeam(team.id!, userId);
         // Handle successful join team response
         print('Successfully joined team: ${team.name}');
     } catch (error) {

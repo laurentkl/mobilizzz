@@ -44,7 +44,7 @@ class _TeamPageState extends State<TeamPage> {
       teamProvider.fetchTeamsForUser(_user!.id).then((_) {
         if (teamProvider.teamsForUser.isNotEmpty) {
           setState(() {
-            _currentTeamId = teamProvider.teamsForUser.first.id;
+            _currentTeamId = teamProvider.teamsForUser.first.id!;
             _currentTeam = teamProvider.teamsForUser.first;
           });
         }
@@ -98,7 +98,7 @@ class _TeamPageState extends State<TeamPage> {
                   ...teamProvider.teamsForUser.map((team) => ListTile(
                         title: Text(team.name),
                         onTap: () {
-                          _toggleTeam(team.id);
+                          _toggleTeam(team.id!);
                           Navigator.pop(context); // Close the drawer
                         },
                       )),

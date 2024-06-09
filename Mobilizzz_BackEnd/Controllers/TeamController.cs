@@ -28,13 +28,16 @@ public class TeamController : ControllerBase
     public async Task<IActionResult> Create([FromBody] Team team)
     {
         // Validate the incoming team data
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
+        if (!ModelState.IsValid) return BadRequest(); 
+
+        var creatorUser = await _dbContext.Users.FindAsync(team?.AdminIds?.First());
+
+        // Initialize the Users list if it's null
+        team.Users = new List<User>{creatorUser};
 
         // Add the team to the database
         _dbContext.Teams.Add(team);
+
         await _dbContext.SaveChangesAsync();
 
         return Ok(new { message = "Team created successfully", team });
