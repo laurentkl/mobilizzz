@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobilizzz/pages/signup_page.dart';
+import 'package:mobilizzz/providers/team_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:mobilizzz/pages/login_page.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
@@ -50,6 +51,9 @@ void main() async {
         ChangeNotifierProvider<UserProvider>(
           create: (context) => UserProvider(),
         ),
+        ChangeNotifierProvider<TeamProvider>(
+          create: (context) => TeamProvider(),
+        ),
         ChangeNotifierProvider<RecordProvider>(
           create: (context) => RecordProvider(),
         ),
@@ -75,6 +79,8 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+
+
   }
 
   @override

@@ -1,6 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:mobilizzz/constants/constants.dart';
+import 'package:mobilizzz/dialogs/join_team_dialog.dart';
 import 'package:mobilizzz/models/team_model.dart';
+import 'package:mobilizzz/providers/auth_provider.dart';
+import 'package:mobilizzz/providers/team_provider.dart';
 import 'package:mobilizzz/services/team_service.dart';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class SearchTeamPage extends StatefulWidget {
   const SearchTeamPage({Key? key}) : super(key: key);
@@ -18,6 +26,20 @@ class _SearchTeamPageState extends State<SearchTeamPage> {
     super.initState();
     _teamsFuture = _teamService.getAll();
   }
+
+  Future<void> _requestJoinTeam(Team team) async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final teamProvider = Provider.of<TeamProvider>(context, listen: false);
+    final userId = authProvider.user!.id; // Get the user ID from the auth provider
+    try {
+        await teamProvider.joinTeam(team.id, userId);
+        // Handle successful join team response
+        print('Successfully joined team: ${team.name}');
+    } catch (error) {
+      print('Error joining team: $error');
+  }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -63,10 +85,16 @@ class _SearchTeamPageState extends State<SearchTeamPage> {
                       itemBuilder: (context, index) {
                         final team = teams[index];
                         return ListTile(
-                          title: Text(team.name), // Replace with your team name field
-                          subtitle: Text(team.company?.name ?? ""), // Replace with your team description field
+                          title: Text(team.name),
+                          subtitle: Text(team.company?.name ?? ""),
                           onTap: () {
-                            // Handle tap on team
+                            showDialog(
+                              context: context,
+                              builder: (context) => JoinTeamDialog(
+                                teamName: team.name,
+                                onRequestJoin: () => _requestJoinTeam(team),
+                              ),
+                            );
                           },
                         );
                       },

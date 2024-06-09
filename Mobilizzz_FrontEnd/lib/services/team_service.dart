@@ -15,7 +15,7 @@ class TeamService {
     return [];
   }
 
-  Future<List<Team>> getTeamsByUser(userId) async {
+  Future<List<Team>> getTeamsByUser(int userId) async {
     dynamic url = '${AppConstants.apiUrl}/Team/GetTeamsByUser/$userId';
     final uri = Uri.parse(url);
     final response = await http.get(uri);
@@ -24,6 +24,58 @@ class TeamService {
       return json.map((json) => Team.fromJson(json)).toList();
     }
     return [];
+  }
+
+  Future<void> joinTeam(int teamId, int userId) async {
+    try {
+      final joinTeamUrl = Uri.parse('${AppConstants.apiUrl}/Team/JoinTeam');
+      final requestData = {'teamId': teamId, 'userId': userId};
+
+      final response = await http.post(
+        joinTeamUrl,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(requestData),
+      );
+
+      if (response.statusCode == 200) {
+        print('Successfully joined team');
+        // Optionally, you can update the state or perform any other action
+      } else {
+        print('Failed to join team: ${response.statusCode}');
+        // Handle error response
+      }
+    } catch (error) {
+      print('Error joining team: $error');
+      // Handle exceptions
+    }
+  }
+
+  Future<void> createTeam(Team team) async {
+    try {
+      final createTeamUrl = Uri.parse('${AppConstants.apiUrl}/Team/Create');
+
+      final requestData = team.toJson();
+
+      final response = await http.post(
+        createTeamUrl,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(requestData),
+      );
+
+      if (response.statusCode == 200) {
+        print('Team created successfully');
+      } else {
+        print('Failed to create team: ${response.statusCode}');
+        // Handle error response
+      }
+    } catch (error) {
+      print('Error creating team: $error');
+      // Handle exceptions
+    }
   }
 
   // Future<bool> addRecord(Record record) async {

@@ -5,11 +5,11 @@ namespace Mobilizzz_BackEnd.Models
     public class Team: BaseEntity
     {
         public string Name { get; set; }
-        public int LeaderId { get; set; }
         public int? CompanyId { get; set; }
         public Company? Company { get; set; }
+        public List<int>? AdminIds { get; set; } // Read-only collection for teams
 
         [JsonIgnore]
-        public List<User> Users { get; set; } // Read-only collection for teams
+        public List<User>? Users { get; set; } // Read-only collection for teams
     }
 }

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Mobilizzz_BackEnd")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+773c139b5c30e34c6775eea149ae9eaf7433b3e7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1f480c6d854d8e2ec17addb3642f21af4021e279")]
 [assembly: System.Reflection.AssemblyProductAttribute("Mobilizzz_BackEnd")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Mobilizzz_BackEnd")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -5,14 +5,14 @@ import 'package:mobilizzz/models/company_model.dart'; // Import your Company mod
 class Team {
   final int id;
   final String name;
-  final int leaderId;
+  final List<int> adminIds;
   final int companyId;
   final Company? company; // Add nullable company object field
 
   const Team({
     required this.id,
     required this.name,
-    required this.leaderId,
+    required this.adminIds,
     required this.companyId,
     this.company, // Make company parameter nullable
   });
@@ -40,7 +40,7 @@ class Team {
     return Team(
       id: json['id'] as int,
       name: json['name'] as String,
-      leaderId: json['leaderId'] as int,
+      adminIds: (json['adminIds'] as List<dynamic>).map((id) => id as int).toList(),
       companyId: json['companyId'] as int,
       company: json['company'] != null
           ? Company.fromJson(json['company'])
@@ -52,7 +52,7 @@ class Team {
     final Map<String, dynamic> data = {
       'id': id,
       'name': name,
-      'leaderId': leaderId,
+      'leaderIds': adminIds,
       'companyId': companyId,
     };
 

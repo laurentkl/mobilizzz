@@ -27,7 +27,7 @@ namespace Mobilizzz_BackEnd.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(Login model)
+        public async Task<IActionResult> Login(LoginRequest model)
         {
             // Vérifier les informations d'identification de l'utilisateur
             var user = await _dbContext.Users

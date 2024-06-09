@@ -10,6 +10,20 @@ public class Context: DbContext
         optionsBuilder.UseNpgsql(@"Server=localhost;Database=MobilizzzTest;Port=5432;User Id=MobilizzzTestUser;Password=toor");
     }
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    base.OnModelCreating(modelBuilder);
+
+    // modelBuilder.Entity<Team>()
+    //     .HasMany(t => t.Leaders)
+    //     .WithMany(u => u.Teams)
+    //     .UsingEntity(j => j.ToTable("TeamLeaders"));
+     modelBuilder.Entity<Team>()
+        .HasMany(t => t.Users)
+        .WithMany(u => u.Teams)
+        .UsingEntity(j => j.ToTable("TeamMember"));
+    }
+
     public DbSet<Record> Records { get; set; }
     public DbSet<Team> Teams { get; set; }
     public DbSet<User> Users { get; set; }

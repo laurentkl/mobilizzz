@@ -12,6 +12,12 @@ class RecordProvider extends ChangeNotifier {
       notifyListeners();
   }
 
+  RecordProvider() {
+    // Fetch records when the provider is instantiated
+    getAllRecords();
+  }
+
+  // TODO use a getRecordByUser 
   Future<void> getAllRecords() async {
     final service = RecordService();
     isLoading = true;

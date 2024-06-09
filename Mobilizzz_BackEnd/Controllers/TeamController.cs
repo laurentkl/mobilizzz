@@ -24,7 +24,23 @@ public class TeamController : ControllerBase
         return Ok(teams);
     }
 
-    [HttpGet("GetTeams/{userId}")]
+    [HttpPost("Create")]
+    public async Task<IActionResult> Create([FromBody] Team team)
+    {
+        // Validate the incoming team data
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        // Add the team to the database
+        _dbContext.Teams.Add(team);
+        await _dbContext.SaveChangesAsync();
+
+        return Ok(new { message = "Team created successfully", team });
+    }
+
+    [HttpGet("GetTeamsByUser/{userId}")]
     public async Task<IActionResult> GetTeamsByUser(int userId)
     {
         // Fetch the user with the associated teams
@@ -52,5 +68,41 @@ public class TeamController : ControllerBase
             .ToListAsync();
 
         return Ok(teams); // Return the teams with associated users if found
+    }
+
+    [HttpPost("JoinTeam")]
+    public async Task<IActionResult> JoinTeam([FromBody] JoinTeamRequest request)
+    {
+        var user = await _dbContext.Users
+            .Include(u => u.Teams)
+            .SingleOrDefaultAsync(u => u.Id == request.UserId);
+
+        if (user == null)
+        {
+            return NotFound(new { message = "User not found" });
+        }
+
+        var team = await _dbContext.Teams
+            .Include(t => t.Users)
+            .SingleOrDefaultAsync(t => t.Id == request.TeamId);
+
+        if (team == null)
+        {
+            return NotFound(new { message = "Team not found" });
+        }
+
+        // Check if the user is already a member of the team
+        if (user.Teams.Any(t => t.Id == request.TeamId))
+        {
+            return BadRequest(new { message = "User is already a member of this team" });
+        }
+
+        // Add the user to the team's users list
+        team.Users.Add(user);
+
+        // Save changes to the database
+        await _dbContext.SaveChangesAsync();
+
+        return Ok(new { message = "User successfully joined the team" });
     }
 }

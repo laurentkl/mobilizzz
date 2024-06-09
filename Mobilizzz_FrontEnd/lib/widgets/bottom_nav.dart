@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobilizzz/pages/search_team_page.dart';
 import 'package:mobilizzz/pages/team_page.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
+import 'package:mobilizzz/providers/team_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../pages/home_page.dart';
@@ -11,16 +12,17 @@ class TeamPageWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context);
-    final user = authProvider.user;
-
-    if (user != null && user.teams != null && user.teams.isNotEmpty) {
-      // Si l'utilisateur a des équipes, affichez la page de l'équipe
-      return TeamPage();
-    } else {
-      // Si l'utilisateur n'a pas d'équipe, redirigez-le vers la page de recherche d'équipe
-      return SearchTeamPage();
-    }
+    return Consumer<TeamProvider>(
+      builder: (context, teamProvider, child) {
+        if (teamProvider.teamsForUser.isNotEmpty) {
+          // If the user has teams, display the TeamPage
+          return TeamPage();
+        } else {
+          // If the user does not have any teams, redirect to the SearchTeamPage
+          return SearchTeamPage();
+        }
+      },
+    );
   }
 }
 
@@ -33,6 +35,16 @@ class BottomNav extends StatefulWidget {
 
 class BottomNavState extends State<BottomNav> {
   int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    var _userProvider = Provider.of<AuthProvider>(context, listen: false);
+    var _teamProvider = Provider.of<TeamProvider>(context, listen: false);
+
+    _teamProvider.fetchTeamsForUser(_userProvider.user!.id);
+  }
 
   static const List<Widget> _views = [
     HomePage(),
