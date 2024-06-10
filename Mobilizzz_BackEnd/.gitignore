@@ -130,3 +130,6 @@ secrets.json
 # Web config
 web.config
 
+
+obj
+bin

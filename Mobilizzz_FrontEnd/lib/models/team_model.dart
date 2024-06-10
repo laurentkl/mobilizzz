@@ -1,7 +1,11 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:mobilizzz/models/user_model.dart';
 import 'package:mobilizzz/services/user_service.dart';
 import 'package:mobilizzz/models/company_model.dart'; // Import your Company model
 
+part 'team_model.g.dart';
+
+@JsonSerializable()
 class Team {
   final int? id;
   final String name;
@@ -36,35 +40,6 @@ class Team {
     return totalKm;
   }
 
-  factory Team.fromJson(Map<String, dynamic> json) {
-    return Team(
-      id: json['id'] as int,
-      name: json['name'] as String,
-      adminIds: json['adminIds'] != null 
-          ? (json['adminIds'] as List<dynamic>).map((id) => id as int).toList()
-          : [],
-      companyId: json['companyId'] as int,
-      company: json['company'] != null
-          ? Company.fromJson(json['company'])
-          : null, // Parse company object from JSON if not null
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = {
-      'name': name,
-      'adminIds': adminIds,
-      'companyId': companyId,
-    };
-
-    if (id != null) {
-      data['id'] = id;
-    }
-
-    if (company != null) {
-      data['company'] = company!.toJson(); // Include company object in JSON if not null
-    }
-
-    return data;
-  }
+  factory Team.fromJson(Map<String, dynamic> json) => _$TeamFromJson(json);
+  Map<String, dynamic> toJson() => _$TeamToJson(this);
 }
