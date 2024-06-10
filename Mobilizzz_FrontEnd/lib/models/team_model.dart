@@ -40,7 +40,9 @@ class Team {
     return Team(
       id: json['id'] as int,
       name: json['name'] as String,
-      adminIds: (json['adminIds'] as List<dynamic>).map((id) => id as int).toList(),
+      adminIds: json['adminIds'] != null 
+          ? (json['adminIds'] as List<dynamic>).map((id) => id as int).toList()
+          : [],
       companyId: json['companyId'] as int,
       company: json['company'] != null
           ? Company.fromJson(json['company'])

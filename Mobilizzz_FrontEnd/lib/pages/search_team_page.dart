@@ -30,16 +30,16 @@ class _SearchTeamPageState extends State<SearchTeamPage> {
   Future<void> _requestJoinTeam(Team team) async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final teamProvider = Provider.of<TeamProvider>(context, listen: false);
-    final userId = authProvider.user!.id; // Get the user ID from the auth provider
+    final userId =
+        authProvider.user!.id; // Get the user ID from the auth provider
     try {
-        await teamProvider.joinTeam(team.id!, userId);
-        // Handle successful join team response
-        print('Successfully joined team: ${team.name}');
+      await teamProvider.joinTeam(team.id!, userId);
+      // Handle successful join team response
+      print('Successfully joined team: ${team.name}');
     } catch (error) {
       print('Error joining team: $error');
+    }
   }
-  }
-
 
   @override
   Widget build(BuildContext context) {
