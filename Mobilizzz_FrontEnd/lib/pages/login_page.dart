@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
+// import 'package:shared_preferences_platform_interface/shared_preferences_platform_interface.dart';
 
 class LoginPage extends StatelessWidget {
   final TextEditingController _emailController =
@@ -42,6 +45,11 @@ class LoginPage extends StatelessWidget {
                     _emailController.text.trim(),
                     _passwordController.text.trim(),
                   );
+                  // Future<void> _saveUser() async {
+                  //   final prefs = await SharedPreferencesStorePlatform.instance;
+                  //   prefs.setValue("String",'user', jsonEncode("hello world"));
+                  // }
+
                   if (context.mounted) context.go('/bottomnav');
                 } catch (error) {
                   ScaffoldMessenger.of(context).showSnackBar(
