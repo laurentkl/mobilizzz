@@ -3,7 +3,7 @@ import 'package:mobilizzz/models/team_model.dart';
 import 'package:mobilizzz/models/record_model.dart';
 part 'user_model.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(includeIfNull: false)
 class User {
   final int id;
   final String lastName;

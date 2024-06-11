@@ -14,10 +14,19 @@ Record _$RecordFromJson(Map<String, dynamic> json) => Record(
       id: (json['id'] as num?)?.toInt(),
     );
 
-Map<String, dynamic> _$RecordToJson(Record instance) => <String, dynamic>{
-      'id': instance.id,
-      'transportMethod': instance.transportMethod,
-      'distance': instance.distance,
-      'userId': instance.userId,
-      'teamId': instance.teamId,
-    };
+Map<String, dynamic> _$RecordToJson(Record instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('id', instance.id);
+  val['transportMethod'] = instance.transportMethod;
+  val['distance'] = instance.distance;
+  val['userId'] = instance.userId;
+  val['teamId'] = instance.teamId;
+  return val;
+}

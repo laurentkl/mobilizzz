@@ -5,7 +5,7 @@ import 'package:mobilizzz/models/company_model.dart'; // Import your Company mod
 
 part 'team_model.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(includeIfNull: false)
 class Team {
   final int? id;
   final String name;

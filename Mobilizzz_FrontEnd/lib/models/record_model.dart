@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'record_model.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(includeIfNull: false)
 class Record {
   final int? id;
   final String transportMethod;
@@ -19,4 +19,5 @@ class Record {
 
   factory Record.fromJson(Map<String, dynamic> json) => _$RecordFromJson(json);
   Map<String, dynamic> toJson() => _$RecordToJson(this);
+
 }

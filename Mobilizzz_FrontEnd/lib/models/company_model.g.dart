@@ -17,9 +17,19 @@ Company _$CompanyFromJson(Map<String, dynamic> json) => Company(
           .toList(),
     );
 
-Map<String, dynamic> _$CompanyToJson(Company instance) => <String, dynamic>{
-      'id': instance.id,
-      'name': instance.name,
-      'leaders': instance.leaders,
-      'teams': instance.teams,
-    };
+Map<String, dynamic> _$CompanyToJson(Company instance) {
+  final val = <String, dynamic>{
+    'id': instance.id,
+    'name': instance.name,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('leaders', instance.leaders);
+  writeNotNull('teams', instance.teams);
+  return val;
+}

@@ -19,11 +19,21 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
           ?.map((e) => Team.fromJson(e as Map<String, dynamic>))
           .toList();
 
-Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
-      'id': instance.id,
-      'lastName': instance.lastName,
-      'firstName': instance.firstName,
-      'email': instance.email,
-      'records': instance.records,
-      'teams': instance.teams,
-    };
+Map<String, dynamic> _$UserToJson(User instance) {
+  final val = <String, dynamic>{
+    'id': instance.id,
+    'lastName': instance.lastName,
+    'firstName': instance.firstName,
+    'email': instance.email,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('records', instance.records);
+  writeNotNull('teams', instance.teams);
+  return val;
+}

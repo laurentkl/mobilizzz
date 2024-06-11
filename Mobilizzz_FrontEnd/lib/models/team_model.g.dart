@@ -21,11 +21,20 @@ Team _$TeamFromJson(Map<String, dynamic> json) => Team(
           .toList(),
     );
 
-Map<String, dynamic> _$TeamToJson(Team instance) => <String, dynamic>{
-      'id': instance.id,
-      'name': instance.name,
-      'adminIds': instance.adminIds,
-      'companyId': instance.companyId,
-      'company': instance.company,
-      'pendingUserRequests': instance.pendingUserRequests,
-    };
+Map<String, dynamic> _$TeamToJson(Team instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('id', instance.id);
+  val['name'] = instance.name;
+  val['adminIds'] = instance.adminIds;
+  val['companyId'] = instance.companyId;
+  writeNotNull('company', instance.company);
+  writeNotNull('pendingUserRequests', instance.pendingUserRequests);
+  return val;
+}
