@@ -16,6 +16,9 @@ Team _$TeamFromJson(Map<String, dynamic> json) => Team(
       company: json['company'] == null
           ? null
           : Company.fromJson(json['company'] as Map<String, dynamic>),
+      pendingUserRequests: (json['pendingUserRequests'] as List<dynamic>?)
+          ?.map((e) => User.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$TeamToJson(Team instance) => <String, dynamic>{
@@ -24,4 +27,5 @@ Map<String, dynamic> _$TeamToJson(Team instance) => <String, dynamic>{
       'adminIds': instance.adminIds,
       'companyId': instance.companyId,
       'company': instance.company,
+      'pendingUserRequests': instance.pendingUserRequests,
     };

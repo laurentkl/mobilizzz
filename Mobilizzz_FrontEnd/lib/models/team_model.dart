@@ -12,6 +12,7 @@ class Team {
   final List<int> adminIds;
   final int companyId;
   final Company? company; // Add nullable company object field
+  final List<User>? pendingUserRequests; // Add nullable company object field
 
   const Team({
     this.id,
@@ -19,6 +20,7 @@ class Team {
     required this.adminIds,
     required this.companyId,
     this.company, // Make company parameter nullable
+    this.pendingUserRequests, // Make company parameter nullable
   });
 
   Future<List<User>> fetchUsers() async {
@@ -31,9 +33,11 @@ class Team {
     double totalKm = 0.0;
 
     for (var user in users) {
-      for (var record in user.records) {
-        if (record.teamId == id) {
-          totalKm += record.distance;
+      if (user.records != null) {
+        for (var record in user.records!) {
+          if (record.teamId == id) {
+            totalKm += record.distance;
+          }
         }
       }
     }

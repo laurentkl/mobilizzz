@@ -14,11 +14,9 @@ class AuthProvider extends ChangeNotifier {
       if (user != null) {
         _user = user;
         notifyListeners();
-      } else {
-        throw Exception('Sign-In failed.');
-      }
+      } 
     } catch (error) {
-      throw Exception('Error signing in: $error');
+      rethrow;
     }
   }
 
@@ -30,11 +28,9 @@ class AuthProvider extends ChangeNotifier {
       if (user != null) {
         _user = user;
         notifyListeners();
-      } else {
-        throw Exception('Sign-up failed.');
-      }
+      } 
     } catch (error) {
-      throw Exception('Error signing up: $error');
+      rethrow;
     }
   }
 

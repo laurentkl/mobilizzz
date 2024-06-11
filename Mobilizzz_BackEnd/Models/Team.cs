@@ -11,5 +11,6 @@ namespace Mobilizzz_BackEnd.Models
 
         [JsonIgnore]
         public List<User>? Users { get; set; } // Read-only collection for teams
+        public List<User>? PendingUserRequests { get; set; } // Pending requests to join the team
     }
 }

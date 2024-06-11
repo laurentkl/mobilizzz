@@ -9,8 +9,8 @@ class User {
   final String lastName;
   final String firstName;
   final String email;
-  List<Record> records = [];
-  List<Team> teams = [];
+  List<Record>? records;
+  List<Team>? teams;
 
   User({
     required this.id,
@@ -19,15 +19,17 @@ class User {
     required this.email,
   });
 
-  List<Record> getRecordsForUserByTeam(teamId) {
-    return records.where((record) => record.teamId == teamId).toList();
+  List<Record>? getRecordsForUserByTeam(teamId) {
+    return records?.where((record) => record.teamId == teamId).toList();
   }
 
   double getTotalDistanceByTeam(teamId) {
     final userRecordsByTeam = getRecordsForUserByTeam(teamId);
     double totalDistance = 0.0;
 
-    for (final record in userRecordsByTeam) {
+    if (userRecordsByTeam == null) return totalDistance;
+
+    for (final record in userRecordsByTeam!) {
       if(record.teamId == teamId) {
         totalDistance += record.distance; 
       }

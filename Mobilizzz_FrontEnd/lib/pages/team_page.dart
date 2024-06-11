@@ -4,6 +4,7 @@ import 'package:mobilizzz/dialogs/add_team_dialog.dart';
 import 'package:mobilizzz/models/team_model.dart';
 import 'package:mobilizzz/models/user_model.dart';
 import 'package:mobilizzz/pages/add_record_page.dart';
+import 'package:mobilizzz/pages/search_team_page.dart';
 import 'package:mobilizzz/pages/team_settings_page.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
 import 'package:mobilizzz/providers/record_provider.dart';
@@ -62,7 +63,7 @@ class _TeamPageState extends State<TeamPage> {
         return SafeArea(
           child: Scaffold(
             appBar: AppBar(
-              title: Text('Team Page'), // Default title if teams are not loaded
+              title: Text('Team Page'), 
               actions: [
                 IconButton(
                   icon: Icon(Icons.settings),
@@ -102,6 +103,18 @@ class _TeamPageState extends State<TeamPage> {
                           Navigator.pop(context); // Close the drawer
                         },
                       )),
+                  ListTile(
+                    leading: Icon(Icons.search),
+                    title: Text('Search team'),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SearchTeamPage(),
+                        ),
+                      );
+                    },
+                  ),
                   ListTile(
                     leading: Icon(Icons.add),
                     title: Text('Add Team'),

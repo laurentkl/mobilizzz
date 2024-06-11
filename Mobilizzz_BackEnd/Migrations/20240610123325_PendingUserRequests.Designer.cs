@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Mobilizzz_BackEnd.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20240610123325_PendingUserRequests")]
+    partial class PendingUserRequests
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -157,15 +160,15 @@ namespace Mobilizzz_BackEnd.Migrations
 
             modelBuilder.Entity("TeamUser1", b =>
                 {
+                    b.Property<int>("PendingRequestsId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("PendingTeamRequestsId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("PendingUserRequestsId")
-                        .HasColumnType("integer");
+                    b.HasKey("PendingRequestsId", "PendingTeamRequestsId");
 
-                    b.HasKey("PendingTeamRequestsId", "PendingUserRequestsId");
-
-                    b.HasIndex("PendingUserRequestsId");
+                    b.HasIndex("PendingTeamRequestsId");
 
                     b.ToTable("TeamMemberRequest", (string)null);
                 });
@@ -224,15 +227,15 @@ namespace Mobilizzz_BackEnd.Migrations
 
             modelBuilder.Entity("TeamUser1", b =>
                 {
-                    b.HasOne("Mobilizzz_BackEnd.Models.Team", null)
+                    b.HasOne("Mobilizzz_BackEnd.Models.User", null)
                         .WithMany()
-                        .HasForeignKey("PendingTeamRequestsId")
+                        .HasForeignKey("PendingRequestsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Mobilizzz_BackEnd.Models.User", null)
+                    b.HasOne("Mobilizzz_BackEnd.Models.Team", null)
                         .WithMany()
-                        .HasForeignKey("PendingUserRequestsId")
+                        .HasForeignKey("PendingTeamRequestsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

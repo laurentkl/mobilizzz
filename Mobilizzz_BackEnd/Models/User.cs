@@ -1,4 +1,6 @@
-﻿namespace Mobilizzz_BackEnd.Models
+﻿using System.Text.Json.Serialization;
+
+namespace Mobilizzz_BackEnd.Models
 {
     public class User: BaseEntity
     {
@@ -9,6 +11,9 @@
         public int? CompanyId { get; set; }
         public Company? Company { get; set; }
         public List<Record>? Records { get; set; } 
+        [JsonIgnore]
         public List<Team>? Teams { get; set; } 
+        [JsonIgnore]
+        public List<Team>? PendingTeamRequests { get; set; } // Pending team join requests by the user
     }
 }

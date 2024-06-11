@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
-import 'login_page.dart'; // Importez la page LoginPage ici
 
 class SignUpPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController(text: "test@mail.com");

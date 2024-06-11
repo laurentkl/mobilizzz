@@ -22,31 +22,27 @@ Future<User?> signIn(String email, String password) async {
 
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body);
-      // Assuming your response contains both user and token
       final userJson = json['user'];
       final token = json['token'];
       // Save token for future API requests (optional)
-      // Set token in your AuthService or somewhere accessible
       // authService.setToken(token);
       return User.fromJson(userJson);
+    } else if (response.statusCode == 401) {
+      // If email/password is incorrect, extract the error message from response body
+      throw jsonDecode(response.body)['message'];
     } else {
-      // If the request was not successful, handle the error
-      // You might want to return different types of errors based on status code
-      print('Failed to sign in: ${response.statusCode}');
-      // For simplicity, we return null in case of any error
-      return null;
+      // If the request was not successful and the error is not 401, handle the error
+      throw 'Failed to sign in: ${response.statusCode}';
     }
   } catch (error) {
     // If an exception occurs during the request, handle it
-    print('Error signing in: $error');
-    // Return null if there is an error
-    return null;
+    throw Exception('Error signing in: $error');
   }
 }
 
 Future<User?> signUp(String firstName, String lastName, String email, String password) async {
   try {
-    const url = '${AppConstants.apiUrl}/Auth/signup';
+    const url = '${AppConstants.apiUrl}/Auth/SignUp';
     final uri = Uri.parse(url);
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({
@@ -64,25 +60,21 @@ Future<User?> signUp(String firstName, String lastName, String email, String pas
 
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body);
-      // Assuming your response contains both user and token
       final userJson = json['user'];
       final token = json['token'];
       // Save token for future API requests (optional)
-      // Set token in your AuthService or somewhere accessible
       // authService.setToken(token);
       return User.fromJson(userJson);
+    } else if (response.statusCode == 409) {
+      // If user already exists, extract the error message from response body
+      throw jsonDecode(response.body)['message'];
     } else {
-      // If the request was not successful, handle the error
-      // You might want to return different types of errors based on status code
-      print('Failed to sign up: ${response.statusCode}');
-      // For simplicity, we return null in case of any error
-      return null;
+      // If the request was not successful and the error is not 409, handle the error
+      throw 'Failed to sign up: ${response.statusCode}';
     }
   } catch (error) {
     // If an exception occurs during the request, handle it
-    print('Error signing up: $error');
-    // Return null if there is an error
-    return null;
+    throw Exception('Error signing up: $error');
   }
 }
 

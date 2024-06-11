@@ -12,11 +12,11 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
       firstName: json['firstName'] as String,
       email: json['email'] as String,
     )
-      ..records = (json['records'] as List<dynamic>)
-          .map((e) => Record.fromJson(e as Map<String, dynamic>))
+      ..records = (json['records'] as List<dynamic>?)
+          ?.map((e) => Record.fromJson(e as Map<String, dynamic>))
           .toList()
-      ..teams = (json['teams'] as List<dynamic>)
-          .map((e) => Team.fromJson(e as Map<String, dynamic>))
+      ..teams = (json['teams'] as List<dynamic>?)
+          ?.map((e) => Team.fromJson(e as Map<String, dynamic>))
           .toList();
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{

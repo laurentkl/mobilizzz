@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Mobilizzz_BackEnd.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20240610121352_ResetDbMigrations")]
+    partial class ResetDbMigrations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,21 +158,6 @@ namespace Mobilizzz_BackEnd.Migrations
                     b.ToTable("TeamMember", (string)null);
                 });
 
-            modelBuilder.Entity("TeamUser1", b =>
-                {
-                    b.Property<int>("PendingTeamRequestsId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PendingUserRequestsId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("PendingTeamRequestsId", "PendingUserRequestsId");
-
-                    b.HasIndex("PendingUserRequestsId");
-
-                    b.ToTable("TeamMemberRequest", (string)null);
-                });
-
             modelBuilder.Entity("Mobilizzz_BackEnd.Models.Record", b =>
                 {
                     b.HasOne("Mobilizzz_BackEnd.Models.Team", "Team")
@@ -218,21 +206,6 @@ namespace Mobilizzz_BackEnd.Migrations
                     b.HasOne("Mobilizzz_BackEnd.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("TeamUser1", b =>
-                {
-                    b.HasOne("Mobilizzz_BackEnd.Models.Team", null)
-                        .WithMany()
-                        .HasForeignKey("PendingTeamRequestsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Mobilizzz_BackEnd.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("PendingUserRequestsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

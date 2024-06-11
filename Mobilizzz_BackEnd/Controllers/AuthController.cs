@@ -38,7 +38,7 @@ namespace Mobilizzz_BackEnd.Controllers
             if (user == null)
             {
                 // Si les informations d'identification sont incorrectes, retourner une erreur 401
-                return Unauthorized();
+                return Unauthorized(new { message = "Wrong email/password" });
             }
 
             // Si les informations d'identification sont correctes, générer un token JWT
@@ -69,7 +69,7 @@ namespace Mobilizzz_BackEnd.Controllers
         }
 
 
-        [HttpPost("signup")]
+        [HttpPost("SignUp")]
         public async Task<IActionResult> SignUp(User model)
         {
             try
@@ -82,7 +82,7 @@ namespace Mobilizzz_BackEnd.Controllers
                 if (existingUser != null)
                 {
                     // Si l'utilisateur existe déjà, retourner une erreur 409 (Conflict)
-                    return Conflict("User already exists");
+                    return Conflict(new { message = "User already exist" });
                 }
 
                 // Créer un nouvel utilisateur avec les données fournies dans le modèle

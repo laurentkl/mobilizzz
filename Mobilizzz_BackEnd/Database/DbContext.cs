@@ -22,6 +22,10 @@ public class Context: DbContext
         .HasMany(t => t.Users)
         .WithMany(u => u.Teams)
         .UsingEntity(j => j.ToTable("TeamMember"));
+    modelBuilder.Entity<Team>()
+        .HasMany(t => t.PendingUserRequests)
+        .WithMany(u => u.PendingTeamRequests)
+        .UsingEntity(j => j.ToTable("TeamMemberRequest"));
     }
 
     public DbSet<Record> Records { get; set; }
