@@ -11,13 +11,14 @@ import 'package:mobilizzz/providers/user_provider.dart';
 import 'package:mobilizzz/widgets/bottom_nav.dart';
 
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // GoRouter configuration
 final _router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => LoginPage(),
+      builder: (context, state) => AuthWrapper(),
     ),
     GoRoute(
       path: '/signup',
@@ -75,18 +76,18 @@ class MyApp extends StatefulWidget {
 
   @override
   State<MyApp> createState() => _MyAppState();
+
 }
 
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-
-
   }
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
     return MaterialApp.router(
       routerConfig: _router,
       title: 'Mobilizzz',
@@ -98,22 +99,22 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-// class AuthWrapper extends StatelessWidget {
-//   const AuthWrapper({Key? key});
+class AuthWrapper extends StatelessWidget {
+  const AuthWrapper({Key? key});
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Consumer<AuthProvider>(
-//       builder: (context, authProvider, _) {
-//         final user = authProvider.user;
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<AuthProvider>(
+      builder: (context, authProvider, _) {
+        final user = authProvider.user;
 
-//         // Check if user is null and show LoginPage if true, otherwise show the main app content
-//         if (user == null) {
-//           return LoginPage();
-//         } else {
-//           return const BottomNav();
-//         }
-//       },
-//     );
-//   }
-// }
+        // Check if user is null and show LoginPage if true, otherwise show the main app content
+        if (user == null) {
+          return LoginPage();
+        } else {
+          return const BottomNav();
+        }
+      },
+    );
+  }
+}
