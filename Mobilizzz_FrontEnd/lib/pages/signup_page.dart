@@ -45,7 +45,6 @@ class SignUpPage extends StatelessWidget {
             const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () async {
-                // Call the signUp method from the AuthProvider
                 final authProvider = Provider.of<AuthProvider>(context, listen: false);
                 
                 try {
@@ -67,7 +66,6 @@ class SignUpPage extends StatelessWidget {
             const SizedBox(height: 8.0),
             TextButton(
               onPressed: () {
-                // Navigate to LoginPage
                   if(context.mounted) context.go('/login');
               },
               child: const Text(

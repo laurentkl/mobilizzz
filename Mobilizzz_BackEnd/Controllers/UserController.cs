@@ -25,27 +25,25 @@ public class UserController : ControllerBase
 
         if (user == null)
         {
-            return NotFound(); // Return 404 Not Found if user is not found
+            return NotFound(); 
         }
 
-        return Ok(user); // Return the user with associated teams if found
+        return Ok(user); 
     }
 
     [HttpGet("GetUsersByTeam/{teamId}")]
     public async Task<IActionResult> GetUsersByTeam(int teamId)
     {
-        // Fetch users with teams filtered by team ID
         var team = await _dbContext.Teams
             .Include(t => t.Users).ThenInclude(u => u.Records)
             .FirstOrDefaultAsync(t => t.Id == teamId);
 
-        // Check if any users are found
         if (team == null)
         {
-            return NotFound(); // Return 404 Not Found if no users are found
+            return NotFound(); 
         }
 
-        return Ok(team.Users); // Return the users with associated teams if found
+        return Ok(team.Users); 
     }
 
 

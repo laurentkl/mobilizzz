@@ -17,7 +17,7 @@ class _SearchTeamPageState extends State<SearchTeamPage> {
   void initState() {
     super.initState();
     final teamProvider = Provider.of<TeamProvider>(context, listen: false);
-    teamProvider.fetchTeams(); // Call fetchAll function from TeamProvider
+    teamProvider.fetchTeams(); 
   }
 
   Future<void> _requestJoinTeam(BuildContext context, Team team) async {

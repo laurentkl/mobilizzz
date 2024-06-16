@@ -35,21 +35,4 @@ public class RecordController : ControllerBase
         
         return Ok(model);
     }
-
-    // [HttpPost("BulkCreate")]
-    // public async Task<IActionResult> BulkCreate(Question[] models)
-    // {
-    //     if (!ModelState.IsValid)
-    //     {
-    //         return BadRequest(ModelState);
-    //     }
-
-    //     foreach(Question model in models){
-    //         _dbContext.Questions?.Add(model);
-    //         await _dbContext.SaveChangesAsync();
-    //     }
-
-        
-    //     return Ok(models);
-    // }
 }

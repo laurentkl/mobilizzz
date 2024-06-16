@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
-// import 'package:shared_preferences_platform_interface/shared_preferences_platform_interface.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginPage extends StatelessWidget {
   final TextEditingController _emailController =
@@ -17,9 +17,6 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('LogDin'),
-      // ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -45,12 +42,6 @@ class LoginPage extends StatelessWidget {
                     _emailController.text.trim(),
                     _passwordController.text.trim(),
                   );
-                  // Future<void> _saveUser() async {
-                  //   final prefs = await SharedPreferencesStorePlatform.instance;
-                  //   prefs.setValue("String",'user', jsonEncode("hello world"));
-                  // }
-
-                  if (context.mounted) context.go('/bottomnav');
                 } catch (error) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(error.toString())),
@@ -62,7 +53,6 @@ class LoginPage extends StatelessWidget {
             const SizedBox(height: 8.0),
             TextButton(
               onPressed: () {
-                // Navigate to LoginPage
                 if (context.mounted) context.go('/signup');
               },
               child: const Text(

@@ -22,14 +22,14 @@ class AddRecordPageState extends State<AddRecordPage> {
   // Form 
   final _formKey = GlobalKey<FormState>();
   Team? _selectedTeam;
-  final List<String> transportMethods = ["Walking", "Cycling", "Bus"]; // Sample data
+  final List<String> transportMethods = ["Walking", "Cycling", "Bus"]; 
   late String _selectedTransportMethod;
   double _distance = 0;
 
   @override
   void initState() {
     super.initState();
-    _selectedTransportMethod = transportMethods[0]; // Initialize with the first element
+    _selectedTransportMethod = transportMethods[0]; 
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final teamProvider = Provider.of<TeamProvider>(context, listen: false);
     _user = authProvider.user!;
@@ -38,15 +38,12 @@ class AddRecordPageState extends State<AddRecordPage> {
     }
   }
 
-    // Function to be called every time the state changes
   void _onStateChanged() {
-    // Implement any logic you want to perform on state change
     print("State changed: Transport Method: $_selectedTransportMethod, Distance: $_distance");
   }
 
   void _handleFormSubmit() {
     if (_formKey.currentState!.validate()) {
-      // Handle form submission (e.g., save record)
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Processing Data')),
       );
@@ -57,7 +54,7 @@ class AddRecordPageState extends State<AddRecordPage> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Record added successfully')),
           );
-          Navigator.pop(context); // Close the page after submission
+          Navigator.pop(context); 
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Failed to add record')),
@@ -144,9 +141,6 @@ class AddRecordPageState extends State<AddRecordPage> {
                         _onStateChanged();
                       });
                     },
-                    // onSaved: (value) {
-                    //   _distance = value! as double;
-                    // },
                   ),
                   ElevatedButton(
                     onPressed: () {

@@ -1,0 +1,9 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.example.mobilizzz",
+    "sha256_cert_fingerprints":
+    ["22:69:47:29:35:FB:D5:2E:4E:93:5B:74:4D:88:87:9C:73:29:A1:7A:BF:84:4B:D3:F5:65:0C:1E:52:3B:8C:57"]
+  }
+}]

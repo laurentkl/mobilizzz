@@ -3,7 +3,7 @@ import 'package:mobilizzz/models/team_model.dart';
 import 'package:mobilizzz/models/user_model.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
 import 'package:mobilizzz/providers/team_provider.dart';
-import 'package:provider/provider.dart'; // Import your Team model
+import 'package:provider/provider.dart'; 
 
 class TeamSettingsPage extends StatefulWidget {
   final Team team;
@@ -86,30 +86,28 @@ class _TeamSettingsPageState extends State<TeamSettingsPage> {
           Text('Leader IDs'),
           TextFormField(
             initialValue:
-                team.adminIds.join(', '), // Convert list to string for display
+                team.adminIds.join(', '), 
             onChanged: (value) {
               setState(() {
-                // Split the string and convert it back to a list of ints
                 _adminIds =
                     value.split(',').map((id) => int.parse(id.trim())).toList();
               });
             },
           ),
           SizedBox(height: 16.0),
-          Text('Pending User Requests'), // Display pending user requests
+          Text('Pending User Requests'), 
           ListView.builder(
             shrinkWrap: true,
             itemCount: team.pendingUserRequests?.length ??
-                0, // Use null-aware operator to handle null list
+                0, 
             itemBuilder: (context, index) {
               if (team.pendingUserRequests == null) {
-                // If pending users list is null, display a message
                 return ListTile(
                   title: Text('No pending user requests'),
                 );
               } else {
                 final user = team.pendingUserRequests![
-                    index]; // Use null assertion operator since list is non-null here
+                    index];
                 return ListTile(
                   title: Text(
                       '${user.firstName} ${user.lastName} (${user.email})'),
@@ -135,15 +133,13 @@ class _TeamSettingsPageState extends State<TeamSettingsPage> {
           SizedBox(height: 16.0),
           ElevatedButton(
             onPressed: () {
-              // Save settings logic
-              _saveSettings();
+              // TODO
             },
             child: Text('Save Settings'),
           ),
           SizedBox(height: 16.0),
           ElevatedButton(
             onPressed: () {
-              // Save settings logic
               _fetchTeamData();
             },
             child: Text('Update'),
@@ -151,22 +147,5 @@ class _TeamSettingsPageState extends State<TeamSettingsPage> {
         ],
       ),
     );
-  }
-
-  void _saveSettings() {
-    // Perform save logic here, e.g., update team name and leader ids
-    // For demonstration, we're just printing the values
-    print('Team Name: $_teamName');
-    print('Leader IDs: $_adminIds');
-    // You can call an API to save the updated settings to the backend
-  }
-
-  void _acceptRequest(User user) {
-    // Handle logic to accept the user request
-    // Remove user from pending users list
-    setState(() {
-      _pendingUsers?.remove(user);
-    });
-    // You can call an API to process the acceptance on the backend
   }
 }

@@ -54,14 +54,4 @@ class TeamProvider extends ChangeNotifier {
       rethrow;
     }
   }
-
-
-  // Future<void> leaveTeam(int teamId, int userId) async {
-  //   try {
-  //     await _teamService.leaveTeam(teamId, userId);
-  //     await fetchTeams();
-  //   } catch (error) {
-  //     throw Exception('Failed to leave team');
-  //   }
-  // }
 }

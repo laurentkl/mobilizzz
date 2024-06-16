@@ -5,7 +5,7 @@ part 'record_model.g.dart';
 class Record {
   final int? id;
   final String transportMethod;
-  final double distance; // Using double for distance measurement
+  final double distance; 
   final int userId;
   final int teamId;
 

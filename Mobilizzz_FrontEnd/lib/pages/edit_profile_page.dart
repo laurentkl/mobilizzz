@@ -34,9 +34,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
-              // Call the signOut method from the userProvider to logout
               Provider.of<AuthProvider>(context, listen: false).signOut();
-              // Navigate to the login page or any other page after logout
               if (context.mounted) context.go('/login');
             },
           ),
@@ -80,14 +78,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
-                    // Update user data in UserProvider (replace with your logic)
                     final userProvider = Provider.of<UserProvider>(context, listen: false);
-                    //userProvider.updateUser(_firstName, _lastName);
-                    // Show success message or navigate back
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Profile updated successfully!')),
                     );
-                    Navigator.pop(context); // Assuming you want to pop back after update
+                    Navigator.pop(context); 
                   }
                 },
                 child: const Text('Save Changes'),

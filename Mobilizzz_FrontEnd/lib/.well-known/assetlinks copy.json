@@ -1,0 +1,26 @@
+
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appIDs": [
+          "48A8TDDPJM.com.example.mobilizzz"
+        ],
+        "paths": [
+          "*"
+        ],
+        "components": [
+          {
+            "/": "/*"
+          }
+        ]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": [
+      "48A8TDDPJM.com.example.mobilizzz"
+    ]
+  }
+}

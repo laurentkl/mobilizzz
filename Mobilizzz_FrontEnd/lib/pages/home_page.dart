@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:mobilizzz/pages/add_record_page.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
 import 'package:mobilizzz/providers/record_provider.dart';
-import 'package:mobilizzz/widgets/profile_banner.dart'; // Assuming profile_banner.dart has ProfileBanner
+import 'package:mobilizzz/widgets/profile_banner.dart'; 
 import 'package:mobilizzz/widgets/records_list.dart';
-import 'package:provider/provider.dart'; // Assuming records_list.dart has RecordsList
+import 'package:provider/provider.dart'; 
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -20,7 +20,7 @@ class HomePage extends StatelessWidget {
 
 
         return Scaffold(
-          body: Stack( // Use Stack for positioning
+          body: Stack( 
             children: [
               Column(
                 children: [
@@ -28,9 +28,9 @@ class HomePage extends StatelessWidget {
                   Expanded(child: RecordsList(records: userRecords)),
                 ],
               ),
-              Positioned( // Position button at bottom right
-                bottom: 20.0, // Adjust for spacing from bottom
-                right: 20.0,  // Adjust for spacing from right
+              Positioned( 
+                bottom: 20.0, 
+                right: 20.0,  
                 child: FloatingActionButton(
                   heroTag: "home-btn-insert",
                   onPressed: () {

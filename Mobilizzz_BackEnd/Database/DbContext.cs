@@ -14,10 +14,6 @@ public class Context: DbContext
 {
     base.OnModelCreating(modelBuilder);
 
-    // modelBuilder.Entity<Team>()
-    //     .HasMany(t => t.Leaders)
-    //     .WithMany(u => u.Teams)
-    //     .UsingEntity(j => j.ToTable("TeamLeaders"));
      modelBuilder.Entity<Team>()
         .HasMany(t => t.Users)
         .WithMany(u => u.Teams)

@@ -11,16 +11,16 @@ class Team {
   final String name;
   final List<int> adminIds;
   final int companyId;
-  final Company? company; // Add nullable company object field
-  final List<User>? pendingUserRequests; // Add nullable company object field
+  final Company? company; 
+  final List<User>? pendingUserRequests; 
 
   const Team({
     this.id,
     required this.name,
     required this.adminIds,
     required this.companyId,
-    this.company, // Make company parameter nullable
-    this.pendingUserRequests, // Make company parameter nullable
+    this.company, 
+    this.pendingUserRequests, 
   });
 
   Future<List<User>> fetchUsers() async {

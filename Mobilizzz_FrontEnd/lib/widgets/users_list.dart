@@ -18,10 +18,10 @@ class UsersList extends StatelessWidget {
             margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.amber, // Single color
+              color: Colors.amber, 
             ),
             child: Padding(
-              padding: const EdgeInsets.all(8.0), // Less space
+              padding: const EdgeInsets.all(8.0), 
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

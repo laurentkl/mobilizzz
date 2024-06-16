@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:mobilizzz/dialogs/add_team_dialog.dart';
 import 'package:mobilizzz/models/team_model.dart';
 import 'package:mobilizzz/models/user_model.dart';
@@ -138,7 +137,7 @@ class _TeamPageState extends State<TeamPage> {
                         style: const TextStyle(
                           fontSize: 34.0,
                           fontWeight: FontWeight.bold,
-                          color: Colors.amber, // Customize the text color
+                          color: Colors.amber, 
                         ),
                       ),
                     ),

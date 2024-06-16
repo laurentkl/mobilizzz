@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mobilizzz/models/record_model.dart'; // Assuming you have a Record model defined
+import 'package:mobilizzz/models/record_model.dart'; 
 
 class RecordsList extends StatelessWidget {
-  final List<Record> records; // Accepting a list of records as a parameter
+  final List<Record> records; 
 
   const RecordsList({super.key, required this.records});
 
@@ -12,8 +12,7 @@ class RecordsList extends StatelessWidget {
         return Icons.directions_bike;
       case 'bus':
         return Icons.directions_bus;
-      // Add more cases for other transport methods if needed
-      default:
+    default:
         return Icons.directions_walk; // Default icon
     }
   }
@@ -31,7 +30,7 @@ class RecordsList extends StatelessWidget {
             margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(6),
-              color: Colors.amber, // Single color for the record card
+              color: Colors.amber, 
             ),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -46,7 +45,7 @@ class RecordsList extends StatelessWidget {
                           color: Colors.white,
                           size: 24,
                         ),
-                        const SizedBox(width: 8), // Add spacing between icon and text
+                        const SizedBox(width: 8), 
                         Text(
                           record.transportMethod,
                           style: const TextStyle(color: Colors.white, fontSize: 16),
