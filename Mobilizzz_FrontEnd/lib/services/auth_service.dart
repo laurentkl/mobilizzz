@@ -28,14 +28,11 @@ Future<User?> signIn(String email, String password) async {
       // authService.setToken(token);
       return User.fromJson(userJson);
     } else if (response.statusCode == 401) {
-      // If email/password is incorrect, extract the error message from response body
       throw jsonDecode(response.body)['message'];
     } else {
-      // If the request was not successful and the error is not 401, handle the error
       throw 'Failed to sign in: ${response.statusCode}';
     }
   } catch (error) {
-    // If an exception occurs during the request, handle it
     throw Exception('Error signing in: $error');
   }
 }
@@ -66,15 +63,12 @@ Future<User?> signUp(String firstName, String lastName, String email, String pas
       // authService.setToken(token);
       return User.fromJson(userJson);
     } else if (response.statusCode == 409) {
-      // If user already exists, extract the error message from response body
       throw jsonDecode(response.body)['message'];
     } else {
-      // If the request was not successful and the error is not 409, handle the error
       throw 'Failed to sign up: ${response.statusCode}';
     }
   } catch (error) {
-    // If an exception occurs during the request, handle it
-    throw Exception('Error signing up: $error');
+  throw Exception('Error signing up: $error');
   }
 }
 
