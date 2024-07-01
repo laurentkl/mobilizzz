@@ -11,6 +11,10 @@ Record _$RecordFromJson(Map<String, dynamic> json) => Record(
       distance: (json['distance'] as num).toDouble(),
       userId: (json['userId'] as num).toInt(),
       teamId: (json['teamId'] as num).toInt(),
+      type: json['type'] as String,
+      creationDate: json['creationDate'] == null
+          ? null
+          : DateTime.parse(json['creationDate'] as String),
       id: (json['id'] as num?)?.toInt(),
     );
 
@@ -28,5 +32,7 @@ Map<String, dynamic> _$RecordToJson(Record instance) {
   val['distance'] = instance.distance;
   val['userId'] = instance.userId;
   val['teamId'] = instance.teamId;
+  val['type'] = instance.type;
+  writeNotNull('creationDate', instance.creationDate?.toIso8601String());
   return val;
 }

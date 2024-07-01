@@ -22,6 +22,15 @@ public class RecordController : ControllerBase
         return Ok(records);
     }
 
+    [HttpGet("GetRecordsByUserId/{userId}")]
+    public async Task<IActionResult> GetRecordsByUserId(int userId)
+    {
+        var records = await _dbContext.Records
+            .Where(r => r.UserId == userId)
+            .ToListAsync();
+        return Ok(records);
+    }
+
     [HttpPost("Create")]
     public async Task<IActionResult> Create(Record model)
     {

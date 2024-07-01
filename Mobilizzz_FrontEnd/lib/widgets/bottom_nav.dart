@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobilizzz/pages/add_record_page.dart';
 import 'package:mobilizzz/pages/search_team_page.dart';
 import 'package:mobilizzz/pages/team_page.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
@@ -48,6 +49,7 @@ class BottomNavState extends State<BottomNav> {
 
   static const List<Widget> _views = [
     HomePage(),
+    AddRecordPage(),
     TeamPageWrapper(),
   ];
 
@@ -69,6 +71,10 @@ class BottomNavState extends State<BottomNav> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add_circle_outline),
+            label: 'Ajouter',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

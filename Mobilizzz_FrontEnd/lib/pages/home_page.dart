@@ -1,47 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:mobilizzz/constants/constants.dart';
 import 'package:mobilizzz/pages/add_record_page.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
+import 'package:mobilizzz/providers/auth_provider.dart';
 import 'package:mobilizzz/providers/record_provider.dart';
-import 'package:mobilizzz/widgets/profile_banner.dart'; 
+import 'package:mobilizzz/widgets/home_filters.dart';
+import 'package:mobilizzz/widgets/home_header.dart';
+import 'package:mobilizzz/widgets/profile_banner.dart';
 import 'package:mobilizzz/widgets/records_list.dart';
-import 'package:provider/provider.dart'; 
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final recordProvider = Provider.of<RecordProvider>(context, listen: false);
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+    recordProvider.getRecordsById(authProvider.user!.id);
+
     return Consumer2<AuthProvider, RecordProvider>(
       builder: (context, authProvider, recordProvider, child) {
         final user = authProvider.user;
-        final userRecords = recordProvider.records
-            .where((record) => record.userId == user?.id)
-            .toList();
-
+        final userRecords = recordProvider.userRecords;
+        final filteredUserRecords = recordProvider.filteredUserRecords;
 
         return Scaffold(
-          body: Stack( 
-            children: [
-              Column(
+          body: Container(
+            color: AppConstants.primaryColor,
+            child: SafeArea(
+              child: Column(
                 children: [
-                  const ProfileBanner(),
-                  Expanded(child: RecordsList(records: userRecords)),
+                  HomeHeader(userRecords: filteredUserRecords),
+                  TransportFilter(onFilterSelected: (transportMethod) {
+                    recordProvider.filterByTransportType(transportMethod);
+                  }),
+                  Expanded(
+                    child: RecordsList(userRecords: filteredUserRecords),
+                  ),
                 ],
               ),
-              Positioned( 
-                bottom: 20.0, 
-                right: 20.0,  
-                child: FloatingActionButton(
-                  heroTag: "home-btn-insert",
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => const AddRecordPage()));
-                  }, 
-                  backgroundColor: Colors.blue,
-                  child: const Icon(Icons.add), 
-                ),
-              ),
-            ],
+            ),
           ),
         );
       },

@@ -19,27 +19,32 @@ class AddRecordPage extends StatefulWidget {
 class AddRecordPageState extends State<AddRecordPage> {
   late User _user;
 
-  // Form 
+  // Form
   final _formKey = GlobalKey<FormState>();
   Team? _selectedTeam;
-  final List<String> transportMethods = ["Walking", "Cycling", "Bus"]; 
+  final List<String> transportMethods = ["Marche", "Vélo", "Bus", "Voiture"];
   late String _selectedTransportMethod;
+  final List<String> types = ["Mission", "Travail", "Personnel"];
+  late String _selectedType;
   double _distance = 0;
 
   @override
   void initState() {
     super.initState();
-    _selectedTransportMethod = transportMethods[0]; 
+    _selectedTransportMethod = transportMethods[0];
+    _selectedType = types[0];
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final teamProvider = Provider.of<TeamProvider>(context, listen: false);
     _user = authProvider.user!;
-    if(widget.preselectedTeamId != null){
-      _selectedTeam = teamProvider.teamsForUser.firstWhere((team) => team.id == widget.preselectedTeamId);
+    if (widget.preselectedTeamId != null) {
+      _selectedTeam = teamProvider.teamsForUser
+          .firstWhere((team) => team.id == widget.preselectedTeamId);
     }
   }
 
   void _onStateChanged() {
-    print("State changed: Transport Method: $_selectedTransportMethod, Distance: $_distance");
+    print(
+        "State changed: Transport Method: $_selectedTransportMethod, Distance: $_distance");
   }
 
   void _handleFormSubmit() {
@@ -47,14 +52,21 @@ class AddRecordPageState extends State<AddRecordPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Processing Data')),
       );
-      Record newRecord = Record(distance: _distance, transportMethod: _selectedTransportMethod, teamId: _selectedTeam?.id ?? 0, userId: _user.id);
+      Record newRecord = Record(
+          distance: _distance,
+          transportMethod: _selectedTransportMethod,
+          type: _selectedType,
+          teamId: _selectedTeam?.id ?? 0,
+          userId: _user.id);
 
-        Provider.of<RecordProvider>(context, listen: false).addRecord(newRecord).then((success) {
+      Provider.of<RecordProvider>(context, listen: false)
+          .addRecord(newRecord, context)
+          .then((success) {
         if (success) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Record added successfully')),
           );
-          Navigator.pop(context); 
+          Navigator.pop(context);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Failed to add record')),
@@ -68,7 +80,7 @@ class AddRecordPageState extends State<AddRecordPage> {
     }
   }
 
- @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -106,7 +118,8 @@ class AddRecordPageState extends State<AddRecordPage> {
                   ),
                   DropdownButtonFormField<String>(
                     value: transportMethods[0],
-                    decoration: const InputDecoration(labelText: "Transport Method"),
+                    decoration:
+                        const InputDecoration(labelText: "Transport Method"),
                     items: transportMethods.map((transportMethod) {
                       return DropdownMenuItem<String>(
                         value: transportMethod,
@@ -116,6 +129,29 @@ class AddRecordPageState extends State<AddRecordPage> {
                     onChanged: (value) {
                       setState(() {
                         _selectedTransportMethod = value!;
+                        _onStateChanged();
+                      });
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please select a transport method.";
+                      }
+                      return null;
+                    },
+                  ),
+                  DropdownButtonFormField<String>(
+                    value: types[0],
+                    decoration:
+                        const InputDecoration(labelText: "Type de trajet"),
+                    items: types.map((type) {
+                      return DropdownMenuItem<String>(
+                        value: type,
+                        child: Text(type),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedType = value!;
                         _onStateChanged();
                       });
                     },

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobilizzz/constants/constants.dart';
 import 'package:mobilizzz/pages/edit_profile_page.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
@@ -13,14 +14,17 @@ class ProfileBanner extends StatelessWidget {
         final user = authProvider.user;
         return Container(
           height: 150,
-          color: Colors.amber,
+          color: AppConstants.primaryColor,
           padding: const EdgeInsets.all(16.0),
           child: SafeArea(
             child: Row(
               children: [
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const EditProfilePage()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const EditProfilePage()));
                   },
                   child: ClipOval(
                     child: Image.network(
@@ -38,7 +42,8 @@ class ProfileBanner extends StatelessWidget {
                   children: [
                     Text(
                       '${user?.firstName ?? 'No Name'} ${user?.lastName ?? 'No Last Name'}',
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),

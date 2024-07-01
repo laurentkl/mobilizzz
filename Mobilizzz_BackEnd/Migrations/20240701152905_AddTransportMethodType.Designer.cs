@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Mobilizzz_BackEnd.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20240701152905_AddTransportMethodType")]
+    partial class AddTransportMethodType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,9 +62,8 @@ namespace Mobilizzz_BackEnd.Migrations
                     b.Property<int>("TeamId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("TransportMethod")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int?>("TransportMethodId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -73,6 +75,8 @@ namespace Mobilizzz_BackEnd.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("TeamId");
+
+                    b.HasIndex("TransportMethodId");
 
                     b.HasIndex("UserId");
 
@@ -105,6 +109,26 @@ namespace Mobilizzz_BackEnd.Migrations
                     b.HasIndex("CompanyId");
 
                     b.ToTable("Teams");
+                });
+
+            modelBuilder.Entity("Mobilizzz_BackEnd.Models.TransportMethod", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TransportMethod");
                 });
 
             modelBuilder.Entity("Mobilizzz_BackEnd.Models.User", b =>
@@ -182,6 +206,10 @@ namespace Mobilizzz_BackEnd.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Mobilizzz_BackEnd.Models.TransportMethod", "TransportMethod")
+                        .WithMany()
+                        .HasForeignKey("TransportMethodId");
+
                     b.HasOne("Mobilizzz_BackEnd.Models.User", "User")
                         .WithMany("Records")
                         .HasForeignKey("UserId")
@@ -189,6 +217,8 @@ namespace Mobilizzz_BackEnd.Migrations
                         .IsRequired();
 
                     b.Navigation("Team");
+
+                    b.Navigation("TransportMethod");
 
                     b.Navigation("User");
                 });
