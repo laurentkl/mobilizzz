@@ -78,6 +78,15 @@ class _RecordsFiltersState extends State<RecordsFilters> {
               ),
               onPressed: () => _handleTransportMethodFilterSelection('walk'),
             ),
+            IconButton(
+              icon: Icon(
+                Icons.directions_car,
+                color: _selectedTransportMethodForFilter == 'car'
+                    ? AppConstants.primaryColor
+                    : AppConstants.inactiveColor,
+              ),
+              onPressed: () => _handleTransportMethodFilterSelection('car'),
+            ),
           ],
         ),
         const Spacer(), // Spacer to push the type icons to the right

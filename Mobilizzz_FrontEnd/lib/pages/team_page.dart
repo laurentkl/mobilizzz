@@ -58,77 +58,79 @@ class _TeamPageState extends State<TeamPage> {
         final authProvider = Provider.of<AuthProvider>(context, listen: false);
         _user = authProvider.user;
 
-        return SafeArea(
-          child: Scaffold(
-            appBar: AppBar(
-              title: const Text('Team Page'),
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.settings),
-                  onPressed: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => TeamSettingsPage(
-                          team: _currentTeam!,
+        return Container(
+          color: AppConstants.backgroundColor,
+          child: SafeArea(
+            child: Scaffold(
+              backgroundColor: AppConstants.backgroundColor,
+              appBar: AppBar(
+                backgroundColor: AppConstants.backgroundColor,
+                title: Text(
+                  _currentTeam?.name ?? 'Team',
+                  style: const TextStyle(color: AppConstants.primaryColor),
+                ),
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.settings),
+                    onPressed: () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TeamSettingsPage(
+                            team: _currentTeam!,
+                          ),
                         ),
-                      ),
-                    )
-                  },
-                ),
-              ],
-            ),
-            drawer: TeamDrawer(
-              teamsForUser: teamProvider.teamsForUser,
-              toggleTeam: _toggleTeam,
-            ),
-            body: Column(
-              children: [
-                Center(
-                  child: Text(
-                    _currentTeam?.name ?? 'Team',
-                    style: const TextStyle(
-                      fontSize: 34.0,
-                      fontWeight: FontWeight.bold,
-                      color: AppConstants.primaryColor,
-                    ),
+                      )
+                    },
                   ),
-                ),
-                FutureBuilder<double>(
-                  future: _currentTeam?.getTotalKm(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    } else {
-                      return TeamStats(
-                        totalKm: snapshot.data ?? 0,
-                        bikeKm: 0,
-                      );
-                    }
-                  },
-                ),
-                Expanded(
-                  child: FutureBuilder<List<User>>(
-                    future: _currentTeam?.fetchUsers(),
+                ],
+              ),
+              drawer: TeamDrawer(
+                teamsForUser: teamProvider.teamsForUser,
+                toggleTeam: _toggleTeam,
+              ),
+              body: Column(
+                children: [
+                  FutureBuilder<double>(
+                    future: _currentTeam?.getTotalKm(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(child: CircularProgressIndicator());
                       } else if (snapshot.hasError) {
                         return Center(child: Text('Error: ${snapshot.error}'));
-                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return const Center(child: Text('No users found'));
                       } else {
-                        return UsersList(
-                          users: snapshot.data!,
-                          teamId: _currentTeamId,
+                        return TeamStats(
+                          totalKm: snapshot.data ?? 0,
+                          bikeKm: 0,
                         );
                       }
                     },
                   ),
-                ),
-              ],
+                  Expanded(
+                    child: FutureBuilder<List<User>>(
+                      future: _currentTeam?.fetchUsers(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          return Center(
+                              child: Text('Error: ${snapshot.error}'));
+                        } else if (!snapshot.hasData ||
+                            snapshot.data!.isEmpty) {
+                          return const Center(child: Text('No users found'));
+                        } else {
+                          return UsersList(
+                            users: snapshot.data!,
+                            teamId: _currentTeamId,
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );

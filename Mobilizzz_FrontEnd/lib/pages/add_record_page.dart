@@ -31,6 +31,19 @@ class AddRecordPageState extends State<AddRecordPage> {
   late String _selectedType;
   double _distance = 0;
 
+  final Map<String, String> typeValues = {
+    "Mission": "mission",
+    "Travail": "work",
+    "Personnel": "personal",
+  };
+
+  final Map<String, String> transportMethodValues = {
+    "Marche": "walk",
+    "Vélo": "bike",
+    "Bus": "bus",
+    "Voiture": "car",
+  };
+
   @override
   void initState() {
     super.initState();
@@ -45,20 +58,15 @@ class AddRecordPageState extends State<AddRecordPage> {
     }
   }
 
-  void _onStateChanged() {
-    print(
-        "State changed: Transport Method: $_selectedTransportMethod, Distance: $_distance");
-  }
-
   void _handleFormSubmit() {
     if (_formKey.currentState!.validate()) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Processing Data')),
+        const SnackBar(content: Text('Enregistrement en cours...')),
       );
       Record newRecord = Record(
           distance: _distance,
-          transportMethod: _selectedTransportMethod,
-          type: _selectedType,
+          transportMethod: transportMethodValues[_selectedTransportMethod]!,
+          type: typeValues[_selectedType]!,
           teamId: _selectedTeam?.id ?? 0,
           userId: _user.id);
 
@@ -67,7 +75,7 @@ class AddRecordPageState extends State<AddRecordPage> {
           .then((success) {
         if (success) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Record added successfully')),
+            const SnackBar(content: Text('Trajet ajouté avec succès')),
           );
           // if (context.mounted) context.go('/home');
           if (context.mounted) {
@@ -78,7 +86,7 @@ class AddRecordPageState extends State<AddRecordPage> {
           }
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Failed to add record')),
+            const SnackBar(content: Text("Erreur lors de l\'ajout du trajet")),
           );
         }
       }).catchError((error) {
@@ -115,35 +123,11 @@ class AddRecordPageState extends State<AddRecordPage> {
                     onChanged: (value) {
                       setState(() {
                         _selectedTeam = value;
-                        _onStateChanged();
                       });
                     },
                     validator: (value) {
                       if (value == null) {
                         return "Please select a team.";
-                      }
-                      return null;
-                    },
-                  ),
-                  DropdownButtonFormField<String>(
-                    value: transportMethods[0],
-                    decoration:
-                        const InputDecoration(labelText: "Transport Method"),
-                    items: transportMethods.map((transportMethod) {
-                      return DropdownMenuItem<String>(
-                        value: transportMethod,
-                        child: Text(transportMethod),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedTransportMethod = value!;
-                        _onStateChanged();
-                      });
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Please select a transport method.";
                       }
                       return null;
                     },
@@ -161,7 +145,28 @@ class AddRecordPageState extends State<AddRecordPage> {
                     onChanged: (value) {
                       setState(() {
                         _selectedType = value!;
-                        _onStateChanged();
+                      });
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please select a transport method.";
+                      }
+                      return null;
+                    },
+                  ),
+                  DropdownButtonFormField<String>(
+                    value: transportMethods[0],
+                    decoration:
+                        const InputDecoration(labelText: "Transport Method"),
+                    items: transportMethods.map((transportMethod) {
+                      return DropdownMenuItem<String>(
+                        value: transportMethod,
+                        child: Text(transportMethod),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedTransportMethod = value!;
                       });
                     },
                     validator: (value) {
@@ -183,7 +188,6 @@ class AddRecordPageState extends State<AddRecordPage> {
                     onChanged: (value) {
                       setState(() {
                         _distance = double.tryParse(value) ?? 0;
-                        _onStateChanged();
                       });
                     },
                   ),

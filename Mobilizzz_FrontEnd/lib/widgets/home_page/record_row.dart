@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:mobilizzz/constants/constants.dart';
 import 'package:mobilizzz/providers/team_provider.dart';
@@ -33,10 +34,12 @@ class RecordRow extends StatelessWidget {
             // Team Name
             Expanded(
               flex: 2,
-              child: Text(
+              child: AutoSizeText(
                 teamProvider.getUserTeamFromId(record.teamId).name,
                 style: const TextStyle(
-                    color: AppConstants.contrastTextColor, fontSize: 14),
+                    color: AppConstants.contrastTextColor,
+                    fontSize: AppConstants.rowFontSize),
+                maxLines: 1,
               ),
             ),
             // Distance and Date
@@ -48,18 +51,21 @@ class RecordRow extends StatelessWidget {
                   Text(
                     record.distance.toStringAsFixed(0).padLeft(4, ' '),
                     style: const TextStyle(
-                        color: AppConstants.contrastTextColor, fontSize: 14),
+                        color: AppConstants.contrastTextColor,
+                        fontSize: AppConstants.rowFontSize),
                   ),
                   const Text(
                     ' km',
                     style: TextStyle(
-                        color: AppConstants.contrastTextColor, fontSize: 14),
+                        color: AppConstants.contrastTextColor,
+                        fontSize: AppConstants.rowFontSize),
                   ),
                   const SizedBox(width: 8),
                   Text(
                     formattedDate,
                     style: const TextStyle(
-                        color: AppConstants.contrastTextColor, fontSize: 14),
+                        color: AppConstants.contrastTextColor,
+                        fontSize: AppConstants.rowFontSize),
                   ),
                 ],
               ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobilizzz/constants/constants.dart';
+import 'package:mobilizzz/widgets/generic/stat_box.dart';
 
 class TeamStats extends StatelessWidget {
   final double totalKm;
@@ -16,41 +17,33 @@ class TeamStats extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Column(
-            children: [
-              const Text(
-                'Team Total Km',
-                style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
-                    color: AppConstants.heading1Color),
-              ),
-              Text(
-                totalKm.toStringAsFixed(0),
-                style: const TextStyle(
-                    fontSize: 24.0, color: AppConstants.textColor),
-              ),
-            ],
+          StatBox(
+            icon: const Icon(
+              Icons.add_road,
+              color: AppConstants.primaryColor,
+              size: 34.0,
+            ),
+            title: "Total",
+            value: "${totalKm.toStringAsFixed(0)} km",
           ),
-          Column(
-            children: [
-              const Text(
-                'Team Bike Km',
-                style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
-                    color: AppConstants.heading1Color),
-              ),
-              Text(
-                bikeKm.toStringAsFixed(0),
-                style: const TextStyle(
-                  fontSize: 24.0,
-                  color: AppConstants.textColor,
-                ),
-              ),
-            ],
+          const StatBox(
+            icon: Icon(
+              Icons.directions_bike,
+              color: AppConstants.primaryColor,
+              size: 34.0,
+            ),
+            title: "Préféré",
+            value: "399 km",
+          ),
+          const StatBox(
+            icon: Icon(
+              Icons.leaderboard,
+              color: AppConstants.primaryColor,
+              size: 34.0,
+            ),
+            title: "Classement",
+            value: "#3",
           ),
         ],
       ),

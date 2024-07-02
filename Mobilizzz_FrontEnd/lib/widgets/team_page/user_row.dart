@@ -28,13 +28,15 @@ class UserRow extends StatelessWidget {
               child: Text(
                 user.firstName ?? "",
                 style: const TextStyle(
-                    color: AppConstants.contrastTextColor, fontSize: 16),
+                    color: AppConstants.contrastTextColor,
+                    fontSize: AppConstants.rowFontSize),
               ),
             ),
             Text(
               '${user.getTotalDistanceByTeam(teamId).toStringAsFixed(1)} km',
               style: const TextStyle(
-                  color: AppConstants.contrastTextColor, fontSize: 14),
+                  color: AppConstants.contrastTextColor,
+                  fontSize: AppConstants.rowFontSize),
             ),
           ],
         ),

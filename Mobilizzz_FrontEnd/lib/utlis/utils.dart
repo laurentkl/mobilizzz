@@ -38,6 +38,8 @@ IconData getTransportIcon(String transportMethod) {
       return Icons.directions_bus;
     case 'walk':
       return Icons.directions_walk;
+    case 'car':
+      return Icons.directions_car;
     default:
       return Icons.error;
   }

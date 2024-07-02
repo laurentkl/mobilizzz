@@ -96,6 +96,7 @@ class RecordProvider extends ChangeNotifier {
 
       return matchesTransportMethod && matchesType;
     }).toList();
+
     notifyListeners();
   }
 }

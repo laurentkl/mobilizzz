@@ -55,7 +55,7 @@ class HomePage extends StatelessWidget {
             child: SafeArea(
               child: Column(
                 children: [
-                  HomeHeader(userRecords: filteredUserRecords),
+                  HomeStats(userRecords: filteredUserRecords),
                   RecordsFilters(
                     onTransportMethodFilterSelected: (transportMethod) {
                       recordProvider.filterByTransportMethod(transportMethod);

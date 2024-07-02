@@ -27,6 +27,7 @@ public class RecordController : ControllerBase
     {
         var records = await _dbContext.Records
             .Where(r => r.UserId == userId)
+            .OrderByDescending(r => r.CreationDate)
             .ToListAsync();
         return Ok(records);
     }
