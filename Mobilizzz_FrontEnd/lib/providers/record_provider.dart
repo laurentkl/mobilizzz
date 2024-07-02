@@ -9,7 +9,8 @@ class RecordProvider extends ChangeNotifier {
   List<Record> _records = [];
   List<Record> _userRecords = [];
   List<Record> _filteredUserRecords = [];
-  String _selectedTransportTypeForFilter = '';
+  String _selectedTransportMethodForFilter = '';
+  String _selectedTypeForFilter = '';
 
   List<Record> get records => _records;
   List<Record> get userRecords => _userRecords;
@@ -64,20 +65,37 @@ class RecordProvider extends ChangeNotifier {
     return success;
   }
 
-  void filterByTransportType(String transportType) {
-    _selectedTransportTypeForFilter = transportType;
+  void filterByTransportMethod(String transportMethod) {
+    if (_selectedTransportMethodForFilter == transportMethod) {
+      _selectedTransportMethodForFilter = '';
+    } else {
+      _selectedTransportMethodForFilter = transportMethod;
+    }
+    _filterRecords();
+    notifyListeners();
+  }
+
+  void filterByType(String type) {
+    if (_selectedTypeForFilter == type) {
+      _selectedTypeForFilter = '';
+    } else {
+      _selectedTypeForFilter = type;
+    }
     _filterRecords();
     notifyListeners();
   }
 
   void _filterRecords() {
-    if (_selectedTransportTypeForFilter.isEmpty) {
-      _filteredUserRecords = _userRecords;
-    } else {
-      _filteredUserRecords = _userRecords
-          .where((record) =>
-              record.transportMethod == _selectedTransportTypeForFilter)
-          .toList();
-    }
+    _filteredUserRecords = _userRecords.where((record) {
+      final matchesTransportMethod =
+          _selectedTransportMethodForFilter.isEmpty ||
+              record.transportMethod == _selectedTransportMethodForFilter;
+
+      final matchesType = _selectedTypeForFilter.isEmpty ||
+          record.type == _selectedTypeForFilter;
+
+      return matchesTransportMethod && matchesType;
+    }).toList();
+    notifyListeners();
   }
 }

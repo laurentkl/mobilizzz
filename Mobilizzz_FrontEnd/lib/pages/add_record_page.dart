@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mobilizzz/models/record_model.dart';
 import 'package:mobilizzz/models/team_model.dart';
 import 'package:mobilizzz/models/user_model.dart';
+import 'package:mobilizzz/pages/home_page.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
 import 'package:mobilizzz/providers/record_provider.dart';
 import 'package:mobilizzz/providers/team_provider.dart';
+import 'package:mobilizzz/widgets/bottom_nav.dart';
 import 'package:provider/provider.dart';
 
 class AddRecordPage extends StatefulWidget {
@@ -66,7 +69,13 @@ class AddRecordPageState extends State<AddRecordPage> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Record added successfully')),
           );
-          Navigator.pop(context);
+          // if (context.mounted) context.go('/home');
+          if (context.mounted) {
+            // Change the index of BottomNav using the GlobalKey
+            final BottomNavState bottomNavState =
+                context.findAncestorStateOfType<BottomNavState>()!;
+            bottomNavState.changeTabIndex(0);
+          }
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Failed to add record')),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobilizzz/constants/constants.dart';
 
 class TeamStats extends StatelessWidget {
   final double totalKm;
@@ -22,16 +23,14 @@ class TeamStats extends StatelessWidget {
               const Text(
                 'Team Total Km',
                 style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                ),
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                    color: AppConstants.heading1Color),
               ),
               Text(
-                totalKm.toString(),
+                totalKm.toStringAsFixed(0),
                 style: const TextStyle(
-                  fontSize: 24.0,
-                  color: Colors.blue,
-                ),
+                    fontSize: 24.0, color: AppConstants.textColor),
               ),
             ],
           ),
@@ -40,15 +39,15 @@ class TeamStats extends StatelessWidget {
               const Text(
                 'Team Bike Km',
                 style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                ),
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                    color: AppConstants.heading1Color),
               ),
               Text(
-                bikeKm.toString(),
+                bikeKm.toStringAsFixed(0),
                 style: const TextStyle(
                   fontSize: 24.0,
-                  color: Colors.blue,
+                  color: AppConstants.textColor,
                 ),
               ),
             ],

@@ -37,7 +37,8 @@ class TeamProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> approveTeamRequest(int callerUserId, int teamId, int userId, bool isApproved) async {
+  Future<void> approveTeamRequest(
+      int callerUserId, int teamId, int userId, bool isApproved) async {
     try {
       await _teamService.approveTeamRequest(teamId, userId, isApproved);
       await fetchTeamsForUser(callerUserId);
@@ -53,5 +54,9 @@ class TeamProvider extends ChangeNotifier {
     } catch (error) {
       rethrow;
     }
+  }
+
+  Team getUserTeamFromId(int id) {
+    return teamsForUser.firstWhere((team) => team.id == id);
   }
 }

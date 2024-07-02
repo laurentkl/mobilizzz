@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobilizzz/constants/constants.dart';
 import 'package:mobilizzz/pages/add_record_page.dart';
 import 'package:mobilizzz/pages/search_team_page.dart';
 import 'package:mobilizzz/pages/team_page.dart';
@@ -59,6 +60,12 @@ class BottomNavState extends State<BottomNav> {
     });
   }
 
+  void changeTabIndex(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,20 +76,20 @@ class BottomNavState extends State<BottomNav> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+            icon: Icon(Icons.person),
+            label: 'Moi',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add_circle_outline),
+            icon: Icon(Icons.add_circle),
             label: 'Ajouter',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+            icon: Icon(Icons.people),
             label: 'Teams',
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue,
+        selectedItemColor: AppConstants.primaryColor,
         onTap: _onItemTapped,
       ),
     );

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:mobilizzz/constants/constants.dart';
 import 'package:mobilizzz/pages/add_record_page.dart';
+import 'package:mobilizzz/pages/edit_profile_page.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
 import 'package:mobilizzz/providers/record_provider.dart';
-import 'package:mobilizzz/widgets/home_filters.dart';
-import 'package:mobilizzz/widgets/home_header.dart';
-import 'package:mobilizzz/widgets/profile_banner.dart';
-import 'package:mobilizzz/widgets/records_list.dart';
+import 'package:mobilizzz/widgets/home_page/home_records_filters.dart';
+import 'package:mobilizzz/widgets/home_page/home_header.dart';
+import 'package:mobilizzz/widgets/home_page/profile_banner.dart';
+import 'package:mobilizzz/widgets/home_page/records_list.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
@@ -22,20 +23,47 @@ class HomePage extends StatelessWidget {
 
     return Consumer2<AuthProvider, RecordProvider>(
       builder: (context, authProvider, recordProvider, child) {
-        final user = authProvider.user;
-        final userRecords = recordProvider.userRecords;
         final filteredUserRecords = recordProvider.filteredUserRecords;
 
         return Scaffold(
+          appBar: AppBar(
+            backgroundColor: AppConstants.backgroundColor,
+            elevation: 0,
+            leading: IconButton(
+              icon: const Icon(Icons.person_2),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const EditProfilePage(),
+                  ),
+                );
+              },
+            ),
+            actions: [
+              //deconetion
+              IconButton(
+                icon: const Icon(Icons.logout),
+                onPressed: () {
+                  authProvider.signOut();
+                },
+              ),
+            ],
+          ),
           body: Container(
-            color: AppConstants.primaryColor,
+            color: AppConstants.backgroundColor,
             child: SafeArea(
               child: Column(
                 children: [
                   HomeHeader(userRecords: filteredUserRecords),
-                  TransportFilter(onFilterSelected: (transportMethod) {
-                    recordProvider.filterByTransportType(transportMethod);
-                  }),
+                  RecordsFilters(
+                    onTransportMethodFilterSelected: (transportMethod) {
+                      recordProvider.filterByTransportMethod(transportMethod);
+                    },
+                    onTypeFilterSelected: (type) {
+                      recordProvider.filterByType(type);
+                    },
+                  ),
                   Expanded(
                     child: RecordsList(userRecords: filteredUserRecords),
                   ),

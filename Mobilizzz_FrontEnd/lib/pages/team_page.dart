@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:mobilizzz/dialogs/add_team_dialog.dart';
+import 'package:mobilizzz/constants/constants.dart';
 import 'package:mobilizzz/models/team_model.dart';
 import 'package:mobilizzz/models/user_model.dart';
-import 'package:mobilizzz/pages/add_record_page.dart';
-import 'package:mobilizzz/pages/search_team_page.dart';
 import 'package:mobilizzz/pages/team_settings_page.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
 import 'package:mobilizzz/providers/record_provider.dart';
 import 'package:mobilizzz/providers/team_provider.dart';
-import 'package:mobilizzz/widgets/team_stats.dart';
-import 'package:mobilizzz/widgets/users_list.dart';
+import 'package:mobilizzz/widgets/team_page/team_page_drawer.dart';
+import 'package:mobilizzz/widgets/team_page/team_stats.dart';
+import 'package:mobilizzz/widgets/team_page/users_list.dart';
 import 'package:provider/provider.dart';
 
 class TeamPage extends StatefulWidget {
@@ -62,142 +61,71 @@ class _TeamPageState extends State<TeamPage> {
         return SafeArea(
           child: Scaffold(
             appBar: AppBar(
-              title: Text('Team Page'), 
+              title: const Text('Team Page'),
               actions: [
                 IconButton(
-                  icon: Icon(Icons.settings),
+                  icon: const Icon(Icons.settings),
                   onPressed: () => {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => TeamSettingsPage(
-                            team: _currentTeam!,
-                          ),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TeamSettingsPage(
+                          team: _currentTeam!,
                         ),
-                      )
+                      ),
+                    )
                   },
                 ),
               ],
             ),
-            drawer: Drawer(
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: [
-                  const DrawerHeader(
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                    ),
-                    child: Text(
-                      'Team Selection',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                      ),
-                    ),
-                  ),
-                  ...teamProvider.teamsForUser.map((team) => ListTile(
-                        title: Text(team.name),
-                        onTap: () {
-                          _toggleTeam(team.id!);
-                          Navigator.pop(context); // Close the drawer
-                        },
-                      )),
-                  ListTile(
-                    leading: Icon(Icons.search),
-                    title: Text('Search team'),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SearchTeamPage(),
-                        ),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.add),
-                    title: Text('Add Team'),
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AddTeamDialog(),
-                      );
-                    },
-                  ),
-                ],
-              ),
+            drawer: TeamDrawer(
+              teamsForUser: teamProvider.teamsForUser,
+              toggleTeam: _toggleTeam,
             ),
-            body: Stack(
+            body: Column(
               children: [
-                Column(
-                  children: [
-                    Center(
-                      child: Text(
-                        _currentTeam?.name ?? 'Team',
-                        style: const TextStyle(
-                          fontSize: 34.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.amber, 
-                        ),
-                      ),
+                Center(
+                  child: Text(
+                    _currentTeam?.name ?? 'Team',
+                    style: const TextStyle(
+                      fontSize: 34.0,
+                      fontWeight: FontWeight.bold,
+                      color: AppConstants.primaryColor,
                     ),
-                    FutureBuilder<double>(
-                      future: _currentTeam?.getTotalKm(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return const Center(child: CircularProgressIndicator());
-                        } else if (snapshot.hasError) {
-                          return Center(child: Text('Error: ${snapshot.error}'));
-                        } else {
-                          return TeamStats(
-                            totalKm: snapshot.data ?? 0,
-                            bikeKm: 0,
-                          );
-                        }
-                      },
-                    ),
-                    Expanded(
-                      child: FutureBuilder<List<User>>(
-                        future: _currentTeam?.fetchUsers(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return const Center(child: CircularProgressIndicator());
-                          } else if (snapshot.hasError) {
-                            return Center(child: Text('Error: ${snapshot.error}'));
-                          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                            return const Center(child: Text('No users found'));
-                          } else {
-                            return UsersList(
-                              users: snapshot.data!,
-                              teamId: _currentTeamId,
-                            );
-                          }
-                        },
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-                Positioned(
-                  bottom: 20.0,
-                  right: 20.0,
-                  child: FloatingActionButton(
-                    heroTag: "team-btn-insert",
-                    onPressed: () async {
-                      final result = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AddRecordPage(
-                            preselectedTeamId: _currentTeamId,
-                          ),
-                        ),
+                FutureBuilder<double>(
+                  future: _currentTeam?.getTotalKm(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else {
+                      return TeamStats(
+                        totalKm: snapshot.data ?? 0,
+                        bikeKm: 0,
                       );
-
-                      if (result == true) {
-                        setState(() {}); // Force the widget to rebuild
+                    }
+                  },
+                ),
+                Expanded(
+                  child: FutureBuilder<List<User>>(
+                    future: _currentTeam?.fetchUsers(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return const Center(child: Text('No users found'));
+                      } else {
+                        return UsersList(
+                          users: snapshot.data!,
+                          teamId: _currentTeamId,
+                        );
                       }
                     },
-                    backgroundColor: Colors.blue,
-                    child: const Icon(Icons.add),
                   ),
                 ),
               ],

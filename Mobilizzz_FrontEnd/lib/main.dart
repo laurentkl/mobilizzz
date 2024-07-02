@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:mobilizzz/pages/home_page.dart';
 import 'package:mobilizzz/pages/signup_page.dart';
 import 'package:mobilizzz/providers/team_provider.dart';
 import 'package:provider/provider.dart';
@@ -31,6 +32,10 @@ final _router = GoRouter(
     GoRoute(
       path: '/login',
       builder: (context, state) => LoginPage(),
+    ),
+    GoRoute(
+      path: '/home',
+      builder: (context, state) => const HomePage(),
     ),
   ],
   redirect: (context, state) {
@@ -76,7 +81,6 @@ class MyApp extends StatefulWidget {
 
   @override
   State<MyApp> createState() => _MyAppState();
-
 }
 
 class _MyAppState extends State<MyApp> {
@@ -87,7 +91,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context);
     return MaterialApp.router(
       routerConfig: _router,
       title: 'Mobilizzz',
