@@ -16,6 +16,9 @@ Team _$TeamFromJson(Map<String, dynamic> json) => Team(
       company: json['company'] == null
           ? null
           : Company.fromJson(json['company'] as Map<String, dynamic>),
+      users: (json['users'] as List<dynamic>?)
+          ?.map((e) => User.fromJson(e as Map<String, dynamic>))
+          .toList(),
       pendingUserRequests: (json['pendingUserRequests'] as List<dynamic>?)
           ?.map((e) => User.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -36,5 +39,6 @@ Map<String, dynamic> _$TeamToJson(Team instance) {
   val['companyId'] = instance.companyId;
   writeNotNull('company', instance.company);
   writeNotNull('pendingUserRequests', instance.pendingUserRequests);
+  writeNotNull('users', instance.users);
   return val;
 }

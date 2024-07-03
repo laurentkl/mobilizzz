@@ -56,7 +56,10 @@ class TeamProvider extends ChangeNotifier {
     }
   }
 
-  Team getUserTeamFromId(int id) {
+  Team? getUserTeamFromId(int id) {
+    if (teamsForUser.isEmpty) {
+      return null;
+    }
     return teamsForUser.firstWhere((team) => team.id == id);
   }
 }

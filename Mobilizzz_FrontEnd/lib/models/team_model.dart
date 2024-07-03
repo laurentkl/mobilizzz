@@ -11,16 +11,18 @@ class Team {
   final String name;
   final List<int> adminIds;
   final int companyId;
-  final Company? company; 
-  final List<User>? pendingUserRequests; 
+  final Company? company;
+  final List<User>? pendingUserRequests;
+  final List<User>? users;
 
   const Team({
     this.id,
     required this.name,
     required this.adminIds,
     required this.companyId,
-    this.company, 
-    this.pendingUserRequests, 
+    this.company,
+    this.users,
+    this.pendingUserRequests,
   });
 
   Future<List<User>> fetchUsers() async {

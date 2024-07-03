@@ -35,7 +35,8 @@ class RecordRow extends StatelessWidget {
             Expanded(
               flex: 2,
               child: AutoSizeText(
-                teamProvider.getUserTeamFromId(record.teamId).name,
+                teamProvider.getUserTeamFromId(record.teamId)?.name ??
+                    "No Team",
                 style: const TextStyle(
                     color: AppConstants.contrastTextColor,
                     fontSize: AppConstants.rowFontSize),

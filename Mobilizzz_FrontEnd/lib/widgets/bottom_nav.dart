@@ -17,10 +17,8 @@ class TeamPageWrapper extends StatelessWidget {
     return Consumer<TeamProvider>(
       builder: (context, teamProvider, child) {
         if (teamProvider.teamsForUser.isNotEmpty) {
-          // If the user has teams, display the TeamPage
           return TeamPage();
         } else {
-          // If the user does not have any teams, redirect to the SearchTeamPage
           return SearchTeamPage();
         }
       },
@@ -48,12 +46,6 @@ class BottomNavState extends State<BottomNav> {
     _teamProvider.fetchTeamsForUser(_userProvider.user!.id);
   }
 
-  static const List<Widget> _views = [
-    HomePage(),
-    AddRecordPage(),
-    TeamPageWrapper(),
-  ];
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -68,6 +60,12 @@ class BottomNavState extends State<BottomNav> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _views = [
+      HomePage(),
+      AddRecordPage(changeTabIndex: changeTabIndex),
+      TeamPageWrapper(),
+    ];
+
     return Scaffold(
       body: IndexedStack(
         index: _selectedIndex,

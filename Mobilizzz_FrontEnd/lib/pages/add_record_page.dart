@@ -11,9 +11,11 @@ import 'package:mobilizzz/widgets/bottom_nav.dart';
 import 'package:provider/provider.dart';
 
 class AddRecordPage extends StatefulWidget {
-  const AddRecordPage({super.key, this.preselectedTeamId});
+  const AddRecordPage(
+      {super.key, this.preselectedTeamId, required this.changeTabIndex});
 
   final int? preselectedTeamId;
+  final Function(int) changeTabIndex;
 
   @override
   AddRecordPageState createState() => AddRecordPageState();
@@ -79,10 +81,9 @@ class AddRecordPageState extends State<AddRecordPage> {
           );
           // if (context.mounted) context.go('/home');
           if (context.mounted) {
-            // Change the index of BottomNav using the GlobalKey
-            final BottomNavState bottomNavState =
-                context.findAncestorStateOfType<BottomNavState>()!;
-            bottomNavState.changeTabIndex(0);
+            _selectedTeam =
+                null; // Reset selected team to avoid a weird bug when opening team adming page
+            widget.changeTabIndex(0);
           }
         } else {
           ScaffoldMessenger.of(context).showSnackBar(

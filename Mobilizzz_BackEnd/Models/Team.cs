@@ -9,7 +9,6 @@ namespace Mobilizzz_BackEnd.Models
         public Company? Company { get; set; }
         public List<int>? AdminIds { get; set; } // Read-only collection for teams
 
-        [JsonIgnore]
         public List<User>? Users { get; set; } // Read-only collection for teams
         public List<User>? PendingUserRequests { get; set; } // Pending requests to join the team
     }

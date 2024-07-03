@@ -6,7 +6,7 @@ import 'package:mobilizzz/providers/auth_provider.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
 import 'package:mobilizzz/providers/record_provider.dart';
 import 'package:mobilizzz/widgets/home_page/home_records_filters.dart';
-import 'package:mobilizzz/widgets/home_page/home_header.dart';
+import 'package:mobilizzz/widgets/home_page/home_stats.dart';
 import 'package:mobilizzz/widgets/home_page/profile_banner.dart';
 import 'package:mobilizzz/widgets/home_page/records_list.dart';
 import 'package:provider/provider.dart';
