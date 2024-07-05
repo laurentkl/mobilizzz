@@ -5,16 +5,17 @@ import 'package:mobilizzz/models/user_model.dart';
 import 'package:mobilizzz/widgets/team_settings_page/managed_user_row.dart';
 
 class ManagedUsersList extends StatelessWidget {
+  final Team team;
+  final Function(User, bool) approveCallback; // Callback function
+
   const ManagedUsersList({
     Key? key,
     required this.team,
+    required this.approveCallback, // Initialize the callback function
   }) : super(key: key);
-
-  final Team team;
 
   @override
   Widget build(BuildContext context) {
-    // Combine users and pending user requests into a single list
     List<User> combinedUsers = [];
     if (team.pendingUserRequests != null) {
       combinedUsers.addAll(team.pendingUserRequests!);
@@ -25,7 +26,6 @@ class ManagedUsersList extends StatelessWidget {
     }
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 0),
@@ -33,8 +33,11 @@ class ManagedUsersList extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Member List',
-                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                'Liste des membres',
+                style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                    color: AppConstants.primaryColor),
               ),
             ],
           ),
@@ -49,12 +52,12 @@ class ManagedUsersList extends StatelessWidget {
               return ManagedUserRow(
                 user: user,
                 isPending: isPending,
-                // onAccept: () {
-                //   // TODO: Implement accept functionality
-                // },
-                // onReject: () {
-                //   // TODO: Implement reject functionality
-                // },
+                onAccept: () {
+                  approveCallback(user, true); // Invoke approve callback
+                },
+                onReject: () {
+                  approveCallback(user, false); // Invoke reject callback
+                },
               );
             },
           ),

@@ -93,9 +93,15 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       routerConfig: _router,
+      debugShowCheckedModeBanner: false,
       title: 'Mobilizzz',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        snackBarTheme: const SnackBarThemeData(
+          backgroundColor: Colors.blueGrey, // Couleur de fond de SnackBar
+          contentTextStyle:
+              TextStyle(color: Colors.white), // Couleur du texte de SnackBar
+        ),
         useMaterial3: true,
       ),
     );

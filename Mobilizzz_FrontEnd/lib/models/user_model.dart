@@ -6,6 +6,7 @@ part 'user_model.g.dart';
 @JsonSerializable(includeIfNull: false)
 class User {
   final int id;
+  final String userName;
   final String lastName;
   final String firstName;
   final String email;
@@ -14,6 +15,7 @@ class User {
 
   User({
     required this.id,
+    required this.userName,
     required this.lastName,
     required this.firstName,
     required this.email,
@@ -30,8 +32,8 @@ class User {
     if (userRecordsByTeam == null) return totalDistance;
 
     for (final record in userRecordsByTeam!) {
-      if(record.teamId == teamId) {
-        totalDistance += record.distance; 
+      if (record.teamId == teamId) {
+        totalDistance += record.distance;
       }
     }
     return totalDistance;

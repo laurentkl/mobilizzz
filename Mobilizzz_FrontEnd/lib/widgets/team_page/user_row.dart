@@ -26,7 +26,7 @@ class UserRow extends StatelessWidget {
           children: [
             Flexible(
               child: Text(
-                user.firstName ?? "",
+                user.userName,
                 style: const TextStyle(
                     color: AppConstants.contrastTextColor,
                     fontSize: AppConstants.rowFontSize),

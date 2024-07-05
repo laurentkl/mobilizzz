@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Mobilizzz_BackEnd.Models;
+using Npgsql.Replication;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -65,13 +66,13 @@ namespace Mobilizzz_BackEnd.Controllers
 
 
         [HttpPost("SignUp")]
-        public async Task<IActionResult> SignUp(User model)
+        public async Task<IActionResult> SignUp(SignUpRequest model)
         {
             try
             {
                 var existingUser = await _dbContext.Users
                     .Include(u => u.Teams).ThenInclude(t => t.Company)
-                    .FirstOrDefaultAsync(u => u.Email == model.Email);
+                    .FirstOrDefaultAsync(u => u.Email == model.Email || u.UserName == model.UserName);
 
                 if (existingUser != null)
                 {
@@ -84,9 +85,26 @@ namespace Mobilizzz_BackEnd.Controllers
                     LastName = model.LastName,
                     Email = model.Email,
                     Password = model.Password,
+                    UserName = model.UserName,
                 };
 
                 _dbContext.Users.Add(newUser);
+
+                if(model.TeamCode != 0)
+                {
+                    var team = await _dbContext.Teams
+                        .Include(t => t.PendingUserRequests)
+                        .FirstOrDefaultAsync(t => t.Id == model.TeamCode);
+
+                    if (team == null)
+                    {
+                        return NotFound(new { message = "Team not found" });
+                    }
+
+                    team?.PendingUserRequests.Add(newUser);
+                }
+
+                // use JoinTeamRequest here 
                 await _dbContext.SaveChangesAsync();
 
                 var token = GenerateJwtToken(newUser);

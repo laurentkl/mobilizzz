@@ -72,6 +72,7 @@ class BottomNavState extends State<BottomNav> {
         children: _views,
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: AppConstants.backgroundColor,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

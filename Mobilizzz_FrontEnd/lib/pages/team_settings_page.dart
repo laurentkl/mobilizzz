@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:clipboard/clipboard.dart';
 import 'package:mobilizzz/constants/constants.dart';
 import 'package:mobilizzz/models/team_model.dart';
 import 'package:mobilizzz/models/user_model.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
 import 'package:mobilizzz/providers/team_provider.dart';
+import 'package:mobilizzz/widgets/generic/custom_elevated_button.dart';
+import 'package:mobilizzz/widgets/generic/custom_textfield.dart';
 import 'package:mobilizzz/widgets/team_settings_page/managed_user_list.dart';
-import 'package:mobilizzz/widgets/team_settings_page/managed_user_row.dart';
-import 'package:mobilizzz/widgets/team_settings_page/pending_users_list.dart';
+import 'package:mobilizzz/widgets/team_settings_page/team_settings_form.dart';
 import 'package:provider/provider.dart';
 
 class TeamSettingsPage extends StatefulWidget {
@@ -19,9 +21,8 @@ class TeamSettingsPage extends StatefulWidget {
 }
 
 class _TeamSettingsPageState extends State<TeamSettingsPage> {
-  late String _teamName = "";
-  late List<int>? _adminIds = [];
   late final List<User> _pendingUsers = [];
+  late final TextEditingController _teamNameController;
 
   Future<void> _approveJoinTeam(User requestUser, bool isApproved) async {
     final teamProvider = Provider.of<TeamProvider>(context, listen: false);
@@ -53,8 +54,7 @@ class _TeamSettingsPageState extends State<TeamSettingsPage> {
   void initState() {
     super.initState();
     _fetchTeamData();
-    _teamName = widget.team.name;
-    _adminIds = widget.team.adminIds;
+    _teamNameController = TextEditingController(text: widget.team.name);
   }
 
   @override
@@ -63,64 +63,62 @@ class _TeamSettingsPageState extends State<TeamSettingsPage> {
       backgroundColor: AppConstants.backgroundColor,
       appBar: AppBar(
         backgroundColor: AppConstants.backgroundColor,
-        title: const Text('Team Settings Page'),
+        title: const Text(
+          "Paramètres de l\'équipe",
+          style: TextStyle(color: AppConstants.primaryColor),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.copy_rounded),
+            onPressed: () {
+              String contentToCopy =
+                  'www.mobilitizzz.com/invite/${widget.team.id}';
+
+              FlutterClipboard.copy(contentToCopy).then((_) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      "Lien d'invitation copié dans le presse papier",
+                    ),
+                  ),
+                );
+              });
+            },
+          ),
+        ],
       ),
       body: Consumer<TeamProvider>(
         builder: (context, teamProvider, child) {
-          final updatedTeam = teamProvider.teamsForUser
+          final team = teamProvider.teamsForUser
               .firstWhere((team) => team.id == widget.team.id);
-          return _buildSettingsForm(context, updatedTeam);
-        },
-      ),
-    );
-  }
-
-  Widget _buildSettingsForm(BuildContext context, Team team) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Text(
-            'Team Name',
-            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 8.0),
-          TextFormField(
-            initialValue: team.name,
-            onChanged: (value) {
-              setState(() {
-                _teamName = value;
-              });
-            },
-            decoration: InputDecoration(
-                contentPadding: const EdgeInsets.symmetric(
-                    vertical: 10.0, horizontal: 16.0),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                filled: true,
-                fillColor: Colors.white54),
-          ),
-          const SizedBox(height: 16.0),
-          Expanded(
-            flex: 4,
-            child: ManagedUsersList(team: team),
-          ),
-          const SizedBox(height: 16.0),
-          ElevatedButton(
-            onPressed: () {
-              // TODO: Implement save settings functionality
-            },
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 14.0),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
+          return SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TeamSettingsForm(teamNameController: _teamNameController),
+                  const SizedBox(height: 16.0),
+                  Expanded(
+                    flex: 1,
+                    child: ManagedUsersList(
+                      team: team,
+                      approveCallback: _approveJoinTeam,
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  CustomElevatedButton(
+                    onPressed: () {
+                      // TODO: Implement save settings functionality
+                    },
+                    label: "Sauvegarder",
+                    color: AppConstants.primaryColor,
+                  ),
+                ],
               ),
             ),
-            child: const Text('Save Settings'),
-          ),
-        ],
+          );
+        },
       ),
     );
   }

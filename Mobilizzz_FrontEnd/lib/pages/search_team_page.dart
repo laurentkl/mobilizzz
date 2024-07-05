@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobilizzz/constants/constants.dart';
 import 'package:mobilizzz/dialogs/join_team_dialog.dart';
 import 'package:mobilizzz/models/team_model.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
@@ -17,7 +18,7 @@ class _SearchTeamPageState extends State<SearchTeamPage> {
   void initState() {
     super.initState();
     final teamProvider = Provider.of<TeamProvider>(context, listen: false);
-    teamProvider.fetchTeams(); 
+    teamProvider.fetchTeams();
   }
 
   Future<void> _requestJoinTeam(BuildContext context, Team team) async {
@@ -26,18 +27,22 @@ class _SearchTeamPageState extends State<SearchTeamPage> {
     final userId = authProvider.user!.id;
     try {
       await teamProvider.joinTeamRequest(team.id!, userId);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Request sent successfully")),
-      );
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Request sent successfully")),
+        );
+      }
     } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(error.toString())),
-      );
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(error.toString())),
+        );
+      }
     }
   }
 
   void _fetchTeamData() async {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false); 
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final teamProvider = Provider.of<TeamProvider>(context, listen: false);
     await teamProvider.fetchTeamsForUser(authProvider.user!.id);
   }
@@ -45,7 +50,9 @@ class _SearchTeamPageState extends State<SearchTeamPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppConstants.backgroundColor,
       appBar: AppBar(
+        backgroundColor: AppConstants.backgroundColor,
         title: const Text('Search Team'),
         actions: [
           IconButton(

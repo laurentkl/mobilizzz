@@ -2,7 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mobilizzz/constants/constants.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
+import 'package:mobilizzz/widgets/generic/auth_header.dart';
+import 'package:mobilizzz/widgets/generic/custom_elevated_button.dart';
+import 'package:mobilizzz/widgets/generic/custom_textfield.dart';
+import 'package:mobilizzz/widgets/login_page/login_bottom_buttons.dart';
+import 'package:mobilizzz/widgets/login_page/login_form.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -17,50 +23,21 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: _emailController,
-              decoration: const InputDecoration(labelText: 'Email'),
-            ),
-            const SizedBox(height: 16.0),
-            TextField(
-              controller: _passwordController,
-              decoration: const InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-            const SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: () async {
-                final authProvider =
-                    Provider.of<AuthProvider>(context, listen: false);
-                try {
-                  await authProvider.signIn(
-                    _emailController.text.trim(),
-                    _passwordController.text.trim(),
-                  );
-                } catch (error) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(error.toString())),
-                  );
-                }
-              },
-              child: const Text('Login'),
-            ),
-            const SizedBox(height: 8.0),
-            TextButton(
-              onPressed: () {
-                if (context.mounted) context.go('/signup');
-              },
-              child: const Text(
-                "Don't have an account yet ? Sign up here",
-                style: TextStyle(color: Colors.blue),
-              ),
-            ),
-          ],
+      backgroundColor: AppConstants.backgroundColor,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              AuthHeader(),
+              LoginForm(
+                  emailController: _emailController,
+                  passwordController: _passwordController),
+              LoginBottomButtons(
+                  emailController: _emailController,
+                  passwordController: _passwordController),
+            ],
+          ),
         ),
       ),
     );

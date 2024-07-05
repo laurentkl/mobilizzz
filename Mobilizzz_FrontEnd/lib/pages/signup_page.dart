@@ -1,79 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:mobilizzz/providers/auth_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:mobilizzz/constants/constants.dart';
+import 'package:mobilizzz/widgets/signup_page/signup_bottom_buttons.dart';
+import 'package:mobilizzz/widgets/signup_page/signup_form.dart';
+import 'package:mobilizzz/widgets/generic/auth_header.dart';
 
 class SignUpPage extends StatelessWidget {
-  final TextEditingController _emailController = TextEditingController(text: "test@mail.com");
-  final TextEditingController _passwordController = TextEditingController(text: "password");
-  final TextEditingController _firstNameController = TextEditingController(text: "Laurent");
-  final TextEditingController _lastNameController = TextEditingController(text: "Klein");
+  final TextEditingController _userNameController =
+      TextEditingController(text: "Shady123");
+  final TextEditingController _emailController =
+      TextEditingController(text: "test@mail.com");
+  final TextEditingController _passwordController =
+      TextEditingController(text: "password");
+  final TextEditingController _firstNameController =
+      TextEditingController(text: "Laurent");
+  final TextEditingController _lastNameController =
+      TextEditingController(text: "Klein");
+  final TextEditingController _teamCodeController =
+      TextEditingController(text: "");
 
-  SignUpPage({Key? key}) : super(key: key);
+  SignUpPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Sign Up'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: _firstNameController,
-              decoration: const InputDecoration(labelText: 'First Name'),
-            ),
-            const SizedBox(height: 16.0),
-            TextField(
-              controller: _lastNameController,
-              decoration: const InputDecoration(labelText: 'Last Name'),
-            ),
-            const SizedBox(height: 16.0),
-            TextField(
-              controller: _emailController,
-              decoration: const InputDecoration(labelText: 'Email'),
-            ),
-            const SizedBox(height: 16.0),
-            TextField(
-              controller: _passwordController,
-              decoration: const InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-            const SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: () async {
-                final authProvider = Provider.of<AuthProvider>(context, listen: false);
-                
-                try {
-                  await authProvider.signUp(
-                    _firstNameController.text.trim(),
-                    _lastNameController.text.trim(),
-                    _emailController.text.trim(),
-                    _passwordController.text.trim(),
-                  );
-                  if (context.mounted) context.go('/bottomnav');
-                } catch (error) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(error.toString())),
-                  );
-                }
-              },
-              child: const Text('Sign Up'),
-            ),
-            const SizedBox(height: 8.0),
-            TextButton(
-              onPressed: () {
-                  if(context.mounted) context.go('/login');
-              },
-              child: const Text(
-                'Already have an account? Login',
-                style: TextStyle(color: Colors.blue),
-              ),
-            ),
-          ],
+      backgroundColor: AppConstants.backgroundColor,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              const AuthHeader(),
+              SignUpForm(
+                  userNameController: _userNameController,
+                  firstNameController: _firstNameController,
+                  lastNameController: _lastNameController,
+                  emailController: _emailController,
+                  passwordController: _passwordController,
+                  teamCodeController: _teamCodeController),
+              const SignUpBottomButtons(),
+            ],
+          ),
         ),
       ),
     );

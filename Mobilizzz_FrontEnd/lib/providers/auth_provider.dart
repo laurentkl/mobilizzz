@@ -27,11 +27,11 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> signUp(
-      String email, String password, String firstName, String lastName) async {
+  Future<void> signUp(String userName, String email, String password,
+      String firstName, String lastName, int teamCode) async {
     try {
-      final user =
-          await _authService.signUp(email, password, firstName, lastName);
+      final user = await _authService.signUp(
+          userName, email, password, firstName, lastName, teamCode);
       if (user != null) {
         _user = user;
         await _saveUser(user); // Save user data to SharedPreferences
@@ -57,7 +57,7 @@ class AuthProvider extends ChangeNotifier {
       _user = User.fromJson(jsonDecode(userData));
       notifyListeners();
     }
-    return(userData != null);
+    return (userData != null);
   }
 
   Future<void> _saveUser(User user) async {

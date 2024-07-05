@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mobilizzz/constants/constants.dart';
 import 'package:mobilizzz/pages/add_record_page.dart';
 import 'package:mobilizzz/pages/edit_profile_page.dart';
@@ -46,6 +47,7 @@ class HomePage extends StatelessWidget {
                 icon: const Icon(Icons.logout),
                 onPressed: () {
                   authProvider.signOut();
+                  if (context.mounted) context.go('/login');
                 },
               ),
             ],
