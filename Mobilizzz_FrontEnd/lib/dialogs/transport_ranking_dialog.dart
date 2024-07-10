@@ -37,7 +37,7 @@ class TransportRankingDialog extends StatelessWidget {
             for (int i = 0; i < sortedTransports.length; i++)
               TransportRankingRow(
                 transportMethod: AppConstants
-                        .transportMethodValuesFrench[sortedTransports[i].key] ??
+                        .transportMethodValues[sortedTransports[i].key] ??
                     '',
                 totalDistance: sortedTransports[i].value ?? 0,
                 rank: i + 1,
