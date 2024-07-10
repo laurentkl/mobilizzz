@@ -1,8 +1,7 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:mobilizzz/constants/constants.dart';
+import 'package:mobilizzz/dialogs/transport_ranking_dialog.dart';
 import 'package:mobilizzz/models/record_model.dart';
-import 'package:mobilizzz/utlis/utils.dart';
 import 'package:mobilizzz/widgets/generic/stat_box.dart';
 
 class HomeStats extends StatelessWidget {
@@ -17,33 +16,38 @@ class HomeStats extends StatelessWidget {
 
     // Find the most used transport method and its total distance
     String mostUsedTransport = '';
-    int maxDistance = 0;
+    double maxDistance = 0;
     userRecords.forEach((record) {
-      if (record.distance.toInt() > maxDistance) {
+      if (record.distance > maxDistance) {
         mostUsedTransport = record.transportMethod;
-        maxDistance = record.distance.toInt();
+        maxDistance = record.distance;
       }
     });
-
-    // IconData transportIcon = getTransportIcon(mostUsedTransport);
-    IconData transportIcon = getTransportIcon("bike");
-
-    // Calculate the streak of consecutive days with records
-    int consecutiveDays = 8;
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
-          StatBox(
-            icon: Icon(
-              transportIcon,
-              color: AppConstants.primaryColor,
-              size: 34.0,
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => TransportRankingDialog(
+                    records: userRecords,
+                  ),
+                );
+              },
+              child: StatBox(
+                icon: const Icon(
+                  Icons.directions_bike,
+                  color: AppConstants.primaryColor,
+                  size: 34.0,
+                ),
+                title: "Préféré",
+                value: "${maxDistance.toStringAsFixed(0)} km",
+              ),
             ),
-            title: "Préféré",
-            // value: "$maxDistance km",
-            value: "93 km",
           ),
           StatBox(
             icon: const Icon(
@@ -54,14 +58,14 @@ class HomeStats extends StatelessWidget {
             title: "Total",
             value: "$totalKm km",
           ),
-          StatBox(
-            icon: const Icon(
+          const StatBox(
+            icon: Icon(
               Icons.calendar_today,
               color: AppConstants.primaryColor,
               size: 34.0,
             ),
             title: "Consécutif",
-            value: "$consecutiveDays jours",
+            value: "8 jours", // Replace with dynamic value
           ),
         ],
       ),

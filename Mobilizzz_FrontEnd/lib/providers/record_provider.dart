@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
+import 'package:mobilizzz/providers/team_provider.dart';
 import 'package:mobilizzz/services/record_service.dart';
 import 'package:mobilizzz/models/record_model.dart';
 import 'package:provider/provider.dart';
@@ -37,7 +38,7 @@ class RecordProvider extends ChangeNotifier {
     isLoading = false;
   }
 
-  Future<void> getRecordsById(int userId) async {
+  Future<void> getRecordsByUserId(int userId) async {
     final service = RecordService();
     isLoading = true;
 
@@ -53,10 +54,16 @@ class RecordProvider extends ChangeNotifier {
     isLoading = true;
 
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final teamProvider = Provider.of<TeamProvider>(context, listen: false);
+
+    int userId = authProvider.user!.id;
 
     try {
       success = await service.addRecord(record);
-      await getRecordsById(authProvider.user!.id);
+      // Fetch the records to update the records in the user view
+      await getRecordsByUserId(userId);
+      // Fetch the teams to update the records in the team view
+      await teamProvider.fetchTeamsForUser(userId);
     } catch (error) {
       // Hsndle error
     } finally {

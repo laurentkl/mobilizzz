@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mobilizzz/constants/constants.dart';
 import 'package:mobilizzz/models/record_model.dart';
 import 'package:mobilizzz/models/team_model.dart';
 import 'package:mobilizzz/models/user_model.dart';
-import 'package:mobilizzz/pages/home_page.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
 import 'package:mobilizzz/providers/record_provider.dart';
 import 'package:mobilizzz/providers/team_provider.dart';
-import 'package:mobilizzz/widgets/bottom_nav.dart';
+import 'package:mobilizzz/widgets/generic/custom_combobox.dart';
+import 'package:mobilizzz/widgets/generic/custom_elevated_button.dart';
 import 'package:provider/provider.dart';
 
 class AddRecordPage extends StatefulWidget {
@@ -27,30 +28,15 @@ class AddRecordPageState extends State<AddRecordPage> {
   // Form
   final _formKey = GlobalKey<FormState>();
   Team? _selectedTeam;
-  final List<String> transportMethods = ["Marche", "Vélo", "Bus", "Voiture"];
   late String _selectedTransportMethod;
-  final List<String> types = ["Mission", "Travail", "Personnel"];
   late String _selectedType;
-  double _distance = 0;
-
-  final Map<String, String> typeValues = {
-    "Mission": "mission",
-    "Travail": "work",
-    "Personnel": "personal",
-  };
-
-  final Map<String, String> transportMethodValues = {
-    "Marche": "walk",
-    "Vélo": "bike",
-    "Bus": "bus",
-    "Voiture": "car",
-  };
+  double _distance = 15;
 
   @override
   void initState() {
     super.initState();
-    _selectedTransportMethod = transportMethods[0];
-    _selectedType = types[0];
+    _selectedTransportMethod = AppConstants.transportMethods[0];
+    _selectedType = AppConstants.types[0];
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final teamProvider = Provider.of<TeamProvider>(context, listen: false);
     _user = authProvider.user!;
@@ -67,8 +53,9 @@ class AddRecordPageState extends State<AddRecordPage> {
       );
       Record newRecord = Record(
           distance: _distance,
-          transportMethod: transportMethodValues[_selectedTransportMethod]!,
-          type: typeValues[_selectedType]!,
+          transportMethod:
+              AppConstants.transportMethodValues[_selectedTransportMethod]!,
+          type: AppConstants.typeValues[_selectedType]!,
           teamId: _selectedTeam?.id ?? 0,
           userId: _user.id);
 
@@ -79,15 +66,14 @@ class AddRecordPageState extends State<AddRecordPage> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Trajet ajouté avec succès')),
           );
-          // if (context.mounted) context.go('/home');
           if (context.mounted) {
             _selectedTeam =
-                null; // Reset selected team to avoid a weird bug when opening team adming page
+                null; // Reset selected team to avoid a weird bug when opening team admin page
             widget.changeTabIndex(0);
           }
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Erreur lors de l\'ajout du trajet")),
+            const SnackBar(content: Text("Erreur lors de l'ajout du trajet")),
           );
         }
       }).catchError((error) {
@@ -98,23 +84,68 @@ class AddRecordPageState extends State<AddRecordPage> {
     }
   }
 
+  Widget _buildTransportMethodButton(String method, IconData icon) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _selectedTransportMethod = method;
+        });
+      },
+      child: Column(
+        children: [
+          Icon(
+            icon,
+            color: _selectedTransportMethod == method
+                ? Theme.of(context).primaryColor
+                : Colors.grey,
+            size: 40.0,
+          ),
+          Text(method)
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTypeButton(String type, IconData icon) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _selectedType = type;
+        });
+      },
+      child: Column(
+        children: [
+          Icon(
+            icon,
+            color: _selectedType == type
+                ? Theme.of(context).primaryColor
+                : Colors.grey,
+            size: 40.0,
+          ),
+          Text(type)
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Record'),
+        title: const Text('Créer un nouveau trajet'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
         child: Consumer<TeamProvider>(
           builder: (context, teamProvider, child) {
             return Form(
-              key: _formKey,
+              key: _formKey, // Ensure the key is attached here
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  DropdownButtonFormField<Team>(
+                  CustomComboBox<Team>(
+                    label: "Team",
                     value: _selectedTeam,
-                    decoration: const InputDecoration(labelText: "Team"),
                     items: teamProvider.teamsForUser.map((team) {
                       return DropdownMenuItem<Team>(
                         value: team,
@@ -133,70 +164,55 @@ class AddRecordPageState extends State<AddRecordPage> {
                       return null;
                     },
                   ),
-                  DropdownButtonFormField<String>(
-                    value: types[0],
-                    decoration:
-                        const InputDecoration(labelText: "Type de trajet"),
-                    items: types.map((type) {
-                      return DropdownMenuItem<String>(
-                        value: type,
-                        child: Text(type),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedType = value!;
-                      });
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Please select a transport method.";
-                      }
-                      return null;
-                    },
+                  const SizedBox(height: 16.0),
+                  const Text("Type de trajet", style: TextStyle(fontSize: 16)),
+                  const SizedBox(height: 8.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _buildTypeButton("Mission", Icons.work),
+                      _buildTypeButton("Travail", Icons.home_work),
+                      _buildTypeButton("Privé", Icons.home),
+                    ],
                   ),
-                  DropdownButtonFormField<String>(
-                    value: transportMethods[0],
-                    decoration:
-                        const InputDecoration(labelText: "Transport Method"),
-                    items: transportMethods.map((transportMethod) {
-                      return DropdownMenuItem<String>(
-                        value: transportMethod,
-                        child: Text(transportMethod),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedTransportMethod = value!;
-                      });
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Please select a transport method.";
-                      }
-                      return null;
-                    },
+                  const SizedBox(height: 16.0),
+                  const Text("Moyen de transport",
+                      style: TextStyle(fontSize: 16)),
+                  const SizedBox(height: 8.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _buildTransportMethodButton(
+                          "Marche", Icons.directions_walk),
+                      _buildTransportMethodButton(
+                          "2 Roues", Icons.directions_bike),
+                      _buildTransportMethodButton("Bus", Icons.directions_bus),
+                      _buildTransportMethodButton(
+                          "Co-Voit", Icons.directions_car),
+                    ],
                   ),
-                  TextFormField(
-                    decoration: const InputDecoration(labelText: "Distance"),
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Please enter distance.";
-                      }
-                      return null;
-                    },
+                  const SizedBox(height: 16.0),
+                  Text(
+                    'Distance: ${_distance.toStringAsFixed(0)} km',
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  Slider(
+                    value: _distance,
+                    min: 0,
+                    max: 100,
+                    divisions: 100,
+                    label: _distance.toStringAsFixed(1),
                     onChanged: (value) {
                       setState(() {
-                        _distance = double.tryParse(value) ?? 0;
+                        _distance = value;
                       });
                     },
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      _handleFormSubmit();
-                    },
-                    child: const Text('Save Record'),
+                  CustomElevatedButton(
+                    onPressed: _handleFormSubmit,
+                    label: "Sauvegarder",
+                    width: double.infinity,
+                    color: Theme.of(context).primaryColor,
                   ),
                 ],
               ),

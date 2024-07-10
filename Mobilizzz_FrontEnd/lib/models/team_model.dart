@@ -1,5 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:mobilizzz/models/record_model.dart';
 import 'package:mobilizzz/models/user_model.dart';
+import 'package:mobilizzz/services/record_service.dart';
 import 'package:mobilizzz/services/user_service.dart';
 import 'package:mobilizzz/models/company_model.dart'; // Import your Company model
 
@@ -27,14 +29,34 @@ class Team {
 
   Future<List<User>> fetchUsers() async {
     final userService = UserService();
-    return await userService.getUsersByTeam(id);
+    return await userService.getUsersByTeam(id!);
   }
 
-  Future<double> getTotalKm() async {
-    final users = await fetchUsers();
+  Future<List<Record>> fetchRecords() async {
+    final recordService = RecordService();
+    return await recordService.getRecordsByTeamId(id!);
+  }
+
+  List<Record> getAllRecords() {
+    List<Record> records = [];
+
+    for (var user in users!) {
+      if (user.records != null) {
+        for (var record in user.records!) {
+          if (record.teamId == id) {
+            records.add(record);
+          }
+        }
+      }
+    }
+
+    return records;
+  }
+
+  double getTotalKm() {
     double totalKm = 0.0;
 
-    for (var user in users) {
+    for (var user in users!) {
       if (user.records != null) {
         for (var record in user.records!) {
           if (record.teamId == id) {
@@ -43,7 +65,60 @@ class Team {
         }
       }
     }
+
     return totalKm;
+  }
+
+  double getTotalBikeKm() {
+    double totalKm = 0.0;
+
+    for (var user in users!) {
+      if (user.records != null) {
+        for (var record in user.records!) {
+          if (record.teamId == id && record.transportMethod == 'bike') {
+            totalKm += record.distance;
+          }
+        }
+      }
+    }
+
+    return totalKm;
+  }
+
+  Map<String, dynamic> getMostUsedTransportMethod() {
+    Map<String, double> transportMethodDistances = {};
+
+    for (var user in users!) {
+      if (user.records != null) {
+        for (var record in user.records!) {
+          if (record.teamId == id) {
+            if (transportMethodDistances.containsKey(record.transportMethod)) {
+              transportMethodDistances[record.transportMethod] =
+                  transportMethodDistances[record.transportMethod]! +
+                      record.distance;
+            } else {
+              transportMethodDistances[record.transportMethod] =
+                  record.distance;
+            }
+          }
+        }
+      }
+    }
+
+    String mostUsedTransportMethod = '';
+    double maxDistance = 0.0;
+
+    transportMethodDistances.forEach((method, distance) {
+      if (distance > maxDistance) {
+        maxDistance = distance;
+        mostUsedTransportMethod = method;
+      }
+    });
+
+    return {
+      'name': mostUsedTransportMethod,
+      'distance': maxDistance,
+    };
   }
 
   factory Team.fromJson(Map<String, dynamic> json) => _$TeamFromJson(json);

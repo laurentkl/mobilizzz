@@ -76,11 +76,12 @@ public class TeamController : ControllerBase
 
             var teams = await _dbContext.Teams
                 .Include(t => t.Users)
+                .ThenInclude(u => u.Records)
                 .Include(t => t.PendingUserRequests)
                 .Where(t => teamIds.Contains(t.Id))
                 .ToListAsync();
 
-            return Ok(teams); 
+            return Ok(teams);
         }
         catch (Exception ex)
         {
@@ -169,7 +170,7 @@ public class TeamController : ControllerBase
                 return BadRequest(new { message = "User is already a member of this team" });
             }
 
-            if(request.IsApproved)
+            if (request.IsApproved)
             {
                 team.Users ??= new List<User>();
                 team.Users.Add(user);

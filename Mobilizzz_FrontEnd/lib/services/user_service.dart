@@ -15,7 +15,7 @@ class UserService {
     return [];
   }
 
-  Future<List<User>> getUsersByTeam(teamId) async {
+  Future<List<User>> getUsersByTeam(int teamId) async {
     dynamic url = '${AppConstants.apiUrl}/User/GetUsersByTeam/$teamId';
     final uri = Uri.parse(url);
     final response = await http.get(uri);

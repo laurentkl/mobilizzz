@@ -1,11 +1,12 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class AppConstants {
   // Example API URL constant
-  static const String apiUrl = 'http://10.0.10.46:5169';
-  // static const String apiUrl = 'http://localhost:5169';
+  // static const String apiUrl = 'http://10.0.1.158:5169';
+  static const String apiUrl = 'http://localhost:5169';
   // static const String apiUrl = 'http://192.168.0.99:5169';
   // static const String apiUrl = 'http://10.0.1.190:5169';
   // static const String apiUrl = 'http://10.0.10.55:5169';
@@ -13,6 +14,7 @@ class AppConstants {
   // Theme
   // static const Color primaryColor = Color(0xFF043aff);
   static const Color primaryColor = Color(0xFFB1AFFF);
+  // static const Color primaryColor = Colors.deepPurple;
   static const Color secondaryColor = Color(0xFFB1AFFF);
   static const Color inactiveColor = Colors.grey;
   static const Color backgroundColor = Colors.white;
@@ -29,6 +31,31 @@ class AppConstants {
     "Marche",
     "Vélo",
     "Bus",
-    "Voiture"
+    "Co-Voit"
   ];
+
+  static const Map<String, String> typeValues = {
+    "Mission": "mission",
+    "Travail": "work",
+    "Personnel": "personal",
+  };
+
+  static const Map<String, String> transportMethodValues = {
+    "Marche": "walk",
+    "Vélo": "bike",
+    "Bus": "bus",
+    "Co-Voit": "carpooling",
+  };
+
+  static Map<String, String> transportMethodNamesToFrench = {
+    for (var entry in AppConstants.transportMethodValues.entries)
+      entry.value: entry.key
+  };
 }
+
+// enum TransportMethod {
+//   walk,
+//   bike,
+//   bus,
+//   carpooling,
+// }

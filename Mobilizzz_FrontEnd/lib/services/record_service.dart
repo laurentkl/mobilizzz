@@ -26,6 +26,17 @@ class RecordService {
     return [];
   }
 
+  Future<List<Record>> getRecordsByTeamId(int teamId) async {
+    dynamic url = '${AppConstants.apiUrl}/Record/GetRecordsByTeamId/$teamId';
+    final uri = Uri.parse(url);
+    final response = await http.get(uri);
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body) as List;
+      return json.map((json) => Record.fromJson(json)).toList();
+    }
+    return [];
+  }
+
   Future<bool> addRecord(Record record) async {
     try {
       const url = '${AppConstants.apiUrl}/Record/Create';

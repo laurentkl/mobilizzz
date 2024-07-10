@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:mobilizzz/constants/constants.dart';
 import 'package:mobilizzz/pages/home_page.dart';
 import 'package:mobilizzz/pages/signup_page.dart';
 import 'package:mobilizzz/providers/team_provider.dart';
@@ -96,7 +97,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'Mobilizzz',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: AppConstants.primaryColor),
         snackBarTheme: const SnackBarThemeData(
           backgroundColor: Colors.blueGrey, // Couleur de fond de SnackBar
           contentTextStyle:

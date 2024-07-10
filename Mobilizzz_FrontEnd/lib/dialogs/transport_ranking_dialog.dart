@@ -5,18 +5,18 @@ import 'package:mobilizzz/utlis/utils.dart';
 import 'package:mobilizzz/widgets/generic/transport_ranking_row.dart';
 
 class TransportRankingDialog extends StatelessWidget {
-  final List<Record> userRecords;
+  final List<Record> records;
 
   const TransportRankingDialog({
     Key? key,
-    required this.userRecords,
+    required this.records,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // Calculate total distance per transport method
     Map<String, double> transportDistances = {};
-    for (var record in userRecords) {
+    for (var record in records) {
       transportDistances.update(
         record.transportMethod,
         (value) => value + record.distance,
@@ -37,14 +37,15 @@ class TransportRankingDialog extends StatelessWidget {
             for (int i = 0; i < sortedTransports.length; i++)
               TransportRankingRow(
                 transportMethod: AppConstants
-                    .transportMethods[sortedTransports[i].key]!,
-                totalDistance: sortedTransports[i].value!,
+                        .transportMethodValuesFrench[sortedTransports[i].key] ??
+                    '',
+                totalDistance: sortedTransports[i].value ?? 0,
                 rank: i + 1,
                 icon: Icon(
-                getTransportIcon(sortedTransports[i].key),
-                color: AppConstants.contrastTextColor,
-                size: 24,
-              ),,
+                  getTransportIcon(sortedTransports[i].key),
+                  color: AppConstants.contrastTextColor,
+                  size: 24,
+                ),
               ),
           ],
         ),

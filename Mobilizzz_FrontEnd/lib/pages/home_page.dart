@@ -20,7 +20,7 @@ class HomePage extends StatelessWidget {
     final recordProvider = Provider.of<RecordProvider>(context, listen: false);
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
-    recordProvider.getRecordsById(authProvider.user!.id);
+    recordProvider.getRecordsByUserId(authProvider.user!.id);
 
     return Consumer2<AuthProvider, RecordProvider>(
       builder: (context, authProvider, recordProvider, child) {

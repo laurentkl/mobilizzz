@@ -12,7 +12,7 @@ public class RecordController : ControllerBase
 
     public RecordController(Context context)
     {
-        _dbContext = context; 
+        _dbContext = context;
     }
 
     [HttpGet("GetAll")]
@@ -32,6 +32,16 @@ public class RecordController : ControllerBase
         return Ok(records);
     }
 
+    [HttpGet("GetRecordsByTeamId/{teamId}")]
+    public async Task<IActionResult> GetRecordsByTeamId(int teamId)
+    {
+        var records = await _dbContext.Records
+            .Where(r => r.TeamId == teamId)
+            .OrderByDescending(r => r.CreationDate)
+            .ToListAsync();
+        return Ok(records);
+    }
+
     [HttpPost("Create")]
     public async Task<IActionResult> Create(Record model)
     {
@@ -42,7 +52,7 @@ public class RecordController : ControllerBase
 
         _dbContext.Records?.Add(model);
         await _dbContext.SaveChangesAsync();
-        
+
         return Ok(model);
     }
 }
