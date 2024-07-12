@@ -20,39 +20,12 @@ class TeamPage extends StatefulWidget {
 }
 
 class _TeamPageState extends State<TeamPage> {
-  User? _user;
-  int _currentTeamId = 0;
-  Team? _currentTeam;
-
   // GlobalKey to control the ScaffoldState
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  void _toggleTeam(int teamId) {
-    setState(() {
-      _currentTeamId = teamId;
-      _currentTeam = Provider.of<TeamProvider>(context, listen: false)
-          .teamsForUser
-          .firstWhere((team) => team.id == _currentTeamId);
-    });
-  }
 
   @override
   void initState() {
     super.initState();
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final teamProvider = Provider.of<TeamProvider>(context, listen: false);
-    _user = authProvider.user;
-
-    if (_user != null) {
-      teamProvider.fetchTeamsForUser(_user!.id).then((_) {
-        if (teamProvider.teamsForUser.isNotEmpty) {
-          setState(() {
-            _currentTeamId = teamProvider.teamsForUser.first.id!;
-            _currentTeam = teamProvider.teamsForUser.first;
-          });
-        }
-      });
-    }
   }
 
   // Method to open the drawer
@@ -62,11 +35,9 @@ class _TeamPageState extends State<TeamPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<TeamProvider, RecordProvider>(
-      builder: (context, teamProvider, recordProvider, child) {
-        final authProvider = Provider.of<AuthProvider>(context, listen: false);
-        _user = authProvider.user;
-
+    return Consumer3<TeamProvider, RecordProvider, AuthProvider>(
+      builder: (context, teamProvider, recordProvider, authProvider, child) {
+        Team? currentTeam = teamProvider.currentTeam;
         return Container(
           color: AppConstants.backgroundColor,
           child: SafeArea(
@@ -75,12 +46,12 @@ class _TeamPageState extends State<TeamPage> {
               backgroundColor: AppConstants.backgroundColor,
               endDrawer: TeamDrawer(
                 teamsForUser: teamProvider.teamsForUser,
-                toggleTeam: _toggleTeam,
+                toggleTeam: teamProvider.toggleCurrentTeam,
               ),
               appBar: AppBar(
                 backgroundColor: AppConstants.backgroundColor,
                 title: Text(
-                  _currentTeam?.name ?? 'Team',
+                  currentTeam?.name ?? 'Team',
                   style: const TextStyle(color: AppConstants.primaryColor),
                 ),
                 actions: [
@@ -91,7 +62,7 @@ class _TeamPageState extends State<TeamPage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => TeamSettingsPage(
-                            team: _currentTeam!,
+                            team: currentTeam!,
                           ),
                         ),
                       );
@@ -102,19 +73,18 @@ class _TeamPageState extends State<TeamPage> {
               body: Column(
                 children: [
                   TeamStats(
-                    totalKm: _currentTeam?.getTotalKm() ?? 0,
-                    mostUsedTransportMethodDistance: _currentTeam
-                            ?.getMostUsedTransportMethod()["distance"] ??
-                        0,
+                    totalKm: teamProvider.currentTeamTotalKm,
+                    mostUsedTransportMethodDistance:
+                        currentTeam?.getMostUsedTransportMethod()["distance"] ??
+                            0,
                     mostUsedTransportMethodName:
-                        _currentTeam?.getMostUsedTransportMethod()["name"] ??
-                            "",
-                    teamRecords: _currentTeam?.getAllRecords() ?? [],
+                        currentTeam?.getMostUsedTransportMethod()["name"] ?? "",
+                    teamRecords: currentTeam?.getAllRecords() ?? [],
                   ),
                   Expanded(
                     child: UsersList(
-                      users: _currentTeam?.users ?? [],
-                      teamId: _currentTeamId,
+                      users: currentTeam?.users ?? [],
+                      teamId: currentTeam?.id ?? 0,
                     ),
                   ),
                 ],
@@ -123,7 +93,7 @@ class _TeamPageState extends State<TeamPage> {
                 onPressed: _openDrawer,
                 backgroundColor: Colors.deepPurple,
                 child: const Icon(
-                  Icons.screen_rotation_alt_outlined,
+                  Icons.social_distance,
                   size: 40,
                   color: Colors.white,
                 ),

@@ -53,22 +53,6 @@ class Team {
     return records;
   }
 
-  double getTotalKm() {
-    double totalKm = 0.0;
-
-    for (var user in users!) {
-      if (user.records != null) {
-        for (var record in user.records!) {
-          if (record.teamId == id) {
-            totalKm += record.distance;
-          }
-        }
-      }
-    }
-
-    return totalKm;
-  }
-
   double getTotalBikeKm() {
     double totalKm = 0.0;
 

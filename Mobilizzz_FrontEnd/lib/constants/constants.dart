@@ -11,25 +11,35 @@ class AppConstants {
   // static const String apiUrl = 'http://10.0.1.190:5169';
   // static const String apiUrl = 'http://10.0.10.55:5169';
 
+// --blue : #0439ff
+// --lavande : #C2C7FF
+// --corail : #ea515b
+// --red : #e51e58
+// --pink : #f19eeb
+// --yellow : #ecfb81
+// --green : #75CA6D
+// --turquoise : #5dd8c9
+
   // Theme
-  // static const Color primaryColor = Color(0xFF043aff);
   static const Color primaryColor = Color(0xFFB1AFFF);
-  // static const Color primaryColor = Colors.deepPurple;
+  static const Color backgroundColor = Colors.white;
   static const Color secondaryColor = Color(0xFFB1AFFF);
   static const Color inactiveColor = Colors.grey;
-  static const Color backgroundColor = Colors.white;
   static const Color heading1Color = Colors.black;
   static const Color heading2Color = Color(0xFFFFE6E6);
   static const Color textColor = Colors.black54;
   static const Color contrastTextColor = Colors.white;
 
+  // Final
+  // static const Color primaryColor = Color(0xFFecfb81);
+  // static const Color backgroundColor = Color(0xFF0439ff);
   // FontSize
   static const double rowFontSize = 14;
 
   static const List<String> types = ["Mission", "Travail", "Personnel"];
   static const List<String> transportMethods = [
     "Marche",
-    "Vélo",
+    "2 Roues",
     "Bus",
     "Co-Voit"
   ];
@@ -37,12 +47,12 @@ class AppConstants {
   static const Map<String, String> typeValues = {
     "Mission": "mission",
     "Travail": "work",
-    "Personnel": "personal",
+    "Privé": "personal",
   };
 
   static const Map<String, String> transportMethodValues = {
     "Marche": "walk",
-    "Vélo": "bike",
+    "2 Roues": "bike",
     "Bus": "bus",
     "Co-Voit": "carpooling",
   };
@@ -52,10 +62,3 @@ class AppConstants {
       entry.value: entry.key
   };
 }
-
-// enum TransportMethod {
-//   walk,
-//   bike,
-//   bus,
-//   carpooling,
-// }

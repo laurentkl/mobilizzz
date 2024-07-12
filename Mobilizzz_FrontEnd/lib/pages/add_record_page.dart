@@ -40,10 +40,6 @@ class AddRecordPageState extends State<AddRecordPage> {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final teamProvider = Provider.of<TeamProvider>(context, listen: false);
     _user = authProvider.user!;
-    if (widget.preselectedTeamId != null) {
-      _selectedTeam = teamProvider.teamsForUser
-          .firstWhere((team) => team.id == widget.preselectedTeamId);
-    }
   }
 
   void _handleFormSubmit() {
@@ -96,7 +92,7 @@ class AddRecordPageState extends State<AddRecordPage> {
           Icon(
             icon,
             color: _selectedTransportMethod == method
-                ? Theme.of(context).primaryColor
+                ? AppConstants.primaryColor
                 : Colors.grey,
             size: 40.0,
           ),
@@ -117,9 +113,8 @@ class AddRecordPageState extends State<AddRecordPage> {
         children: [
           Icon(
             icon,
-            color: _selectedType == type
-                ? Theme.of(context).primaryColor
-                : Colors.grey,
+            color:
+                _selectedType == type ? AppConstants.primaryColor : Colors.grey,
             size: 40.0,
           ),
           Text(type)
@@ -131,8 +126,10 @@ class AddRecordPageState extends State<AddRecordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppConstants.backgroundColor,
       appBar: AppBar(
-        title: const Text('Créer un nouveau trajet'),
+        title: const Text('Ajouter un nouveau trajet'),
+        backgroundColor: AppConstants.backgroundColor,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
@@ -207,12 +204,13 @@ class AddRecordPageState extends State<AddRecordPage> {
                         _distance = value;
                       });
                     },
+                    activeColor: AppConstants.primaryColor,
                   ),
                   CustomElevatedButton(
                     onPressed: _handleFormSubmit,
                     label: "Sauvegarder",
                     width: double.infinity,
-                    color: Theme.of(context).primaryColor,
+                    color: AppConstants.primaryColor,
                   ),
                 ],
               ),

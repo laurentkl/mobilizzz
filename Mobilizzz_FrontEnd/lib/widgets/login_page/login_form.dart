@@ -44,11 +44,11 @@ class LoginForm extends StatelessWidget {
                   _emailController.text.trim(),
                   _passwordController.text.trim(),
                 );
+                if (context.mounted) context.go('/bottomnav');
               } catch (error) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(error.toString())),
                 );
-                if (context.mounted) context.go('/bottomnav');
               }
             },
             label: "Se connecter",

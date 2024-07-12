@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobilizzz/constants/constants.dart';
 import 'package:mobilizzz/models/user_model.dart';
 import 'package:mobilizzz/widgets/team_page/user_row.dart';
 
@@ -11,6 +12,7 @@ class UsersList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppConstants.backgroundColor,
       body: ListView.builder(
         itemCount: users.length,
         itemBuilder: (context, index) {

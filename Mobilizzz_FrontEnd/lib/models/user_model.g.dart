@@ -12,6 +12,7 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
       lastName: json['lastName'] as String,
       firstName: json['firstName'] as String,
       email: json['email'] as String,
+      password: json['password'] as String?,
     )
       ..records = (json['records'] as List<dynamic>?)
           ?.map((e) => Record.fromJson(e as Map<String, dynamic>))
@@ -35,6 +36,7 @@ Map<String, dynamic> _$UserToJson(User instance) {
     }
   }
 
+  writeNotNull('password', instance.password);
   writeNotNull('records', instance.records);
   writeNotNull('teams', instance.teams);
   return val;

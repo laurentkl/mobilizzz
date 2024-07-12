@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
 import 'package:mobilizzz/providers/team_provider.dart';
@@ -70,6 +72,81 @@ class RecordProvider extends ChangeNotifier {
       isLoading = false;
     }
     return success;
+  }
+
+  Map<String, dynamic> get mostUsedTransportMethod {
+    Map<String, double> transportMethodDistances = {};
+
+    for (var record in userRecords) {
+      if (transportMethodDistances.containsKey(record.transportMethod)) {
+        transportMethodDistances[record.transportMethod] =
+            transportMethodDistances[record.transportMethod]! + record.distance;
+      } else {
+        transportMethodDistances[record.transportMethod] = record.distance;
+      }
+    }
+
+    String mostUsedTransportMethod = '';
+    double maxDistance = 0.0;
+
+    transportMethodDistances.forEach((method, distance) {
+      if (distance > maxDistance) {
+        maxDistance = distance;
+        mostUsedTransportMethod = method;
+      }
+    });
+
+    return {
+      'name': mostUsedTransportMethod,
+      'distance': maxDistance,
+    };
+  }
+
+  double get totalKm {
+    double totalKm = 0.0;
+
+    for (var record in userRecords) {
+      totalKm += record.distance;
+    }
+
+    return totalKm;
+  }
+
+  int get consecutiveRecords {
+    if (userRecords.isEmpty) {
+      return 0;
+    }
+
+    // Utiliser un Set pour stocker les dates uniques sans tenir compte de l'heure
+    Set<DateTime> uniqueDates = {};
+
+    // Ajouter chaque date d'enregistrement unique au Set
+    for (var record in userRecords) {
+      uniqueDates.add(DateTime(record.creationDate!.year,
+          record.creationDate!.month, record.creationDate!.day));
+    }
+
+    // Convertir le Set en liste et trier par date
+    List<DateTime> sortedDates = uniqueDates.toList()..sort();
+
+    int tempConsecutiveRecords = 1;
+    int consecutiveRecords = 0;
+    DateTime lastDate = sortedDates.first;
+
+    // Vérifier les jours consécutifs
+    for (var i = 1; i < sortedDates.length; i++) {
+      // Vérifier la différence de jours
+      if (sortedDates[i].difference(lastDate).inDays == 1) {
+        tempConsecutiveRecords++;
+      } else {
+        consecutiveRecords = max(consecutiveRecords, tempConsecutiveRecords);
+        tempConsecutiveRecords = 1;
+      }
+
+      lastDate = sortedDates[i];
+    }
+
+    return consecutiveRecords;
   }
 
   void filterByTransportMethod(String transportMethod) {

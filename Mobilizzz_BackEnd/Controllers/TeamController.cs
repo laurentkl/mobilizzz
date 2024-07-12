@@ -41,23 +41,52 @@ public class TeamController : ControllerBase
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            var creatorUser = await _dbContext.Users.FindAsync(team?.AdminIds?.First());
+            // Check if companyId is 0
+            if (team.CompanyId == 0)
+            {
+                // Find the company with name "mobilitizzz"
+                var company = await _dbContext.Companies.FirstOrDefaultAsync(c => c.Name.ToLower() == "mobilitizzz");
 
+                if (company == null)
+                {
+                    // If company is not found, return a 404 Not Found response or handle accordingly
+                    return NotFound(new { message = "Company 'mobilitizzz' not found" });
+                }
+
+                // Set the team's companyId to the found company's ID
+                team.CompanyId = company.Id;
+            }
+
+            // Find the creator user by their ID
+            var creatorUser = await _dbContext.Users.FindAsync(team?.AdminIds?.FirstOrDefault());
+
+            if (creatorUser == null)
+            {
+                return NotFound(new { message = "Creator user not found" });
+            }
+
+            // Add the creator user to the team's Users list
             team.Users = new List<User> { creatorUser };
 
+            // Add the team to the Teams DbSet
             _dbContext.Teams.Add(team);
 
+            // Save changes to the database
             await _dbContext.SaveChangesAsync();
 
+            // Return success response with created team
             return Ok(new { message = "Team created successfully", team });
         }
         catch (Exception ex)
         {
+            // Log exception
             Console.WriteLine(ex.ToString(), "An error occurred while creating the team");
 
+            // Return 500 Internal Server Error response
             return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred while processing your request" });
         }
     }
+
 
     [HttpGet("GetTeamsByUser/{userId}")]
     public async Task<IActionResult> GetTeamsByUser(int userId)

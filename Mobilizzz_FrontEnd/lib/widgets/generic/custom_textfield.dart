@@ -7,13 +7,10 @@ import 'package:mobilizzz/constants/constants.dart';
 /// for text input fields within Flutter applications.
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
-
   final String label;
-
   final bool obscureText;
-
-  /// Defaults to true, allowing the TextField to expand to fill available space.
   final bool isFlexible;
+  final FormFieldValidator<String>? validator;
 
   const CustomTextField({
     Key? key,
@@ -21,13 +18,15 @@ class CustomTextField extends StatelessWidget {
     required this.label,
     this.obscureText = false,
     this.isFlexible = true,
+    this.validator,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Widget textField = TextField(
+    Widget textField = TextFormField(
       controller: controller,
       obscureText: obscureText,
+      validator: validator, // Utilize the provided validator function
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.grey[100],
@@ -53,7 +52,7 @@ class CustomTextField extends StatelessWidget {
       ),
     );
 
-    // Wrap the TextField in a Flexible widget if isFlexible is true, otherwise return it directly
+    // Wrap the TextFormField in a Flexible widget if isFlexible is true, otherwise return it directly
     if (isFlexible) {
       return Flexible(
         child: textField,

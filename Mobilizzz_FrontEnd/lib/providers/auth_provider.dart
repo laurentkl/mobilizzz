@@ -14,6 +14,13 @@ class AuthProvider extends ChangeNotifier {
     _loadUser(); // Load user data when the AuthProvider is initialized
   }
 
+  set user(User? user) {
+    _user = user;
+    _clearUser();
+    _saveUser(user!);
+    notifyListeners();
+  }
+
   Future<void> signIn(String email, String password) async {
     try {
       final user = await _authService.signIn(email, password);
@@ -34,7 +41,6 @@ class AuthProvider extends ChangeNotifier {
           userName, email, password, firstName, lastName, teamCode);
       if (user != null) {
         _user = user;
-        await _saveUser(user); // Save user data to SharedPreferences
         notifyListeners();
       }
     } catch (error) {

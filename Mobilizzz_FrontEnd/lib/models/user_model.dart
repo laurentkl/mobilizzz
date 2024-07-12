@@ -10,6 +10,7 @@ class User {
   final String lastName;
   final String firstName;
   final String email;
+  final String? password;
   List<Record>? records;
   List<Team>? teams;
 
@@ -19,6 +20,7 @@ class User {
     required this.lastName,
     required this.firstName,
     required this.email,
+    required this.password,
   });
 
   List<Record>? getRecordsForUserByTeam(teamId) {

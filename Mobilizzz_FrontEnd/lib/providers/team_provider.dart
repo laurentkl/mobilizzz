@@ -5,10 +5,20 @@ import 'package:mobilizzz/services/team_service.dart';
 class TeamProvider extends ChangeNotifier {
   final TeamService _teamService = TeamService();
   List<Team> _teams = [];
+  Team? _currentTeam;
   List<Team> _teamsForUser = [];
+  double _currentTeamTotalKm = 0;
 
   List<Team> get teams => _teams;
+  Team? get currentTeam => _currentTeam;
   List<Team> get teamsForUser => _teamsForUser;
+  double get currentTeamTotalKm => _currentTeamTotalKm;
+
+  set currentTeam(Team? team) {
+    _currentTeam = team;
+    _currentTeamTotalKm = computeTeamTotalKm();
+    notifyListeners();
+  }
 
   Future<void> fetchTeams() async {
     try {
@@ -19,9 +29,20 @@ class TeamProvider extends ChangeNotifier {
     }
   }
 
+  // This function is responsible to maintain the list of teams for the current user up to date
+  // It's also maintening the current team up to date
   Future<void> fetchTeamsForUser(int userId) async {
     try {
       _teamsForUser = await _teamService.getTeamsByUser(userId);
+
+      if (currentTeam == null && _teamsForUser.isNotEmpty) {
+        currentTeam = _teamsForUser.first;
+      } else if (currentTeam != null) {
+        currentTeam =
+            _teamsForUser.firstWhere((team) => team.id == currentTeam!.id);
+      }
+
+      _currentTeamTotalKm = computeTeamTotalKm();
       notifyListeners();
     } catch (error) {
       rethrow;
@@ -61,5 +82,25 @@ class TeamProvider extends ChangeNotifier {
       return null;
     }
     return teamsForUser.firstWhere((team) => team.id == teamId);
+  }
+
+  void toggleCurrentTeam(int teamId) {
+    currentTeam = teamsForUser.firstWhere((team) => team.id == teamId);
+  }
+
+  double computeTeamTotalKm() {
+    double totalKm = 0.0;
+
+    for (var user in currentTeam!.users!) {
+      if (user.records != null) {
+        for (var record in user.records!) {
+          if (record.teamId == currentTeam!.id) {
+            totalKm += record.distance;
+          }
+        }
+      }
+    }
+
+    return totalKm;
   }
 }
