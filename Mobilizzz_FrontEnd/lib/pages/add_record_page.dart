@@ -35,7 +35,7 @@ class AddRecordPageState extends State<AddRecordPage> {
   double _distance = 15;
 
   final Team forMeTeam =
-      const Team(id: 0, name: "Pour moi", adminIds: [], companyId: 0);
+      const Team(id: null, name: "Pour moi", adminIds: [], companyId: 0);
 
   @override
   void initState() {
@@ -88,7 +88,7 @@ class AddRecordPageState extends State<AddRecordPage> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          _selectedTransportMethod = _selectedTransportMethod;
+          _selectedTransportMethod = method;
         });
       },
       child: Column(
