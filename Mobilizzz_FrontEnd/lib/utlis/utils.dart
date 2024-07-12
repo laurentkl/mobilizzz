@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobilizzz/constants/constants.dart';
+import 'package:mobilizzz/enums/enums.dart';
 import 'package:mobilizzz/models/record_model.dart';
 import 'package:mobilizzz/models/team_model.dart';
 import 'package:mobilizzz/models/user_model.dart';
@@ -45,15 +47,28 @@ IconData getTransportIcon(String transportMethod) {
   }
 }
 
-IconData getTypeIcon(String type) {
-  switch (type.toLowerCase()) {
-    case 'mission':
-      return Icons.track_changes_outlined;
-    case 'personal':
-      return Icons.favorite;
-    case 'work':
-      return Icons.alarm;
+IconData getTypeIcon(RecordType type) {
+  switch (type) {
+    case RecordType.mission:
+      return AppConstants.recordTypeMissionIcon;
+    case RecordType.private:
+      return AppConstants.recordTypePrivateIcon;
+    case RecordType.work:
+      return AppConstants.recordTypeWorkIcon;
     default:
       return Icons.error;
+  }
+}
+
+String getRecordTypeString(RecordType type) {
+  switch (type) {
+    case RecordType.mission:
+      return 'Mission';
+    case RecordType.private:
+      return 'Privé';
+    case RecordType.work:
+      return 'Travail';
+    default:
+      return 'Inconnu';
   }
 }

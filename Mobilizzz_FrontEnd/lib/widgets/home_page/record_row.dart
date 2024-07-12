@@ -18,8 +18,6 @@ class RecordRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var teamProvider = Provider.of<TeamProvider>(context, listen: false);
-
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
@@ -35,8 +33,7 @@ class RecordRow extends StatelessWidget {
             Expanded(
               flex: 2,
               child: AutoSizeText(
-                teamProvider.getTeamFromTeamId(record.teamId)?.name ??
-                    "No Team",
+                record.team?.name ?? "Pour moi",
                 style: const TextStyle(
                     color: AppConstants.contrastTextColor,
                     fontSize: AppConstants.rowFontSize),
@@ -81,7 +78,7 @@ class RecordRow extends StatelessWidget {
                 ),
                 const SizedBox(width: 4),
                 Icon(
-                  getTypeIcon(record.type),
+                  getTypeIcon(record.recordType),
                   color: AppConstants.contrastTextColor,
                   size: 24,
                 ),

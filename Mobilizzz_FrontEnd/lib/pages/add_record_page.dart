@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobilizzz/constants/constants.dart';
+import 'package:mobilizzz/enums/enums.dart';
 import 'package:mobilizzz/models/record_model.dart';
 import 'package:mobilizzz/models/team_model.dart';
 import 'package:mobilizzz/models/user_model.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
 import 'package:mobilizzz/providers/record_provider.dart';
 import 'package:mobilizzz/providers/team_provider.dart';
+import 'package:mobilizzz/utlis/utils.dart';
 import 'package:mobilizzz/widgets/generic/custom_combobox.dart';
 import 'package:mobilizzz/widgets/generic/custom_elevated_button.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +31,7 @@ class AddRecordPageState extends State<AddRecordPage> {
   final _formKey = GlobalKey<FormState>();
   Team? _selectedTeam;
   late String _selectedTransportMethod;
-  late String _selectedType;
+  late RecordType _selectedType;
   double _distance = 15;
 
   final Team forMeTeam =
@@ -39,7 +41,7 @@ class AddRecordPageState extends State<AddRecordPage> {
   void initState() {
     super.initState();
     _selectedTransportMethod = AppConstants.transportMethods[0];
-    _selectedType = AppConstants.types[0];
+    _selectedType = RecordType.work;
     _selectedTeam = forMeTeam;
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     _user = authProvider.user!;
@@ -54,8 +56,8 @@ class AddRecordPageState extends State<AddRecordPage> {
           distance: _distance,
           transportMethod:
               AppConstants.transportMethodValues[_selectedTransportMethod]!,
-          type: AppConstants.typeValues[_selectedType]!,
-          teamId: _selectedTeam?.id ?? 0,
+          teamId: _selectedTeam?.id ?? null,
+          recordType: _selectedType,
           userId: _user.id);
 
       Provider.of<RecordProvider>(context, listen: false)
@@ -105,7 +107,7 @@ class AddRecordPageState extends State<AddRecordPage> {
     );
   }
 
-  Widget _buildTypeButton(String type, IconData icon) {
+  Widget _buildTypeButton(RecordType type, IconData icon) {
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -120,7 +122,7 @@ class AddRecordPageState extends State<AddRecordPage> {
                 _selectedType == type ? AppConstants.primaryColor : Colors.grey,
             size: 40.0,
           ),
-          Text(type)
+          Text(getRecordTypeString(type))
         ],
       ),
     );
@@ -176,9 +178,12 @@ class AddRecordPageState extends State<AddRecordPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _buildTypeButton("Mission", Icons.work),
-                      _buildTypeButton("Travail", Icons.home_work),
-                      _buildTypeButton("Privé", Icons.home),
+                      _buildTypeButton(
+                          RecordType.work, AppConstants.recordTypeWorkIcon),
+                      _buildTypeButton(RecordType.mission,
+                          AppConstants.recordTypeMissionIcon),
+                      _buildTypeButton(RecordType.private,
+                          AppConstants.recordTypePrivateIcon),
                     ],
                   ),
                   const SizedBox(height: 16.0),

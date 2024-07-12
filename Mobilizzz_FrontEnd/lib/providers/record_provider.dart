@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:mobilizzz/enums/enums.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
 import 'package:mobilizzz/providers/team_provider.dart';
 import 'package:mobilizzz/services/record_service.dart';
@@ -13,7 +14,7 @@ class RecordProvider extends ChangeNotifier {
   List<Record> _userRecords = [];
   List<Record> _filteredUserRecords = [];
   String _selectedTransportMethodForFilter = '';
-  String _selectedTypeForFilter = '';
+  RecordType? _selectedTypeForFilter;
 
   List<Record> get records => _records;
   List<Record> get userRecords => _userRecords;
@@ -159,9 +160,9 @@ class RecordProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void filterByType(String type) {
+  void filterByType(RecordType type) {
     if (_selectedTypeForFilter == type) {
-      _selectedTypeForFilter = '';
+      _selectedTypeForFilter = null;
     } else {
       _selectedTypeForFilter = type;
     }
@@ -175,8 +176,7 @@ class RecordProvider extends ChangeNotifier {
           _selectedTransportMethodForFilter.isEmpty ||
               record.transportMethod == _selectedTransportMethodForFilter;
 
-      final matchesType = _selectedTypeForFilter.isEmpty ||
-          record.type == _selectedTypeForFilter;
+      final matchesType = record.recordType == _selectedTypeForFilter;
 
       return matchesTransportMethod && matchesType;
     }).toList();

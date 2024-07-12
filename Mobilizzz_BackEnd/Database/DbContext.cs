@@ -1,9 +1,9 @@
 using Mobilizzz_BackEnd.Models;
 using Microsoft.EntityFrameworkCore;
 
-public class Context: DbContext
+public class Context : DbContext
 {
-    public Context(){}
+    public Context() { }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -11,17 +11,20 @@ public class Context: DbContext
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
-{
-    base.OnModelCreating(modelBuilder);
+    {
+        base.OnModelCreating(modelBuilder);
 
-     modelBuilder.Entity<Team>()
-        .HasMany(t => t.Users)
-        .WithMany(u => u.Teams)
-        .UsingEntity(j => j.ToTable("TeamMember"));
-    modelBuilder.Entity<Team>()
-        .HasMany(t => t.PendingUserRequests)
-        .WithMany(u => u.PendingTeamRequests)
-        .UsingEntity(j => j.ToTable("TeamMemberRequest"));
+        modelBuilder.Entity<Team>()
+           .HasMany(t => t.Users)
+           .WithMany(u => u.Teams)
+           .UsingEntity(j => j.ToTable("TeamMember"));
+        modelBuilder.Entity<Team>()
+            .HasMany(t => t.PendingUserRequests)
+            .WithMany(u => u.PendingTeamRequests)
+            .UsingEntity(j => j.ToTable("TeamMemberRequest"));
+        modelBuilder.Entity<Record>()
+        .Property(r => r.TeamId)
+        .IsRequired(false);
     }
 
     public DbSet<Record> Records { get; set; }

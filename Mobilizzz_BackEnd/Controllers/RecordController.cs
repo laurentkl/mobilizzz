@@ -26,9 +26,22 @@ public class RecordController : ControllerBase
     public async Task<IActionResult> GetRecordsByUserId(int userId)
     {
         var records = await _dbContext.Records
+            .Include(r => r.Team) // Include the Team navigation property
             .Where(r => r.UserId == userId)
             .OrderByDescending(r => r.CreationDate)
+            .Select(r => new RecordWithTeamDto
+            {
+                Id = r.Id,
+                CreationDate = r.CreationDate,
+                TransportMethod = r.TransportMethod,
+                RecordType = r.RecordType,
+                Distance = r.Distance,
+                UserId = r.UserId,
+                TeamId = r.TeamId,
+                Team = r.Team
+            })
             .ToListAsync();
+
         return Ok(records);
     }
 
@@ -45,14 +58,21 @@ public class RecordController : ControllerBase
     [HttpPost("Create")]
     public async Task<IActionResult> Create(Record model)
     {
-        if (!ModelState.IsValid)
+        try
         {
-            return BadRequest(ModelState);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            _dbContext.Records?.Add(model);
+            await _dbContext.SaveChangesAsync();
+
+            return Ok(model);
         }
-
-        _dbContext.Records?.Add(model);
-        await _dbContext.SaveChangesAsync();
-
-        return Ok(model);
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
+        }
     }
 }

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mobilizzz/constants/constants.dart';
+import 'package:mobilizzz/enums/enums.dart';
 
 class RecordsFilters extends StatefulWidget {
   final Function(String) onTransportMethodFilterSelected;
-  final Function(String) onTypeFilterSelected;
+  final Function(RecordType) onTypeFilterSelected;
 
   const RecordsFilters(
       {Key? key,
@@ -17,7 +18,7 @@ class RecordsFilters extends StatefulWidget {
 
 class _RecordsFiltersState extends State<RecordsFilters> {
   String _selectedTransportMethodForFilter = '';
-  String _selectedTypeForFilter = '';
+  RecordType? _selectedTypeForFilter;
 
   void _handleTransportMethodFilterSelection(String transportMethod) {
     setState(() {
@@ -31,16 +32,16 @@ class _RecordsFiltersState extends State<RecordsFilters> {
     widget.onTransportMethodFilterSelected(_selectedTransportMethodForFilter);
   }
 
-  void _handleTypeFilterSelection(String type) {
+  void _handleTypeFilterSelection(RecordType type) {
     setState(() {
       if (_selectedTypeForFilter == type) {
         _selectedTypeForFilter =
-            ''; // Deselect the filter if it's already selected
+            null; // Deselect the filter if it's already selected
       } else {
         _selectedTypeForFilter = type;
       }
     });
-    widget.onTypeFilterSelected(_selectedTypeForFilter);
+    widget.onTypeFilterSelected(_selectedTypeForFilter!);
   }
 
   @override
@@ -95,24 +96,24 @@ class _RecordsFiltersState extends State<RecordsFilters> {
           children: [
             IconButton(
               icon: Icon(Icons.track_changes_outlined,
-                  color: _selectedTypeForFilter == 'mission'
+                  color: _selectedTypeForFilter == RecordType.mission
                       ? AppConstants.primaryColor
                       : AppConstants.inactiveColor),
-              onPressed: () => _handleTypeFilterSelection('mission'),
+              onPressed: () => _handleTypeFilterSelection(RecordType.mission),
             ),
             IconButton(
               icon: Icon(Icons.favorite,
-                  color: _selectedTypeForFilter == 'personal'
+                  color: _selectedTypeForFilter == RecordType.private
                       ? AppConstants.primaryColor
                       : AppConstants.inactiveColor),
-              onPressed: () => _handleTypeFilterSelection('personal'),
+              onPressed: () => _handleTypeFilterSelection(RecordType.private),
             ),
             IconButton(
               icon: Icon(Icons.alarm,
-                  color: _selectedTypeForFilter == 'work'
+                  color: _selectedTypeForFilter == RecordType.work
                       ? AppConstants.primaryColor
                       : AppConstants.inactiveColor),
-              onPressed: () => _handleTypeFilterSelection('work'),
+              onPressed: () => _handleTypeFilterSelection(RecordType.work),
             ),
           ],
         ),

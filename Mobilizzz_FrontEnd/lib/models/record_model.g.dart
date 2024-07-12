@@ -10,8 +10,11 @@ Record _$RecordFromJson(Map<String, dynamic> json) => Record(
       transportMethod: json['transportMethod'] as String,
       distance: (json['distance'] as num).toDouble(),
       userId: (json['userId'] as num).toInt(),
-      teamId: (json['teamId'] as num).toInt(),
-      type: json['type'] as String,
+      teamId: (json['teamId'] as num?)?.toInt(),
+      recordType: $enumDecode(_$RecordTypeEnumMap, json['recordType']),
+      team: json['team'] == null
+          ? null
+          : Team.fromJson(json['team'] as Map<String, dynamic>),
       creationDate: json['creationDate'] == null
           ? null
           : DateTime.parse(json['creationDate'] as String),
@@ -31,8 +34,15 @@ Map<String, dynamic> _$RecordToJson(Record instance) {
   val['transportMethod'] = instance.transportMethod;
   val['distance'] = instance.distance;
   val['userId'] = instance.userId;
-  val['teamId'] = instance.teamId;
-  val['type'] = instance.type;
+  writeNotNull('teamId', instance.teamId);
+  writeNotNull('team', instance.team);
+  val['recordType'] = _$RecordTypeEnumMap[instance.recordType]!;
   writeNotNull('creationDate', instance.creationDate?.toIso8601String());
   return val;
 }
+
+const _$RecordTypeEnumMap = {
+  RecordType.work: 1,
+  RecordType.mission: 2,
+  RecordType.private: 3,
+};

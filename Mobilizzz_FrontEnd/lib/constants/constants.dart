@@ -6,10 +6,10 @@ import 'package:go_router/go_router.dart';
 class AppConstants {
   // Example API URL constant
   // static const String apiUrl = 'http://10.0.1.158:5169';
-  static const String apiUrl = 'http://localhost:5169';
+  // static const String apiUrl = 'http://localhost:5169';
   // static const String apiUrl = 'http://192.168.0.99:5169';
   // static const String apiUrl = 'http://10.0.1.190:5169';
-  // static const String apiUrl = 'http://10.0.10.55:5169';
+  static const String apiUrl = 'http://10.0.10.46:5169';
 
 // --blue : #0439ff
 // --lavande : #C2C7FF
@@ -30,25 +30,26 @@ class AppConstants {
   static const Color textColor = Colors.black54;
   static const Color contrastTextColor = Colors.white;
 
+  //   _buildTypeButton("Travail", Icons.home_work),
+  // _buildTypeButton("Mission", Icons.work),
+  // _buildTypeButton("Privé", Icons.home),
+
   // Final
   // static const Color primaryColor = Color(0xFFecfb81);
   // static const Color backgroundColor = Color(0xFF0439ff);
   // FontSize
   static const double rowFontSize = 14;
 
-  static const List<String> types = ["Mission", "Travail", "Personnel"];
+  static const IconData recordTypeWorkIcon = Icons.home_work;
+  static const IconData recordTypeMissionIcon = Icons.work;
+  static const IconData recordTypePrivateIcon = Icons.home;
+
   static const List<String> transportMethods = [
     "Marche",
     "2 Roues",
     "Bus",
     "Co-Voit"
   ];
-
-  static const Map<String, String> typeValues = {
-    "Mission": "mission",
-    "Travail": "work",
-    "Privé": "personal",
-  };
 
   static const Map<String, String> transportMethodValues = {
     "Marche": "walk",

@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:mobilizzz/enums/enums.dart';
+import 'package:mobilizzz/models/team_model.dart';
 part 'record_model.g.dart';
 
 @JsonSerializable(includeIfNull: false)
@@ -8,8 +9,9 @@ class Record {
   final String transportMethod;
   final double distance;
   final int userId;
-  final int teamId;
-  final String type;
+  final int? teamId;
+  final Team? team;
+  final RecordType recordType;
   final DateTime? creationDate;
 
   Record({
@@ -17,7 +19,8 @@ class Record {
     required this.distance,
     required this.userId,
     required this.teamId,
-    required this.type,
+    required this.recordType,
+    this.team,
     this.creationDate,
     this.id,
   });
