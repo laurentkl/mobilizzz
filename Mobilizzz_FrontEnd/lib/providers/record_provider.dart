@@ -160,7 +160,7 @@ class RecordProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void filterByType(RecordType type) {
+  void filterByType(RecordType? type) {
     if (_selectedTypeForFilter == type) {
       _selectedTypeForFilter = null;
     } else {
@@ -176,7 +176,8 @@ class RecordProvider extends ChangeNotifier {
           _selectedTransportMethodForFilter.isEmpty ||
               record.transportMethod == _selectedTransportMethodForFilter;
 
-      final matchesType = record.recordType == _selectedTypeForFilter;
+      final matchesType = _selectedTypeForFilter == null ||
+          record.recordType == _selectedTypeForFilter;
 
       return matchesTransportMethod && matchesType;
     }).toList();

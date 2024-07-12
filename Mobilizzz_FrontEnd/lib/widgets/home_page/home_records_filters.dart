@@ -4,7 +4,7 @@ import 'package:mobilizzz/enums/enums.dart';
 
 class RecordsFilters extends StatefulWidget {
   final Function(String) onTransportMethodFilterSelected;
-  final Function(RecordType) onTypeFilterSelected;
+  final Function(RecordType?) onTypeFilterSelected;
 
   const RecordsFilters(
       {Key? key,
@@ -40,8 +40,8 @@ class _RecordsFiltersState extends State<RecordsFilters> {
       } else {
         _selectedTypeForFilter = type;
       }
+      widget.onTypeFilterSelected(_selectedTypeForFilter);
     });
-    widget.onTypeFilterSelected(_selectedTypeForFilter!);
   }
 
   @override
@@ -95,25 +95,25 @@ class _RecordsFiltersState extends State<RecordsFilters> {
         Row(
           children: [
             IconButton(
-              icon: Icon(Icons.track_changes_outlined,
+              icon: Icon(AppConstants.recordTypeWorkIcon,
+                  color: _selectedTypeForFilter == RecordType.work
+                      ? AppConstants.primaryColor
+                      : AppConstants.inactiveColor),
+              onPressed: () => _handleTypeFilterSelection(RecordType.work),
+            ),
+            IconButton(
+              icon: Icon(AppConstants.recordTypeMissionIcon,
                   color: _selectedTypeForFilter == RecordType.mission
                       ? AppConstants.primaryColor
                       : AppConstants.inactiveColor),
               onPressed: () => _handleTypeFilterSelection(RecordType.mission),
             ),
             IconButton(
-              icon: Icon(Icons.favorite,
+              icon: Icon(AppConstants.recordTypePrivateIcon,
                   color: _selectedTypeForFilter == RecordType.private
                       ? AppConstants.primaryColor
                       : AppConstants.inactiveColor),
               onPressed: () => _handleTypeFilterSelection(RecordType.private),
-            ),
-            IconButton(
-              icon: Icon(Icons.alarm,
-                  color: _selectedTypeForFilter == RecordType.work
-                      ? AppConstants.primaryColor
-                      : AppConstants.inactiveColor),
-              onPressed: () => _handleTypeFilterSelection(RecordType.work),
             ),
           ],
         ),
