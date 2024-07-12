@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobilizzz/constants/constants.dart';
 import 'package:mobilizzz/dialogs/transport_ranking_dialog.dart';
 import 'package:mobilizzz/models/record_model.dart';
+import 'package:mobilizzz/utlis/utils.dart';
 import 'package:mobilizzz/widgets/generic/stat_box.dart';
 import 'package:provider/provider.dart';
 import 'package:mobilizzz/providers/record_provider.dart';
@@ -28,8 +29,9 @@ class HomeStats extends StatelessWidget {
                     );
                   },
                   child: StatBox(
-                    icon: const Icon(
-                      Icons.directions_bike,
+                    icon: Icon(
+                      getTransportIcon(
+                          recordProvider.mostUsedTransportMethod["name"]),
                       color: AppConstants.primaryColor,
                       size: 34.0,
                     ),

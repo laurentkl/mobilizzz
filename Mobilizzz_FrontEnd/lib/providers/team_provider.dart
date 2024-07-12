@@ -91,6 +91,10 @@ class TeamProvider extends ChangeNotifier {
   double computeTeamTotalKm() {
     double totalKm = 0.0;
 
+    if (currentTeam == null) {
+      return totalKm;
+    }
+
     for (var user in currentTeam!.users!) {
       if (user.records != null) {
         for (var record in user.records!) {

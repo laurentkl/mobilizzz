@@ -32,13 +32,16 @@ class AddRecordPageState extends State<AddRecordPage> {
   late String _selectedType;
   double _distance = 15;
 
+  final Team forMeTeam =
+      const Team(id: 0, name: "Pour moi", adminIds: [], companyId: 0);
+
   @override
   void initState() {
     super.initState();
     _selectedTransportMethod = AppConstants.transportMethods[0];
     _selectedType = AppConstants.types[0];
+    _selectedTeam = forMeTeam;
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final teamProvider = Provider.of<TeamProvider>(context, listen: false);
     _user = authProvider.user!;
   }
 
@@ -143,12 +146,18 @@ class AddRecordPageState extends State<AddRecordPage> {
                   CustomComboBox<Team>(
                     label: "Team",
                     value: _selectedTeam,
-                    items: teamProvider.teamsForUser.map((team) {
-                      return DropdownMenuItem<Team>(
-                        value: team,
-                        child: Text(team.name),
-                      );
-                    }).toList(),
+                    items: [
+                      DropdownMenuItem<Team>(
+                        value: forMeTeam,
+                        child: const Text("Pour moi"),
+                      ),
+                      ...teamProvider.teamsForUser.map((team) {
+                        return DropdownMenuItem<Team>(
+                          value: team,
+                          child: Text(team.name),
+                        );
+                      }),
+                    ],
                     onChanged: (value) {
                       setState(() {
                         _selectedTeam = value;
