@@ -40,8 +40,8 @@ class _RecordsFiltersState extends State<RecordsFilters> {
       } else {
         _selectedTypeForFilter = type;
       }
-      widget.onTypeFilterSelected(_selectedTypeForFilter);
     });
+    widget.onTypeFilterSelected(_selectedTypeForFilter);
   }
 
   @override
