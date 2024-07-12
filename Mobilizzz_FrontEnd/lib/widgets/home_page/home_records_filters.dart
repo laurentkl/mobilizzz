@@ -3,7 +3,9 @@ import 'package:mobilizzz/constants/constants.dart';
 import 'package:mobilizzz/enums/enums.dart';
 
 class RecordsFilters extends StatefulWidget {
-  final Function(String) onTransportMethodFilterSelected;
+  final Function(
+    TransportMethod?,
+  ) onTransportMethodFilterSelected;
   final Function(RecordType?) onTypeFilterSelected;
 
   const RecordsFilters(
@@ -17,14 +19,13 @@ class RecordsFilters extends StatefulWidget {
 }
 
 class _RecordsFiltersState extends State<RecordsFilters> {
-  String _selectedTransportMethodForFilter = '';
+  TransportMethod? _selectedTransportMethodForFilter;
   RecordType? _selectedTypeForFilter;
 
-  void _handleTransportMethodFilterSelection(String transportMethod) {
+  void _handleTransportMethodFilterSelection(TransportMethod transportMethod) {
     setState(() {
       if (_selectedTransportMethodForFilter == transportMethod) {
-        _selectedTransportMethodForFilter =
-            ''; // Deselect the filter if it's already selected
+        _selectedTransportMethodForFilter = null;
       } else {
         _selectedTransportMethodForFilter = transportMethod;
       }
@@ -55,42 +56,47 @@ class _RecordsFiltersState extends State<RecordsFilters> {
             IconButton(
               icon: Icon(
                 Icons.directions_bus,
-                color: _selectedTransportMethodForFilter == 'bus'
+                color: _selectedTransportMethodForFilter == TransportMethod.bus
                     ? AppConstants.primaryColor
                     : AppConstants.inactiveColor,
               ),
-              onPressed: () => _handleTransportMethodFilterSelection('bus'),
+              onPressed: () =>
+                  _handleTransportMethodFilterSelection(TransportMethod.bus),
             ),
             IconButton(
               icon: Icon(
                 Icons.directions_bike,
-                color: _selectedTransportMethodForFilter == 'bike'
+                color: _selectedTransportMethodForFilter == TransportMethod.bike
                     ? AppConstants.primaryColor
                     : AppConstants.inactiveColor,
               ),
-              onPressed: () => _handleTransportMethodFilterSelection('bike'),
+              onPressed: () =>
+                  _handleTransportMethodFilterSelection(TransportMethod.bike),
             ),
             IconButton(
               icon: Icon(
                 Icons.directions_walk,
-                color: _selectedTransportMethodForFilter == 'walk'
+                color: _selectedTransportMethodForFilter == TransportMethod.walk
                     ? AppConstants.primaryColor
                     : AppConstants.inactiveColor,
               ),
-              onPressed: () => _handleTransportMethodFilterSelection('walk'),
+              onPressed: () =>
+                  _handleTransportMethodFilterSelection(TransportMethod.walk),
             ),
             IconButton(
               icon: Icon(
                 Icons.directions_car,
-                color: _selectedTransportMethodForFilter == 'car'
+                color: _selectedTransportMethodForFilter ==
+                        TransportMethod.carpooling
                     ? AppConstants.primaryColor
                     : AppConstants.inactiveColor,
               ),
-              onPressed: () => _handleTransportMethodFilterSelection('car'),
+              onPressed: () => _handleTransportMethodFilterSelection(
+                  TransportMethod.carpooling),
             ),
           ],
         ),
-        const Spacer(), // Spacer to push the type icons to the right
+        const Spacer(),
         // Types
         Row(
           children: [

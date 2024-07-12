@@ -30,7 +30,7 @@ class HomeStats extends StatelessWidget {
                   },
                   child: StatBox(
                     icon: Icon(
-                      getTransportIcon(
+                      getTransportMethodIcon(
                           recordProvider.mostUsedTransportMethod["name"]),
                       color: AppConstants.primaryColor,
                       size: 34.0,

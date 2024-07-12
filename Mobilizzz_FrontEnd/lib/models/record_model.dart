@@ -6,7 +6,7 @@ part 'record_model.g.dart';
 @JsonSerializable(includeIfNull: false)
 class Record {
   final int? id;
-  final String transportMethod;
+  final TransportMethod transportMethod;
   final double distance;
   final int userId;
   final int? teamId;

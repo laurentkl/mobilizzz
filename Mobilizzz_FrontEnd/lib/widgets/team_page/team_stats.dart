@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobilizzz/constants/constants.dart';
 import 'package:mobilizzz/dialogs/transport_ranking_dialog.dart';
+import 'package:mobilizzz/enums/enums.dart';
 import 'package:mobilizzz/utlis/utils.dart';
 import 'package:mobilizzz/widgets/generic/stat_box.dart';
 import 'package:mobilizzz/models/record_model.dart' as custom;
@@ -8,14 +9,14 @@ import 'package:mobilizzz/models/record_model.dart' as custom;
 class TeamStats extends StatelessWidget {
   final double totalKm;
   final double mostUsedTransportMethodDistance;
-  final String mostUsedTransportMethodName;
+  final TransportMethod mostUsedTransportMethod;
   final List<custom.Record> teamRecords;
 
   const TeamStats(
       {Key? key,
       required this.totalKm,
       required this.mostUsedTransportMethodDistance,
-      required this.mostUsedTransportMethodName,
+      required this.mostUsedTransportMethod,
       required this.teamRecords})
       : super(key: key);
 
@@ -36,7 +37,7 @@ class TeamStats extends StatelessWidget {
               },
               child: StatBox(
                 icon: Icon(
-                  getTransportIcon(mostUsedTransportMethodName),
+                  getTransportMethodIcon(mostUsedTransportMethod),
                   color: AppConstants.primaryColor,
                   size: 34.0,
                 ),

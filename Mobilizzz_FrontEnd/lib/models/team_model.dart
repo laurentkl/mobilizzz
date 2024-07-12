@@ -1,9 +1,11 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:mobilizzz/enums/enums.dart';
 import 'package:mobilizzz/models/record_model.dart';
 import 'package:mobilizzz/models/user_model.dart';
 import 'package:mobilizzz/services/record_service.dart';
 import 'package:mobilizzz/services/user_service.dart';
-import 'package:mobilizzz/models/company_model.dart'; // Import your Company model
+import 'package:mobilizzz/models/company_model.dart';
+import 'package:mobilizzz/utlis/utils.dart'; // Import your Company model
 
 part 'team_model.g.dart';
 
@@ -70,26 +72,23 @@ class Team {
   }
 
   Map<String, dynamic> getMostUsedTransportMethod() {
-    Map<String, double> transportMethodDistances = {};
+    Map<TransportMethod, double> transportMethodDistances = {};
 
     for (var user in users!) {
       if (user.records != null) {
         for (var record in user.records!) {
           if (record.teamId == id) {
-            if (transportMethodDistances.containsKey(record.transportMethod)) {
-              transportMethodDistances[record.transportMethod] =
-                  transportMethodDistances[record.transportMethod]! +
-                      record.distance;
-            } else {
-              transportMethodDistances[record.transportMethod] =
-                  record.distance;
-            }
+            transportMethodDistances.update(
+              record.transportMethod,
+              (value) => value + record.distance,
+              ifAbsent: () => record.distance,
+            );
           }
         }
       }
     }
 
-    String mostUsedTransportMethod = '';
+    TransportMethod? mostUsedTransportMethod;
     double maxDistance = 0.0;
 
     transportMethodDistances.forEach((method, distance) {
@@ -99,8 +98,15 @@ class Team {
       }
     });
 
+    if (mostUsedTransportMethod == null) {
+      return {
+        'name': 'None',
+        'distance': 0.0,
+      };
+    }
+
     return {
-      'name': mostUsedTransportMethod,
+      'method': mostUsedTransportMethod,
       'distance': maxDistance,
     };
   }

@@ -72,7 +72,7 @@ class RecordRow extends StatelessWidget {
             Row(
               children: [
                 Icon(
-                  getTransportIcon(record.transportMethod),
+                  getTransportMethodIcon(record.transportMethod),
                   color: AppConstants.contrastTextColor,
                   size: 24,
                 ),

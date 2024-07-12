@@ -7,7 +7,8 @@ part of 'record_model.dart';
 // **************************************************************************
 
 Record _$RecordFromJson(Map<String, dynamic> json) => Record(
-      transportMethod: json['transportMethod'] as String,
+      transportMethod:
+          $enumDecode(_$TransportMethodEnumMap, json['transportMethod']),
       distance: (json['distance'] as num).toDouble(),
       userId: (json['userId'] as num).toInt(),
       teamId: (json['teamId'] as num?)?.toInt(),
@@ -31,7 +32,7 @@ Map<String, dynamic> _$RecordToJson(Record instance) {
   }
 
   writeNotNull('id', instance.id);
-  val['transportMethod'] = instance.transportMethod;
+  val['transportMethod'] = _$TransportMethodEnumMap[instance.transportMethod]!;
   val['distance'] = instance.distance;
   val['userId'] = instance.userId;
   writeNotNull('teamId', instance.teamId);
@@ -40,6 +41,13 @@ Map<String, dynamic> _$RecordToJson(Record instance) {
   writeNotNull('creationDate', instance.creationDate?.toIso8601String());
   return val;
 }
+
+const _$TransportMethodEnumMap = {
+  TransportMethod.walk: 1,
+  TransportMethod.bike: 2,
+  TransportMethod.bus: 3,
+  TransportMethod.carpooling: 4,
+};
 
 const _$RecordTypeEnumMap = {
   RecordType.work: 1,

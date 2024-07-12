@@ -5,7 +5,7 @@ namespace Mobilizzz_BackEnd.Models
 {
     public class RecordWithTeamDto : BaseEntityDto
     {
-        public string TransportMethod { get; set; }
+        public TransportMethod TransportMethod { get; set; }
         public RecordType RecordType { get; set; }
         public double Distance { get; set; }
         public int? UserId { get; set; }

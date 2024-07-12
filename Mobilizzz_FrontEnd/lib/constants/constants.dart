@@ -44,6 +44,11 @@ class AppConstants {
   static const IconData recordTypeMissionIcon = Icons.work;
   static const IconData recordTypePrivateIcon = Icons.home;
 
+  static const IconData transportMethodWalkIcon = Icons.directions_walk;
+  static const IconData transportMethodBikeIcon = Icons.directions_bike;
+  static const IconData transportMethodBusIcon = Icons.directions_bus;
+  static const IconData transportMethodCarpoolingIcon = Icons.directions_car;
+
   static const List<String> transportMethods = [
     "Marche",
     "2 Roues",

@@ -77,8 +77,8 @@ class _TeamPageState extends State<TeamPage> {
                     mostUsedTransportMethodDistance:
                         currentTeam?.getMostUsedTransportMethod()["distance"] ??
                             0,
-                    mostUsedTransportMethodName:
-                        currentTeam?.getMostUsedTransportMethod()["name"] ?? "",
+                    mostUsedTransportMethod:
+                        currentTeam?.getMostUsedTransportMethod()["method"],
                     teamRecords: currentTeam?.getAllRecords() ?? [],
                   ),
                   Expanded(

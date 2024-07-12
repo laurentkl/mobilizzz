@@ -32,13 +32,13 @@ public class RecordController : ControllerBase
             .Select(r => new RecordWithTeamDto
             {
                 Id = r.Id,
-                CreationDate = r.CreationDate,
-                TransportMethod = r.TransportMethod,
+                TransportMethod = r.TransportMethod ?? TransportMethod.Bike,
                 RecordType = r.RecordType,
                 Distance = r.Distance,
                 UserId = r.UserId,
                 TeamId = r.TeamId,
-                Team = r.Team
+                Team = r.Team,
+                CreationDate = r.CreationDate
             })
             .ToListAsync();
 

@@ -32,18 +32,33 @@ Future<List<Team>> loadMockTeams() async {
   return data.map((json) => Team.fromJson(json)).toList();
 }
 
-IconData getTransportIcon(String transportMethod) {
-  switch (transportMethod) {
-    case 'bike':
-      return Icons.directions_bike;
-    case 'bus':
-      return Icons.directions_bus;
-    case 'walk':
-      return Icons.directions_walk;
-    case 'carpooling':
-      return Icons.directions_car;
+IconData getTransportMethodIcon(TransportMethod? method) {
+  switch (method) {
+    case TransportMethod.walk:
+      return AppConstants.transportMethodWalkIcon;
+    case TransportMethod.bike:
+      return AppConstants.transportMethodBikeIcon;
+    case TransportMethod.bus:
+      return AppConstants.transportMethodBusIcon;
+    case TransportMethod.carpooling:
+      return AppConstants.transportMethodCarpoolingIcon;
     default:
       return Icons.error;
+  }
+}
+
+String getTransportMethodString(TransportMethod method) {
+  switch (method) {
+    case TransportMethod.walk:
+      return 'Marche';
+    case TransportMethod.bike:
+      return '2 Roues';
+    case TransportMethod.bus:
+      return 'Bus';
+    case TransportMethod.carpooling:
+      return 'Co-Voit';
+    default:
+      return 'Inconnu';
   }
 }
 

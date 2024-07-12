@@ -13,7 +13,8 @@ class RecordProvider extends ChangeNotifier {
   List<Record> _records = [];
   List<Record> _userRecords = [];
   List<Record> _filteredUserRecords = [];
-  String _selectedTransportMethodForFilter = '';
+
+  TransportMethod? _selectedTransportMethodForFilter;
   RecordType? _selectedTypeForFilter;
 
   List<Record> get records => _records;
@@ -76,7 +77,7 @@ class RecordProvider extends ChangeNotifier {
   }
 
   Map<String, dynamic> get mostUsedTransportMethod {
-    Map<String, double> transportMethodDistances = {};
+    Map<TransportMethod, double> transportMethodDistances = {};
 
     for (var record in userRecords) {
       if (transportMethodDistances.containsKey(record.transportMethod)) {
@@ -87,7 +88,7 @@ class RecordProvider extends ChangeNotifier {
       }
     }
 
-    String mostUsedTransportMethod = '';
+    TransportMethod? mostUsedTransportMethod;
     double maxDistance = 0.0;
 
     transportMethodDistances.forEach((method, distance) {
@@ -150,9 +151,9 @@ class RecordProvider extends ChangeNotifier {
     return consecutiveRecords;
   }
 
-  void filterByTransportMethod(String transportMethod) {
+  void filterByTransportMethod(TransportMethod? transportMethod) {
     if (_selectedTransportMethodForFilter == transportMethod) {
-      _selectedTransportMethodForFilter = '';
+      _selectedTransportMethodForFilter = null;
     } else {
       _selectedTransportMethodForFilter = transportMethod;
     }
@@ -173,7 +174,7 @@ class RecordProvider extends ChangeNotifier {
   void _filterRecords() {
     _filteredUserRecords = _userRecords.where((record) {
       final matchesTransportMethod =
-          _selectedTransportMethodForFilter.isEmpty ||
+          _selectedTransportMethodForFilter == null ||
               record.transportMethod == _selectedTransportMethodForFilter;
 
       final matchesType = _selectedTypeForFilter == null ||

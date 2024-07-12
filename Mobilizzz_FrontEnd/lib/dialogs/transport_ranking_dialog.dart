@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobilizzz/constants/constants.dart';
+import 'package:mobilizzz/enums/enums.dart';
 import 'package:mobilizzz/models/record_model.dart';
 import 'package:mobilizzz/utlis/utils.dart';
 import 'package:mobilizzz/widgets/generic/transport_ranking_row.dart';
@@ -15,7 +16,7 @@ class TransportRankingDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Calculate total distance per transport method
-    Map<String, double> transportDistances = {};
+    Map<TransportMethod, double> transportDistances = {};
     for (var record in records) {
       transportDistances.update(
         record.transportMethod,
@@ -42,7 +43,7 @@ class TransportRankingDialog extends StatelessWidget {
                 totalDistance: sortedTransports[i].value ?? 0,
                 rank: i + 1,
                 icon: Icon(
-                  getTransportIcon(sortedTransports[i].key),
+                  getTransportMethodIcon(sortedTransports[i].key),
                   color: AppConstants.contrastTextColor,
                   size: 24,
                 ),

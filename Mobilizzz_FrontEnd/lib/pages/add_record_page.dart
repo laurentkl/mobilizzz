@@ -30,8 +30,8 @@ class AddRecordPageState extends State<AddRecordPage> {
   // Form
   final _formKey = GlobalKey<FormState>();
   Team? _selectedTeam;
-  late String _selectedTransportMethod;
-  late RecordType _selectedType;
+  late TransportMethod _selectedTransportMethod;
+  late RecordType _selectedRecordType;
   double _distance = 15;
 
   final Team forMeTeam =
@@ -40,8 +40,8 @@ class AddRecordPageState extends State<AddRecordPage> {
   @override
   void initState() {
     super.initState();
-    _selectedTransportMethod = AppConstants.transportMethods[0];
-    _selectedType = RecordType.work;
+    _selectedTransportMethod = TransportMethod.walk;
+    _selectedRecordType = RecordType.work;
     _selectedTeam = forMeTeam;
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     _user = authProvider.user!;
@@ -54,10 +54,9 @@ class AddRecordPageState extends State<AddRecordPage> {
       );
       Record newRecord = Record(
           distance: _distance,
-          transportMethod:
-              AppConstants.transportMethodValues[_selectedTransportMethod]!,
+          transportMethod: _selectedTransportMethod,
           teamId: _selectedTeam?.id ?? null,
-          recordType: _selectedType,
+          recordType: _selectedRecordType,
           userId: _user.id);
 
       Provider.of<RecordProvider>(context, listen: false)
@@ -85,11 +84,11 @@ class AddRecordPageState extends State<AddRecordPage> {
     }
   }
 
-  Widget _buildTransportMethodButton(String method, IconData icon) {
+  Widget _buildTransportMethodButton(TransportMethod method, IconData icon) {
     return GestureDetector(
       onTap: () {
         setState(() {
-          _selectedTransportMethod = method;
+          _selectedTransportMethod = _selectedTransportMethod;
         });
       },
       child: Column(
@@ -101,7 +100,7 @@ class AddRecordPageState extends State<AddRecordPage> {
                 : Colors.grey,
             size: 40.0,
           ),
-          Text(method)
+          Text(getTransportMethodString(method))
         ],
       ),
     );
@@ -111,15 +110,16 @@ class AddRecordPageState extends State<AddRecordPage> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          _selectedType = type;
+          _selectedRecordType = type;
         });
       },
       child: Column(
         children: [
           Icon(
             icon,
-            color:
-                _selectedType == type ? AppConstants.primaryColor : Colors.grey,
+            color: _selectedRecordType == type
+                ? AppConstants.primaryColor
+                : Colors.grey,
             size: 40.0,
           ),
           Text(getRecordTypeString(type))
@@ -193,13 +193,14 @@ class AddRecordPageState extends State<AddRecordPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _buildTransportMethodButton(
-                          "Marche", Icons.directions_walk),
-                      _buildTransportMethodButton(
-                          "2 Roues", Icons.directions_bike),
-                      _buildTransportMethodButton("Bus", Icons.directions_bus),
-                      _buildTransportMethodButton(
-                          "Co-Voit", Icons.directions_car),
+                      _buildTransportMethodButton(TransportMethod.walk,
+                          AppConstants.transportMethodWalkIcon),
+                      _buildTransportMethodButton(TransportMethod.bike,
+                          AppConstants.transportMethodBikeIcon),
+                      _buildTransportMethodButton(TransportMethod.bus,
+                          AppConstants.transportMethodBusIcon),
+                      _buildTransportMethodButton(TransportMethod.carpooling,
+                          AppConstants.transportMethodCarpoolingIcon),
                     ],
                   ),
                   const SizedBox(height: 16.0),
