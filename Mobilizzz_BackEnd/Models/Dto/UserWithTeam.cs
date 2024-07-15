@@ -1,8 +1,9 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
+using Mobilizzz_BackEnd.Dtos;
 
 namespace Mobilizzz_BackEnd.Models
 {
-    public class User : BaseEntity
+    public class UserWithTeamDto : BaseEntityDto
     {
         public string UserName { get; set; }
         public string LastName { get; set; }
@@ -12,11 +13,8 @@ namespace Mobilizzz_BackEnd.Models
         public List<Record>? Records { get; set; }
         [JsonIgnore]
         public List<Company>? CompaniesOwnerShip { get; set; }
-        [JsonIgnore]
         public List<Team>? TeamsOwnerShip { get; set; }
-        [JsonIgnore]
         public List<Team>? Teams { get; set; }
-        [JsonIgnore]
-        public List<Team>? PendingTeamRequests { get; set; }
+
     }
 }

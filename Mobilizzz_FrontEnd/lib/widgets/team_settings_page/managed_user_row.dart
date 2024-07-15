@@ -16,6 +16,29 @@ class ManagedUserRow extends StatelessWidget {
   final VoidCallback onAccept;
   final VoidCallback onReject;
 
+  void _onActionSelected(User user, String action) {
+    switch (action) {
+      case 'eject':
+        _ejectUser(user);
+        break;
+      case 'grantAdmin':
+        _grantAdminRights(user);
+        break;
+      default:
+        break;
+    }
+  }
+
+  void _ejectUser(User user) {
+    // Implémentez la logique pour éjecter l'utilisateur de l'équipe
+    // Vous pouvez utiliser Provider pour appeler la méthode appropriée dans TeamProvider
+  }
+
+  void _grantAdminRights(User user) {
+    // Implémentez la logique pour donner les droits d'administrateur à l'utilisateur
+    // Vous pouvez utiliser Provider pour appeler la méthode appropriée dans TeamProvider
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -80,12 +103,20 @@ class ManagedUserRow extends StatelessWidget {
                 ],
               )
             else // Display edit button if user is not pending
-              IconButton(
-                constraints: const BoxConstraints(maxHeight: 24),
-                padding: EdgeInsets.zero,
-                iconSize: 24,
-                icon: const Icon(Icons.edit, color: AppConstants.primaryColor),
-                onPressed: (() => {}), // Call onEdit callback
+              PopupMenuButton<String>(
+                itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                  const PopupMenuItem<String>(
+                    value: 'grantAdmin',
+                    child: Text('Donner les droits d\'admin'),
+                  ),
+                  const PopupMenuItem<String>(
+                    value: 'eject',
+                    child: Text('Éjecter l\'utilisateur'),
+                  ),
+                ],
+                onSelected: (String value) {
+                  _onActionSelected(user, value);
+                },
               ),
           ],
         ),

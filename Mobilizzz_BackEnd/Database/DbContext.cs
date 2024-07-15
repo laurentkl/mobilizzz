@@ -22,6 +22,15 @@ public class Context : DbContext
             .HasMany(t => t.PendingUserRequests)
             .WithMany(u => u.PendingTeamRequests)
             .UsingEntity(j => j.ToTable("TeamMemberRequest"));
+        modelBuilder.Entity<Team>()
+        .HasMany(t => t.Admins)
+        .WithMany(u => u.TeamsOwnerShip)
+        .UsingEntity(j => j.ToTable("AdminTeam"));
+        modelBuilder.Entity<User>();
+        modelBuilder.Entity<Company>()
+            .HasMany(c => c.Admins)
+            .WithMany(u => u.CompaniesOwnerShip)
+            .UsingEntity(j => j.ToTable("AdminCompany"));
         modelBuilder.Entity<Record>()
         .Property(r => r.TeamId)
         .IsRequired(false);

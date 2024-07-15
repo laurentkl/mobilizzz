@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobilizzz/models/team_model.dart';
+import 'package:mobilizzz/providers/user_provider.dart';
 import 'package:mobilizzz/services/team_service.dart';
 
 class TeamProvider extends ChangeNotifier {
@@ -11,6 +12,8 @@ class TeamProvider extends ChangeNotifier {
 
   List<Team> get teams => _teams;
   Team? get currentTeam => _currentTeam;
+
+  // Data depth: Teams > Users > Records
   List<Team> get teamsForUser => _teamsForUser;
   double get currentTeamTotalKm => _currentTeamTotalKm;
 
@@ -18,6 +21,17 @@ class TeamProvider extends ChangeNotifier {
     _currentTeam = team;
     _currentTeamTotalKm = computeTeamTotalKm();
     notifyListeners();
+  }
+
+  void setCurrentTeamFromId(int teamId) {
+    currentTeam = teamsForUser.firstWhere((team) => team.id == teamId);
+  }
+
+  bool getIsCurrentTeamAdmin(int userId) {
+    if (currentTeam == null || currentTeam!.admins == null) {
+      return false;
+    }
+    return currentTeam!.admins!.any((admin) => admin.id == userId);
   }
 
   Future<void> fetchTeams() async {
@@ -68,9 +82,19 @@ class TeamProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> createTeam(Team team, int userId) async {
+  Future<Team> createTeam(Team team, int userId) async {
     try {
-      await _teamService.createTeam(team);
+      Team createdTeam = await _teamService.createTeam(team);
+      await fetchTeamsForUser(userId);
+      return createdTeam;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<void> updateTeam(Team team, int userId) async {
+    try {
+      await _teamService.updateTeam(team);
       await fetchTeamsForUser(userId);
     } catch (error) {
       rethrow;

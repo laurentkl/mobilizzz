@@ -57,16 +57,10 @@ public class TeamController : ControllerBase
                 team.CompanyId = company.Id;
             }
 
-            // Find the creator user by their ID
-            var creatorUser = await _dbContext.Users.FindAsync(team?.AdminIds?.FirstOrDefault());
+            team.Users = new List<User> { team.Admins.First() };
 
-            if (creatorUser == null)
-            {
-                return NotFound(new { message = "Creator user not found" });
-            }
-
-            // Add the creator user to the team's Users list
-            team.Users = new List<User> { creatorUser };
+            // Prevent ef core to try recreating the user
+            _dbContext.Users.Attach(team.Admins.First());
 
             // Add the team to the Teams DbSet
             _dbContext.Teams.Add(team);
@@ -87,6 +81,44 @@ public class TeamController : ControllerBase
         }
     }
 
+    [HttpPut("Update/{id}")]
+    public async Task<IActionResult> Update(int id, [FromBody] Team updatedTeam)
+    {
+        try
+        {
+            if (!ModelState.IsValid) return BadRequest();
+
+            // Find the existing team by ID
+            var existingTeam = await _dbContext.Teams.Include(t => t.Admins).FirstOrDefaultAsync(t => t.Id == id);
+
+            if (existingTeam == null)
+            {
+                // If team is not found, return a 404 Not Found response
+                return NotFound(new { message = "Team not found" });
+            }
+
+            // Update the team's properties with the new values
+            existingTeam.Name = updatedTeam.Name;
+            existingTeam.IsHidden = updatedTeam.IsHidden;
+            existingTeam.IsPrivate = updatedTeam.IsPrivate;
+
+            // Save changes to the database
+            await _dbContext.SaveChangesAsync();
+
+            // Return success response with updated team
+            return Ok(new { message = "Team updated successfully", team = existingTeam });
+        }
+        catch (Exception ex)
+        {
+            // Log exception
+            Console.WriteLine(ex.ToString(), "An error occurred while updating the team");
+
+            // Return 500 Internal Server Error response
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred while processing your request" });
+        }
+    }
+
+
 
     [HttpGet("GetTeamsByUser/{userId}")]
     public async Task<IActionResult> GetTeamsByUser(int userId)
@@ -105,6 +137,7 @@ public class TeamController : ControllerBase
 
             var teams = await _dbContext.Teams
                 .Include(t => t.Users)
+                .Include(t => t.Admins)
                 .ThenInclude(u => u.Records)
                 .Include(t => t.PendingUserRequests)
                 .Where(t => teamIds.Contains(t.Id))

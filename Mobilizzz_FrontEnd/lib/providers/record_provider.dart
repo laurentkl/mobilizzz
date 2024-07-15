@@ -69,7 +69,7 @@ class RecordProvider extends ChangeNotifier {
       // Fetch the teams to update the records in the team view
       await teamProvider.fetchTeamsForUser(userId);
     } catch (error) {
-      // Hsndle error
+      rethrow;
     } finally {
       isLoading = false;
     }

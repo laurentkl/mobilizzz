@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobilizzz/constants/constants.dart';
+import 'package:mobilizzz/enums/enums.dart';
 import 'package:mobilizzz/models/team_model.dart';
 import 'package:mobilizzz/models/user_model.dart';
 import 'package:mobilizzz/models/record_model.dart' as custom_record;
@@ -38,6 +39,8 @@ class _TeamPageState extends State<TeamPage> {
     return Consumer3<TeamProvider, RecordProvider, AuthProvider>(
       builder: (context, teamProvider, recordProvider, authProvider, child) {
         Team? currentTeam = teamProvider.currentTeam;
+        bool isAdmin =
+            teamProvider.getIsCurrentTeamAdmin(authProvider.user!.id);
         return Container(
           color: AppConstants.backgroundColor,
           child: SafeArea(
@@ -57,12 +60,14 @@ class _TeamPageState extends State<TeamPage> {
                 actions: [
                   IconButton(
                     icon: const Icon(Icons.settings),
+                    color: isAdmin ? Colors.red : AppConstants.primaryColor,
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => TeamSettingsPage(
                             team: currentTeam!,
+                            isAdmin: isAdmin,
                           ),
                         ),
                       );
@@ -78,7 +83,8 @@ class _TeamPageState extends State<TeamPage> {
                         currentTeam?.getMostUsedTransportMethod()["distance"] ??
                             0,
                     mostUsedTransportMethod:
-                        currentTeam?.getMostUsedTransportMethod()["method"],
+                        currentTeam?.getMostUsedTransportMethod()["method"] ??
+                            TransportMethod.bike,
                     teamRecords: currentTeam?.getAllRecords() ?? [],
                   ),
                   Expanded(

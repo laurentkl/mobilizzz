@@ -6,10 +6,20 @@ class TeamSettingsForm extends StatelessWidget {
   const TeamSettingsForm({
     Key? key,
     required TextEditingController teamNameController,
+    required this.isHidden,
+    required this.isPrivate,
+    required this.onVisibilityChanged,
+    required this.onPublicChanged,
+    required this.isAdmin,
   })  : _teamNameController = teamNameController,
         super(key: key);
 
   final TextEditingController _teamNameController;
+  final bool isHidden;
+  final bool isPrivate;
+  final ValueChanged<bool> onVisibilityChanged;
+  final ValueChanged<bool> onPublicChanged;
+  final bool isAdmin;
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +37,10 @@ class TeamSettingsForm extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _buildMaterialSwitch('Visible'),
-            _buildMaterialSwitch('Publique'),
+            _buildMaterialSwitch(
+                'Visible', !isHidden, onVisibilityChanged, isAdmin),
+            _buildMaterialSwitch(
+                'Publique', !isPrivate, onPublicChanged, isAdmin),
           ],
         ),
         const SizedBox(height: 16.0),
@@ -42,6 +54,7 @@ class TeamSettingsForm extends StatelessWidget {
         ),
         const SizedBox(height: 8.0),
         CustomTextField(
+          isEnabled: isAdmin,
           controller: _teamNameController,
           label: "Nom de l'équipe",
           isFlexible: false,
@@ -50,17 +63,14 @@ class TeamSettingsForm extends StatelessWidget {
     );
   }
 
-  Widget _buildMaterialSwitch(String title) {
-    bool value = true; // Set initial value as needed
-
+  Widget _buildMaterialSwitch(
+      String title, bool value, ValueChanged<bool> onChanged, bool isEnabled) {
     return Row(
       children: [
         Text(title),
         Switch(
           value: value,
-          onChanged: (newValue) {
-            // Handle switch value change
-          },
+          onChanged: isEnabled ? onChanged : null,
           activeColor: AppConstants.primaryColor,
         ),
       ],

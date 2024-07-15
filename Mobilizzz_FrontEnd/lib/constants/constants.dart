@@ -6,10 +6,10 @@ import 'package:go_router/go_router.dart';
 class AppConstants {
   // Example API URL constant
   // static const String apiUrl = 'http://10.0.1.158:5169';
-  // static const String apiUrl = 'http://localhost:5169';
+  static const String apiUrl = 'http://localhost:5169';
   // static const String apiUrl = 'http://192.168.0.99:5169';
   // static const String apiUrl = 'http://10.0.1.190:5169';
-  static const String apiUrl = 'http://10.0.10.46:5169';
+  // static const String apiUrl = 'http://10.0.10.46:5169';
 
 // --blue : #0439ff
 // --lavande : #C2C7FF

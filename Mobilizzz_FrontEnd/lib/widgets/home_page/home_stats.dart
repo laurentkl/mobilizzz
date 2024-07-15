@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobilizzz/constants/constants.dart';
 import 'package:mobilizzz/dialogs/transport_ranking_dialog.dart';
+import 'package:mobilizzz/enums/enums.dart';
 import 'package:mobilizzz/models/record_model.dart';
 import 'package:mobilizzz/utlis/utils.dart';
 import 'package:mobilizzz/widgets/generic/stat_box.dart';
@@ -31,7 +32,8 @@ class HomeStats extends StatelessWidget {
                   child: StatBox(
                     icon: Icon(
                       getTransportMethodIcon(
-                          recordProvider.mostUsedTransportMethod["name"]),
+                          recordProvider.mostUsedTransportMethod["name"] ??
+                              TransportMethod.bike),
                       color: AppConstants.primaryColor,
                       size: 34.0,
                     ),

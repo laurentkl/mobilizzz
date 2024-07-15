@@ -34,8 +34,13 @@ class AddRecordPageState extends State<AddRecordPage> {
   late RecordType _selectedRecordType;
   double _distance = 15;
 
-  final Team forMeTeam =
-      const Team(id: null, name: "Pour moi", adminIds: [], companyId: 0);
+  final Team forMeTeam = const Team(
+      id: null,
+      name: "Pour moi",
+      admins: [],
+      companyId: 0,
+      isHidden: false,
+      isPrivate: false);
 
   @override
   void initState() {

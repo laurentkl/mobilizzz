@@ -41,6 +41,7 @@ class AuthProvider extends ChangeNotifier {
           userName, email, password, firstName, lastName, teamCode);
       if (user != null) {
         _user = user;
+        await _saveUser(user); // Save user data to SharedPreferences
         notifyListeners();
       }
     } catch (error) {

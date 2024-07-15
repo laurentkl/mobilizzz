@@ -88,7 +88,7 @@ class TeamService {
     }
   }
 
-  Future<void> createTeam(Team team) async {
+  Future<Team> createTeam(Team team) async {
     final createTeamUrl = Uri.parse('${AppConstants.apiUrl}/Team/Create');
     final requestData = team.toJson();
 
@@ -101,11 +101,46 @@ class TeamService {
         body: jsonEncode(requestData),
       );
 
-      if (response.statusCode != 200) {
-        throw "${jsonDecode(response.body)['message']}  ${response.statusCode}";
+      if (response.statusCode == 200) {
+        // Team created successfully, parse the response JSON into a Team object
+        final jsonResponse = jsonDecode(response.body);
+        final createdTeam = Team.fromJson(jsonResponse['team']);
+        return createdTeam;
+      } else {
+        // Handle HTTP error
+        throw Exception(
+            "${jsonDecode(response.body)['message']}  ${response.statusCode}");
       }
     } catch (error) {
+      // Handle network or JSON decoding errors
       throw Exception('Error creating team: $error');
+    }
+  }
+
+  Future<Team> updateTeam(Team team) async {
+    final updateTeamUrl =
+        Uri.parse('${AppConstants.apiUrl}/Team/Update/${team.id}');
+    final requestData = team.toJson();
+
+    try {
+      final response = await http.put(
+        updateTeamUrl,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(requestData),
+      );
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        final updatedTeam = Team.fromJson(jsonResponse['team']);
+        return updatedTeam;
+      } else {
+        throw Exception(
+            "${jsonDecode(response.body)['message']}  ${response.statusCode}");
+      }
+    } catch (error) {
+      throw Exception('Error updating team: $error');
     }
   }
 }

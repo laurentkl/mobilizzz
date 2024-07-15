@@ -10,6 +10,7 @@ class CustomTextField extends StatelessWidget {
   final String label;
   final bool obscureText;
   final bool isFlexible;
+  final bool isEnabled;
   final FormFieldValidator<String>? validator;
 
   const CustomTextField({
@@ -19,11 +20,13 @@ class CustomTextField extends StatelessWidget {
     this.obscureText = false,
     this.isFlexible = true,
     this.validator,
+    this.isEnabled = true,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Widget textField = TextFormField(
+      enabled: isEnabled,
       controller: controller,
       obscureText: obscureText,
       validator: validator, // Utilize the provided validator function

@@ -56,17 +56,6 @@ class TeamDrawer extends StatelessWidget {
             child: ListView(
               padding: EdgeInsets.zero,
               children: [
-                ...teamsForUser.map((team) => ListTile(
-                      title: Text(
-                        team.name,
-                        style: TextStyle(fontSize: 14),
-                      ),
-                      onTap: () {
-                        toggleTeam(team.id!);
-                        Navigator.pop(context); // Close the drawer
-                      },
-                    )),
-                const Divider(),
                 ListTile(
                   leading: const Icon(Icons.search),
                   title: const Text('Chercher une équipe'),
@@ -79,16 +68,17 @@ class TeamDrawer extends StatelessWidget {
                     );
                   },
                 ),
-                ListTile(
-                  leading: const Icon(Icons.add),
-                  title: const Text("Créer une équipe"),
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AddTeamDialog(),
-                    );
-                  },
-                ),
+                const Divider(),
+                ...teamsForUser.map((team) => ListTile(
+                      title: Text(
+                        team.name,
+                        style: TextStyle(fontSize: 14),
+                      ),
+                      onTap: () {
+                        toggleTeam(team.id!);
+                        Navigator.pop(context); // Close the drawer
+                      },
+                    )),
               ],
             ),
           ),

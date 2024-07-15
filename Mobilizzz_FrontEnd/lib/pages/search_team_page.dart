@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobilizzz/constants/constants.dart';
+import 'package:mobilizzz/dialogs/add_team_dialog.dart';
 import 'package:mobilizzz/dialogs/join_team_dialog.dart';
 import 'package:mobilizzz/models/team_model.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
@@ -53,13 +54,21 @@ class _SearchTeamPageState extends State<SearchTeamPage> {
       backgroundColor: AppConstants.backgroundColor,
       appBar: AppBar(
         backgroundColor: AppConstants.backgroundColor,
-        title: const Text('Search Team'),
+        title: const Text('Chercher une équipe'),
         actions: [
+          IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AddTeamDialog(),
+                );
+              },
+              icon: const Icon(Icons.add)),
           IconButton(
             onPressed: () {
               _fetchTeamData();
             },
-            icon: Icon(Icons.refresh),
+            icon: const Icon(Icons.refresh),
           ),
         ],
       ),

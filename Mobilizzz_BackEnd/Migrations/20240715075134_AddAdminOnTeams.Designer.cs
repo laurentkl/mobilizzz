@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Mobilizzz_BackEnd.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20240715075134_AddAdminOnTeams")]
+    partial class AddAdminOnTeams
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,21 +23,6 @@ namespace Mobilizzz_BackEnd.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("CompanyUser", b =>
-                {
-                    b.Property<int>("AdminsId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("CompaniesOwnerShipId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("AdminsId", "CompaniesOwnerShipId");
-
-                    b.HasIndex("CompaniesOwnerShipId");
-
-                    b.ToTable("AdminCompany", (string)null);
-                });
 
             modelBuilder.Entity("Mobilizzz_BackEnd.Models.Company", b =>
                 {
@@ -157,6 +145,8 @@ namespace Mobilizzz_BackEnd.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CompanyId");
+
                     b.ToTable("Users");
                 });
 
@@ -205,21 +195,6 @@ namespace Mobilizzz_BackEnd.Migrations
                     b.ToTable("AdminTeam", (string)null);
                 });
 
-            modelBuilder.Entity("CompanyUser", b =>
-                {
-                    b.HasOne("Mobilizzz_BackEnd.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("AdminsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Mobilizzz_BackEnd.Models.Company", null)
-                        .WithMany()
-                        .HasForeignKey("CompaniesOwnerShipId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Mobilizzz_BackEnd.Models.Record", b =>
                 {
                     b.HasOne("Mobilizzz_BackEnd.Models.Team", "Team")
@@ -239,6 +214,15 @@ namespace Mobilizzz_BackEnd.Migrations
                 {
                     b.HasOne("Mobilizzz_BackEnd.Models.Company", "Company")
                         .WithMany("Teams")
+                        .HasForeignKey("CompanyId");
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("Mobilizzz_BackEnd.Models.User", b =>
+                {
+                    b.HasOne("Mobilizzz_BackEnd.Models.Company", "Company")
+                        .WithMany("Leaders")
                         .HasForeignKey("CompanyId");
 
                     b.Navigation("Company");
@@ -291,6 +275,8 @@ namespace Mobilizzz_BackEnd.Migrations
 
             modelBuilder.Entity("Mobilizzz_BackEnd.Models.Company", b =>
                 {
+                    b.Navigation("Leaders");
+
                     b.Navigation("Teams");
                 });
 

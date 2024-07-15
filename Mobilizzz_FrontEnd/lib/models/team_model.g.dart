@@ -9,8 +9,10 @@ part of 'team_model.dart';
 Team _$TeamFromJson(Map<String, dynamic> json) => Team(
       id: (json['id'] as num?)?.toInt(),
       name: json['name'] as String,
-      adminIds: (json['adminIds'] as List<dynamic>)
-          .map((e) => (e as num).toInt())
+      isHidden: json['isHidden'] as bool,
+      isPrivate: json['isPrivate'] as bool,
+      admins: (json['admins'] as List<dynamic>?)
+          ?.map((e) => User.fromJson(e as Map<String, dynamic>))
           .toList(),
       companyId: (json['companyId'] as num).toInt(),
       company: json['company'] == null
@@ -35,10 +37,12 @@ Map<String, dynamic> _$TeamToJson(Team instance) {
 
   writeNotNull('id', instance.id);
   val['name'] = instance.name;
-  val['adminIds'] = instance.adminIds;
+  val['isHidden'] = instance.isHidden;
+  val['isPrivate'] = instance.isPrivate;
   val['companyId'] = instance.companyId;
   writeNotNull('company', instance.company);
   writeNotNull('pendingUserRequests', instance.pendingUserRequests);
   writeNotNull('users', instance.users);
+  writeNotNull('admins', instance.admins);
   return val;
 }

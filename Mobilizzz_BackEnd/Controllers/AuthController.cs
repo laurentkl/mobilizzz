@@ -42,7 +42,19 @@ namespace Mobilizzz_BackEnd.Controllers
 
             var token = GenerateJwtToken(user);
 
-        return Ok(new { User = user, Token = token });
+            var userWithTeamDto = new UserWithTeamDto
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+                LastName = user.LastName,
+                FirstName = user.FirstName,
+                Email = user.Email,
+                CompaniesOwnerShip = user.CompaniesOwnerShip,
+                TeamsOwnerShip = user.TeamsOwnerShip,
+                Teams = user.Teams,
+            };
+
+            return Ok(new { User = userWithTeamDto, Token = token });
         }
 
         private string GenerateJwtToken(User user)
@@ -72,11 +84,13 @@ namespace Mobilizzz_BackEnd.Controllers
             {
                 var existingUser = await _dbContext.Users
                     .Include(u => u.Teams).ThenInclude(t => t.Company)
+                    .Include(u => u.CompaniesOwnerShip)
+                    .Include(u => u.TeamsOwnerShip)
                     .FirstOrDefaultAsync(u => u.Email == model.Email || u.UserName == model.UserName);
 
                 if (existingUser != null)
                 {
-                    return Conflict(new { message = "User already exist" });
+                    return Conflict(new { message = "User already exists" });
                 }
 
                 var newUser = new User
@@ -90,7 +104,7 @@ namespace Mobilizzz_BackEnd.Controllers
 
                 _dbContext.Users.Add(newUser);
 
-                if(model.TeamCode != 0)
+                if (model.TeamCode != 0)
                 {
                     var team = await _dbContext.Teams
                         .Include(t => t.PendingUserRequests)
@@ -104,18 +118,41 @@ namespace Mobilizzz_BackEnd.Controllers
                     team?.PendingUserRequests.Add(newUser);
                 }
 
-                // use JoinTeamRequest here 
+                var company = await _dbContext.Companies.FirstOrDefaultAsync(c => c.Name.ToLower() == "mobilitizzz");
+
+                if (company == null)
+                {
+                    return NotFound(new { message = "Company 'mobilitizzz' not found" });
+                }
+
+                newUser.CompaniesOwnerShip = new List<Company> { company };
+
                 await _dbContext.SaveChangesAsync();
+
+                // Mapper les données vers le DTO UserWithTeam
+                var userWithTeamDto = new UserWithTeamDto
+                {
+                    Id = newUser.Id,
+                    UserName = newUser.UserName,
+                    LastName = newUser.LastName,
+                    FirstName = newUser.FirstName,
+                    Email = newUser.Email,
+                    Password = newUser.Password,  // Vous devriez envisager de ne pas retourner le mot de passe dans le DTO
+                    CompaniesOwnerShip = newUser.CompaniesOwnerShip,
+                    TeamsOwnerShip = newUser.TeamsOwnerShip,
+                    Teams = newUser.Teams,
+                };
 
                 var token = GenerateJwtToken(newUser);
 
-                return Ok(new { User = newUser, Token = token });
+                return Ok(new { User = userWithTeamDto, Token = token });
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
             }
         }
+
 
     }
 

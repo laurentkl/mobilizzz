@@ -13,17 +13,21 @@ part 'team_model.g.dart';
 class Team {
   final int? id;
   final String name;
-  final List<int> adminIds;
+  final bool isHidden;
+  final bool isPrivate;
   final int companyId;
   final Company? company;
   final List<User>? pendingUserRequests;
   final List<User>? users;
+  final List<User>? admins;
 
   const Team({
     this.id,
     required this.name,
-    required this.adminIds,
+    required this.isHidden,
+    required this.isPrivate,
     required this.companyId,
+    this.admins,
     this.company,
     this.users,
     this.pendingUserRequests,
