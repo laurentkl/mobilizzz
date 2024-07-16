@@ -1,3 +1,4 @@
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Mobilizzz_BackEnd.Models;
@@ -137,11 +138,42 @@ public class TeamController : ControllerBase
 
             var teams = await _dbContext.Teams
                 .Include(t => t.Users)
-                .Include(t => t.Admins)
                 .ThenInclude(u => u.Records)
+                .Include(t => t.Admins)
                 .Include(t => t.PendingUserRequests)
                 .Where(t => teamIds.Contains(t.Id))
                 .ToListAsync();
+
+            var recordsWithoutUser = await _dbContext.Records
+                .Where(r => r.UserId == null && teamIds.Contains(r.TeamId ?? 0))
+                .ToListAsync();
+
+            foreach (var team in teams)
+            {
+                var teamRecordsWithoutUser = recordsWithoutUser
+                    .Where(r => r.TeamId == team.Id)
+                    .ToList();
+
+                if (teamRecordsWithoutUser.Any())
+                {
+                    var deletedUser = new User
+                    {
+                        UserName = "Utilisateurs supprimés",
+                        FirstName = "",
+                        LastName = "",
+                        Email = "",
+                        Records = teamRecordsWithoutUser,
+                        Teams = new List<Team> { team }
+                    };
+
+                    if (team.Users == null)
+                    {
+                        team.Users = new List<User>();
+                    }
+
+                    team.Users.Add(deletedUser);
+                }
+            }
 
             return Ok(teams);
         }
@@ -248,6 +280,77 @@ public class TeamController : ControllerBase
         catch (Exception ex)
         {
             Console.WriteLine(ex.ToString(), "An error occurred while joining the team");
+
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred while processing your request" });
+        }
+    }
+
+    [HttpPost("GrantAdminRights")]
+    public async Task<IActionResult> GrantAdminRights([FromBody] GrantAdminRightsRequest request)
+    {
+        try
+        {
+            var team = await _dbContext.Teams
+                .Include(t => t.Users)
+                .Include(t => t.Admins)
+                .SingleOrDefaultAsync(t => t.Id == request.TeamId);
+
+            if (team == null)
+            {
+                return NotFound(new { message = "Team not found" });
+            }
+
+
+            var userToPromote = await _dbContext.Users
+                .SingleOrDefaultAsync(u => u.Id == request.UserToPromoteId);
+
+            if (userToPromote == null)
+            {
+                return NotFound(new { message = "User to promote not found" });
+            }
+
+            team.Admins.Add(userToPromote);
+
+            await _dbContext.SaveChangesAsync();
+
+            return Ok(new { message = "Admin rights granted successfully" });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString(), "An error occurred while granting admin rights");
+
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred while processing your request" });
+        }
+    }
+
+    [HttpPost("EjectUser")]
+    public async Task<IActionResult> EjectUser([FromBody] EjectUserRequest request)
+    {
+        try
+        {
+            var team = await _dbContext.Teams
+                .Include(t => t.Users)
+                .SingleOrDefaultAsync(t => t.Id == request.TeamId);
+
+            if (team == null)
+            {
+                return NotFound(new { message = "Team not found" });
+            }
+
+            var userToEject = team.Users.SingleOrDefault(u => u.Id == request.UserId);
+            if (userToEject == null)
+            {
+                return NotFound(new { message = "User not found in the team" });
+            }
+
+            team.Users.Remove(userToEject);
+            await _dbContext.SaveChangesAsync();
+
+            return Ok(new { message = "User ejected successfully" });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString(), "An error occurred while ejecting user");
 
             return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred while processing your request" });
         }

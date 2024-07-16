@@ -34,6 +34,9 @@ public class Context : DbContext
         modelBuilder.Entity<Record>()
         .Property(r => r.TeamId)
         .IsRequired(false);
+        modelBuilder.Entity<Record>()
+        .Property(r => r.UserId)
+        .IsRequired(false);
     }
 
     public DbSet<Record> Records { get; set; }

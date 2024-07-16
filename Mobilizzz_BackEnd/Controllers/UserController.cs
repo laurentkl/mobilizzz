@@ -105,8 +105,20 @@ public class UserController : ControllerBase
     {
         try
         {
-            var user = await _dbContext.Users.FindAsync(id);
+            var user = await _dbContext.Users
+                .Include(u => u.Records)
+                .FirstOrDefaultAsync(u => u.Id == id);
+
             if (user == null) return NotFound();
+
+            // Set the userId to null for all related records
+            if (user.Records != null)
+            {
+                foreach (var record in user.Records)
+                {
+                    record.UserId = null;
+                }
+            }
 
             _dbContext.Users.Remove(user);
             await _dbContext.SaveChangesAsync();
@@ -120,41 +132,7 @@ public class UserController : ControllerBase
         }
     }
 
-    [HttpPost("GrantAdminRights")]
-    public async Task<IActionResult> GrantAdminRights([FromBody] GrantAdminRightsRequest request)
-    {
-        try
-        {
-            var team = await _dbContext.Teams
-                .Include(t => t.Users)
-                .SingleOrDefaultAsync(t => t.Id == request.TeamId);
-
-            if (team == null)
-            {
-                return NotFound(new { message = "Team not found" });
-            }
 
 
-            var userToPromote = await _dbContext.Users
-                .SingleOrDefaultAsync(u => u.Id == request.UserToPromoteId);
-
-            if (userToPromote == null)
-            {
-                return NotFound(new { message = "User to promote not found" });
-            }
-
-            team.Admins.Add(userToPromote);
-
-            await _dbContext.SaveChangesAsync();
-
-            return Ok(new { message = "Admin rights granted successfully" });
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.ToString(), "An error occurred while granting admin rights");
-
-            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred while processing your request" });
-        }
-    }
 
 }

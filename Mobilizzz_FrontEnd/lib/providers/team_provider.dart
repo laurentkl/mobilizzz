@@ -131,4 +131,23 @@ class TeamProvider extends ChangeNotifier {
 
     return totalKm;
   }
+
+  Future<void> grantAdminRights(
+      int teamId, int userToPromoteId, int callerUserId) async {
+    try {
+      await _teamService.grantAdminRights(teamId, userToPromoteId);
+      await fetchTeamsForUser(callerUserId);
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<void> ejectUser(int teamId, int userId, int callerUserId) async {
+    try {
+      await _teamService.ejectUser(teamId, userId);
+      await fetchTeamsForUser(callerUserId);
+    } catch (error) {
+      rethrow;
+    }
+  }
 }

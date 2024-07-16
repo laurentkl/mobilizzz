@@ -6,7 +6,7 @@ import 'package:mobilizzz/widgets/team_settings_page/managed_user_row.dart';
 
 class ManagedUsersList extends StatelessWidget {
   final Team team;
-  final Function(User, bool) approveCallback; // Callback function
+  final Function(User, bool, BuildContext) approveCallback; // Callback function
 
   const ManagedUsersList({
     Key? key,
@@ -24,6 +24,8 @@ class ManagedUsersList extends StatelessWidget {
     if (team.users != null) {
       combinedUsers.addAll(team.users!);
     }
+    combinedUsers
+        .removeWhere((user) => user.userName == "Utilisateurs supprimés");
 
     return Column(
       children: [
@@ -50,13 +52,16 @@ class ManagedUsersList extends StatelessWidget {
               bool isPending =
                   team.pendingUserRequests?.contains(user) ?? false;
               return ManagedUserRow(
+                team: team,
                 user: user,
                 isPending: isPending,
                 onAccept: () {
-                  approveCallback(user, true); // Invoke approve callback
+                  approveCallback(
+                      user, true, context); // Invoke approve callback
                 },
                 onReject: () {
-                  approveCallback(user, false); // Invoke reject callback
+                  approveCallback(
+                      user, false, context); // Invoke reject callback
                 },
               );
             },

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:mobilizzz/constants/constants.dart';
+import 'package:mobilizzz/dialogs/generic_confirmation_dialog.dart';
 import 'package:mobilizzz/models/team_model.dart';
 import 'package:mobilizzz/models/user_model.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
@@ -27,24 +28,50 @@ class _TeamSettingsPageState extends State<TeamSettingsPage> {
   late bool _isHidden;
   late bool _isPrivate;
 
-  Future<void> _approveJoinTeam(User requestUser, bool isApproved) async {
-    final teamProvider = Provider.of<TeamProvider>(context, listen: false);
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+  Future<void> _approveJoinTeam(
+      User requestUser, bool isApproved, BuildContext context) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return GenericConfirmationDialog(
+          title: 'Confirmation',
+          content: isApproved
+              ? 'Voulez-vous approuver la demande de ${requestUser.userName} pour rejoindre l\'équipe ?'
+              : 'Voulez-vous rejeter la demande de ${requestUser.userName} pour rejoindre l\'équipe ?',
+          confirmText: isApproved ? 'Approuver' : 'Rejeter',
+          onConfirm: () async {
+            final teamProvider =
+                Provider.of<TeamProvider>(context, listen: false);
+            final authProvider =
+                Provider.of<AuthProvider>(context, listen: false);
 
-    try {
-      await teamProvider.approveTeamRequest(
-          authProvider.user!.id, widget.team.id!, requestUser.id, isApproved);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('User request processed successfully')),
-      );
-      setState(() {
-        _pendingUsers.remove(requestUser);
-      });
-    } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to process user request')),
-      );
-    }
+            try {
+              await teamProvider.approveTeamRequest(
+                authProvider.user!.id,
+                widget.team.id!,
+                requestUser.id,
+                isApproved,
+              );
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Requête utilisateur traitée avec succès'),
+                ),
+              );
+              setState(() {
+                _pendingUsers.remove(requestUser);
+              });
+            } catch (error) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Erreur lors du traitement de la requête'),
+                ),
+              );
+            }
+            Navigator.pop(context); // Ferme le dialogue après l'action
+          },
+        );
+      },
+    );
   }
 
   void _fetchTeamData() async {

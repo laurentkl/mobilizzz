@@ -1,51 +1,130 @@
 import 'package:flutter/material.dart';
 import 'package:mobilizzz/constants/constants.dart';
+import 'package:mobilizzz/dialogs/generic_confirmation_dialog.dart';
+import 'package:mobilizzz/models/team_model.dart';
 import 'package:mobilizzz/models/user_model.dart';
+import 'package:mobilizzz/providers/auth_provider.dart';
+import 'package:mobilizzz/providers/team_provider.dart';
+import 'package:provider/provider.dart';
 
 class ManagedUserRow extends StatelessWidget {
   const ManagedUserRow({
     Key? key,
     required this.user,
+    required this.team,
     required this.isPending,
     required this.onAccept,
     required this.onReject,
   }) : super(key: key);
 
   final User user;
+  final Team team;
   final bool isPending;
   final VoidCallback onAccept;
   final VoidCallback onReject;
 
-  void _onActionSelected(User user, String action) {
+  void _onActionSelected(String action, BuildContext context) {
     switch (action) {
       case 'eject':
-        _ejectUser(user);
+        _ejectUser(context);
         break;
       case 'grantAdmin':
-        _grantAdminRights(user);
+        _grantAdminRights(context);
         break;
       default:
         break;
     }
   }
 
-  void _ejectUser(User user) {
-    // Implémentez la logique pour éjecter l'utilisateur de l'équipe
-    // Vous pouvez utiliser Provider pour appeler la méthode appropriée dans TeamProvider
+  void _ejectUser(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return GenericConfirmationDialog(
+          title: 'Confirmation',
+          content:
+              'Voulez-vous vraiment éjecter ${user.userName} de l\'équipe ?',
+          confirmText: 'Éjecter',
+          onConfirm: () async {
+            final teamProvider =
+                Provider.of<TeamProvider>(context, listen: false);
+            final authProvider =
+                Provider.of<AuthProvider>(context, listen: false);
+            final callerUserId = authProvider.user!.id;
+            var teamId = teamProvider.currentTeam?.id!;
+
+            try {
+              await teamProvider.ejectUser(teamId!, user.id, callerUserId);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                    content: Text("${user.userName} a été éjecté de l'équipe")),
+              );
+            } catch (error) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                      "Échec lors de la requête pour éjecter l'utilisateur: $error"),
+                ),
+              );
+            }
+            Navigator.pop(context); // Ferme le dialogue après l'action
+          },
+        );
+      },
+    );
   }
 
-  void _grantAdminRights(User user) {
-    // Implémentez la logique pour donner les droits d'administrateur à l'utilisateur
-    // Vous pouvez utiliser Provider pour appeler la méthode appropriée dans TeamProvider
+  void _grantAdminRights(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return GenericConfirmationDialog(
+          title: 'Confirmation',
+          content:
+              'Voulez-vous vraiment donner les droits d\'administration à ${user.userName} ?',
+          confirmText: 'Confirmer',
+          onConfirm: () async {
+            final teamProvider =
+                Provider.of<TeamProvider>(context, listen: false);
+            final authProvider =
+                Provider.of<AuthProvider>(context, listen: false);
+            final callerUserId = authProvider.user!.id;
+            var teamId = teamProvider.currentTeam?.id!;
+
+            try {
+              await teamProvider.grantAdminRights(
+                  teamId!, user.id, callerUserId);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                    content: Text(
+                        "Droit d'administration donné à ${user.userName}")),
+              );
+            } catch (error) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                      "Échec lors de la requête pour donner les droits d'administration: $error"),
+                ),
+              );
+            }
+            Navigator.pop(context); // Ferme le dialogue après l'action
+          },
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    bool isAdmin = false;
+    if (team.admins!.any((admin) => admin.id == user.id)) {
+      isAdmin = true;
+    }
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(6),
-        color: isPending ? Colors.grey[300] : Colors.grey[100],
+        color: (isPending ? Colors.grey[300] : Colors.grey[100]),
       ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -57,20 +136,33 @@ class ManagedUserRow extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (isPending)
-                    Text(
+                    const Text(
                       "(Requête de participation)",
                       style: TextStyle(
                         color: Colors.blue,
                         fontSize: 12,
                       ),
                     ),
-                  Text(
-                    '${user.userName} (${user.email})',
-                    style: TextStyle(
-                      color: isPending
-                          ? Colors.black.withOpacity(0.6)
-                          : Colors.black,
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        '${user.userName} ',
+                        style: TextStyle(
+                          color: isPending
+                              ? Colors.black.withOpacity(0.6)
+                              : Colors.black,
+                        ),
+                      ),
+                      if (isAdmin)
+                        const Text(
+                          '(Admin)',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                    ],
                   ),
                   Text(
                     '${user.firstName} ${user.lastName}',
@@ -103,19 +195,33 @@ class ManagedUserRow extends StatelessWidget {
                 ],
               )
             else // Display edit button if user is not pending
+
               PopupMenuButton<String>(
                 itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                  const PopupMenuItem<String>(
-                    value: 'grantAdmin',
-                    child: Text('Donner les droits d\'admin'),
-                  ),
+                  if (!isAdmin)
+                    const PopupMenuItem<String>(
+                      value: 'grantAdmin',
+                      child: Row(
+                        children: [
+                          Icon(Icons.admin_panel_settings, color: Colors.black),
+                          SizedBox(width: 8),
+                          Text('Donner les droits d\'admin'),
+                        ],
+                      ),
+                    ),
                   const PopupMenuItem<String>(
                     value: 'eject',
-                    child: Text('Éjecter l\'utilisateur'),
+                    child: Row(
+                      children: [
+                        Icon(Icons.person_remove, color: Colors.black),
+                        SizedBox(width: 8),
+                        Text('Éjecter l\'utilisateur'),
+                      ],
+                    ),
                   ),
                 ],
                 onSelected: (String value) {
-                  _onActionSelected(user, value);
+                  _onActionSelected(value, context);
                 },
               ),
           ],

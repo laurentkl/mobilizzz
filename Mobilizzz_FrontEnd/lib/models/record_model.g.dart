@@ -10,7 +10,7 @@ Record _$RecordFromJson(Map<String, dynamic> json) => Record(
       transportMethod:
           $enumDecode(_$TransportMethodEnumMap, json['transportMethod']),
       distance: (json['distance'] as num).toDouble(),
-      userId: (json['userId'] as num).toInt(),
+      userId: (json['userId'] as num?)?.toInt(),
       teamId: (json['teamId'] as num?)?.toInt(),
       recordType: $enumDecode(_$RecordTypeEnumMap, json['recordType']),
       team: json['team'] == null
@@ -34,7 +34,7 @@ Map<String, dynamic> _$RecordToJson(Record instance) {
   writeNotNull('id', instance.id);
   val['transportMethod'] = _$TransportMethodEnumMap[instance.transportMethod]!;
   val['distance'] = instance.distance;
-  val['userId'] = instance.userId;
+  writeNotNull('userId', instance.userId);
   writeNotNull('teamId', instance.teamId);
   writeNotNull('team', instance.team);
   val['recordType'] = _$RecordTypeEnumMap[instance.recordType]!;

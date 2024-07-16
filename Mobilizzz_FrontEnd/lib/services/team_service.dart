@@ -143,4 +143,50 @@ class TeamService {
       throw Exception('Error updating team: $error');
     }
   }
+
+  Future<void> grantAdminRights(int teamId, int userToPromoteId) async {
+    final grantAdminUrl =
+        Uri.parse('${AppConstants.apiUrl}/Team/GrantAdminRights');
+    final requestData = {
+      'teamId': teamId,
+      'userToPromoteId': userToPromoteId,
+    };
+
+    try {
+      final response = await http.post(
+        grantAdminUrl,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(requestData),
+      );
+
+      if (response.statusCode != 200) {
+        throw "${jsonDecode(response.body)['message']} ${response.statusCode}";
+      }
+    } catch (error) {
+      throw Exception('Error granting admin rights: $error');
+    }
+  }
+
+  Future<void> ejectUser(int teamId, int userId) async {
+    final ejectUserUrl = Uri.parse('${AppConstants.apiUrl}/Team/EjectUser');
+    final requestData = {'teamId': teamId, 'userId': userId};
+
+    try {
+      final response = await http.post(
+        ejectUserUrl,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(requestData),
+      );
+
+      if (response.statusCode != 200) {
+        throw "${jsonDecode(response.body)['message']} ${response.statusCode}";
+      }
+    } catch (error) {
+      throw Exception('Error ejecting user: $error');
+    }
+  }
 }

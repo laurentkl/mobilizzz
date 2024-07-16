@@ -8,7 +8,7 @@ class Record {
   final int? id;
   final TransportMethod transportMethod;
   final double distance;
-  final int userId;
+  final int? userId;
   final int? teamId;
   final Team? team;
   final RecordType recordType;

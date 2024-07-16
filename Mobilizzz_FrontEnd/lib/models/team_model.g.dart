@@ -11,10 +11,10 @@ Team _$TeamFromJson(Map<String, dynamic> json) => Team(
       name: json['name'] as String,
       isHidden: json['isHidden'] as bool,
       isPrivate: json['isPrivate'] as bool,
+      companyId: (json['companyId'] as num).toInt(),
       admins: (json['admins'] as List<dynamic>?)
           ?.map((e) => User.fromJson(e as Map<String, dynamic>))
           .toList(),
-      companyId: (json['companyId'] as num).toInt(),
       company: json['company'] == null
           ? null
           : Company.fromJson(json['company'] as Map<String, dynamic>),

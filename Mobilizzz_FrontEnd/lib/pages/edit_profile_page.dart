@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobilizzz/constants/constants.dart';
+import 'package:mobilizzz/dialogs/generic_confirmation_dialog.dart';
 import 'package:mobilizzz/models/user_model.dart';
 import 'package:mobilizzz/providers/auth_provider.dart';
 import 'package:mobilizzz/providers/user_provider.dart';
@@ -41,20 +42,41 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   void _handleDeleteAccount() async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return GenericConfirmationDialog(
+          title: 'Confirmation',
+          content: 'Voulez-vous vraiment supprimer votre compte ?',
+          confirmText: 'Supprimer',
+          onConfirm: () async {
+            final userProvider =
+                Provider.of<UserProvider>(context, listen: false);
+            final authProvider =
+                Provider.of<AuthProvider>(context, listen: false);
 
-    try {
-      await userProvider.deleteUser(authProvider.user!.id);
-      authProvider.signOut();
-      if (context.mounted) context.go('/login');
-    } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Erreur lors de la suppression du compte: $error"),
-        ),
-      );
-    }
+            try {
+              await userProvider.deleteUser(authProvider.user!.id);
+              authProvider.signOut();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Votre compte est définitivement supprimé!"),
+                ),
+              );
+              Navigator.pop(context); // Close the dialog
+              if (context.mounted) context.go('/login');
+            } catch (error) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content:
+                      Text("Erreur lors de la suppression du compte: $error"),
+                ),
+              );
+            }
+          },
+        );
+      },
+    );
   }
 
   Future<void> _handleSubmit() async {

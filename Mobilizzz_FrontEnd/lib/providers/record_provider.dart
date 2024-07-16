@@ -114,7 +114,7 @@ class RecordProvider extends ChangeNotifier {
     return totalKm;
   }
 
-  int get consecutiveRecords {
+  int get largestConsecutiveRecords {
     if (userRecords.isEmpty) {
       return 0;
     }
@@ -149,6 +149,42 @@ class RecordProvider extends ChangeNotifier {
     }
 
     return consecutiveRecords;
+  }
+
+  int get consecutiveRecords {
+    if (userRecords.isEmpty) {
+      return 0;
+    }
+
+    // Utiliser un Set pour stocker les dates uniques sans tenir compte de l'heure
+    Set<DateTime> uniqueDates = {};
+
+    // Ajouter chaque date d'enregistrement unique au Set
+    for (var record in userRecords) {
+      uniqueDates.add(DateTime(record.creationDate!.year,
+          record.creationDate!.month, record.creationDate!.day));
+    }
+
+    // Convertir le Set en liste et trier par date
+    List<DateTime> sortedDates = uniqueDates.toList()..sort();
+
+    int currentStreak = 1; // Current streak of consecutive days
+    DateTime lastDate = sortedDates.first;
+
+    // Vérifier les jours consécutifs
+    for (var i = 1; i < sortedDates.length; i++) {
+      // Vérifier la différence de jours
+      if (sortedDates[i].difference(lastDate).inDays == 1) {
+        currentStreak++;
+      } else {
+        // If the streak is broken, reset the current streak
+        currentStreak = 1;
+      }
+
+      lastDate = sortedDates[i];
+    }
+
+    return currentStreak;
   }
 
   void filterByTransportMethod(TransportMethod? transportMethod) {
