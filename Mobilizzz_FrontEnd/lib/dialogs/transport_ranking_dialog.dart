@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:mobilizzz/constants/constants.dart';
 import 'package:mobilizzz/enums/enums.dart';
@@ -30,7 +31,7 @@ class TransportRankingDialog extends StatelessWidget {
       ..sort((a, b) => b.value.compareTo(a.value));
 
     return AlertDialog(
-      title: const Text('Classement par transports'),
+      title: const Text('Détail transports'),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,

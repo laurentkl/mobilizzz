@@ -356,4 +356,37 @@ public class TeamController : ControllerBase
         }
     }
 
+    [HttpPost("LeaveTeam")]
+    public async Task<IActionResult> LeaveTeam([FromBody] LeaveTeamRequest request)
+    {
+        try
+        {
+            var team = await _dbContext.Teams
+                .Include(t => t.Users)
+                .SingleOrDefaultAsync(t => t.Id == request.TeamId);
+
+            if (team == null)
+            {
+                return NotFound(new { message = "Team not found" });
+            }
+
+            var userToLeave = team.Users.SingleOrDefault(u => u.Id == request.UserId);
+            if (userToLeave == null)
+            {
+                return NotFound(new { message = "User not found in the team" });
+            }
+
+            team.Users.Remove(userToLeave);
+            await _dbContext.SaveChangesAsync();
+
+            return Ok(new { message = "User left the team successfully" });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString(), "An error occurred while leaving the team");
+
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred while processing your request" });
+        }
+    }
+
 }

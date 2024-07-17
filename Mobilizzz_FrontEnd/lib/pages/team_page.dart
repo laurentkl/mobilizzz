@@ -60,7 +60,7 @@ class _TeamPageState extends State<TeamPage> {
                 actions: [
                   IconButton(
                     icon: const Icon(Icons.settings),
-                    color: isAdmin ? Colors.red : AppConstants.primaryColor,
+                    color: AppConstants.primaryColor,
                     onPressed: () {
                       Navigator.push(
                         context,

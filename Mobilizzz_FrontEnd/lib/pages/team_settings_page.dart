@@ -74,6 +74,41 @@ class _TeamSettingsPageState extends State<TeamSettingsPage> {
     );
   }
 
+  Future<void> _leaveTeam(BuildContext context) async {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return GenericConfirmationDialog(
+            title: 'Confirmation',
+            content: 'Voulez-vous vraiment quitter l\'équipe ?',
+            confirmText: 'Quitter',
+            onConfirm: () async {
+              final teamProvider =
+                  Provider.of<TeamProvider>(context, listen: false);
+              final authProvider =
+                  Provider.of<AuthProvider>(context, listen: false);
+              final userId = authProvider.user!.id;
+              final teamId = widget.team.id!;
+
+              try {
+                await teamProvider.leaveTeam(teamId, userId, userId);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text('Vous avez quitté l\'équipe avec succès')),
+                );
+                Navigator.pop(context); // Go back to the previous screen
+              } catch (error) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      content: Text(
+                          'Erreur lors de la sortie de l\'équipe: $error')),
+                );
+              }
+            },
+          );
+        });
+  }
+
   void _fetchTeamData() async {
     final teamProvider = Provider.of<TeamProvider>(context, listen: false);
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -186,6 +221,13 @@ class _TeamSettingsPageState extends State<TeamSettingsPage> {
                       onPressed: _saveSettings,
                       label: "Sauvegarder",
                       color: AppConstants.primaryColor,
+                    ),
+                  if (!widget
+                      .isAdmin) // Show leave button only if the user is not an admin
+                    CustomElevatedButton(
+                      onPressed: () => _leaveTeam(context),
+                      label: "Quitter l'équipe",
+                      color: Colors.red,
                     ),
                 ],
               ),

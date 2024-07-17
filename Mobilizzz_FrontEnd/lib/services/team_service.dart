@@ -189,4 +189,25 @@ class TeamService {
       throw Exception('Error ejecting user: $error');
     }
   }
+
+  Future<void> leaveTeam(int teamId, int userId) async {
+    final leaveTeamUrl = Uri.parse('${AppConstants.apiUrl}/Team/LeaveTeam');
+    final requestData = {'teamId': teamId, 'userId': userId};
+
+    try {
+      final response = await http.post(
+        leaveTeamUrl,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(requestData),
+      );
+
+      if (response.statusCode != 200) {
+        throw "${jsonDecode(response.body)['message']} ${response.statusCode}";
+      }
+    } catch (error) {
+      throw Exception('Error leaving team: $error');
+    }
+  }
 }
