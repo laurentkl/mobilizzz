@@ -7,7 +7,7 @@ public class Context : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql(@"Server=localhost;Database=MobilizzzTest;Port=5432;User Id=MobilizzzTestUser;Password=toor");
+        optionsBuilder.UseNpgsql(@"Server=localhost;Database=mobilitizzzdb;Port=5433;User Id=mobilitizzzuser;Password=toor");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
